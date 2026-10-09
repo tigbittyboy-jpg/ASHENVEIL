@@ -9,7 +9,9 @@ Godot 4.6.3 Standard, GDScript, Compatibility renderer. `scenes/main.tscn` is th
 | `scripts/enemy.gd` | CharacterBody2D enemy state machine, sight checks, territory, telegraphs, attacks, armor, boss phases and summons |
 | `scripts/projectile.gd` | Projectile motion, wall ray checks, target collision and damage delivery |
 | `scripts/world.gd` | Four JSON-defined connected map layouts, static collision, props, nearest interaction query, tile drawing and ambience |
-| `scripts/dialogue.gd` | Offline authored node lookup, world/quest/memory conditions and validated quest actions |
+| `scripts/dialogue.gd` | Strict local node/choice lookup, bounded conversation history, per-NPC knowledge and validated quest actions |
+| `scripts/typography.gd` | Licensed Pixelify Sans resource, 16/24/32 typography and shared font theme |
+| `scripts/world_label.gd`, `world_labels.gd` | World-space panels, vicinity visibility, character/UI bounds checks and nearest-label priority |
 | `scripts/interface.gd` | Shared bronze/charcoal theme, screen HUD, responsive containers, headings, scrolling and focus |
 | `scripts/game.gd` | Scene composition, input registration, menu builders, transitions, encounter spawning, interaction orchestration and presentation |
 | `data/*.json` | Stable item, NPC, enemy and quest IDs and definitions |
@@ -34,4 +36,14 @@ Detailed terrain materials are 48×48; decorative ritual inlays are 192×192. Pl
 
 A 960×540 logical UI canvas scales independently of the world camera's 1.2× zoom. Physical window tests include 800×450, 1152×648, 1600×900 and 1024×768. The camera remains within the existing 1440×960 maps; their collision layout and interaction IDs remain unchanged. NPC labels appear only nearby and avoid the HUD's screen region. World tint and local lamps never tint UI. Static world effects redraw at roughly 7 Hz; physics runs at Godot's regular rate. Real Apple Silicon frame-time measurements remain outstanding.
 
-Map layouts live in `data/maps.json`. `data/dialogue_trees.json` contains stable NPC/node IDs, text, conditional variants, choices, next IDs and optional actions. `data/dialogue.json` supplies authored history text during tree generation; it is not an AI adapter. `State` owns objective validation, once-only rewards and reconciliation. Save version 1 remains compatible; loading removes the obsolete dialogue-service preference without erasing player progress or memory.
+Map layouts live in `data/maps.json`. `data/dialogue_trees.json` contains stable NPC/node IDs, text, conditional variants, choices, next IDs and optional actions. `data/dialogue_trees.json` is the canonical hand-authored source; `tools/validate_dialogue.py` checks IDs, reachability, conditions, exits and action ownership. The older `data/dialogue.json` is retained as historical writing material and is not used at runtime. `State` owns objective validation, once-only rewards and reconciliation. Save version 1 remains compatible; loading removes the obsolete dialogue-service preference without erasing player progress or memory.
+
+## Conversation context, knowledge and labels (0.4.0)
+
+`Dialogue.context` holds NPC, current/previous node, topic, navigation history (maximum 24), selected question IDs, recently revealed facts and snapshots of quests/story flags. History trims cycles. `@back`, `@main` and `@exit` are explicit navigation targets. Service windows preserve context; Goodbye resets it. Every choice ID is scoped to its NPC and node. UI callbacks also retain their owning NPC/node, rejecting callbacks from a replaced panel. Missing nodes never fall back to root.
+
+Entering a node records only its authored `reveals` keys under `State.s.memory.dialogue_knowledge[npc]`. Conditions can require knowledge or its absence, existing quest status, world flags or relationship memory. This additive save field needs no schema-version change. Narrative conditions are evaluated deterministically; story completion and relationships have explicit written variants.
+
+World labels are ordinary world-space Controls under a Node2D, at z-index 100 below the screen UI CanvasLayer. Roof/entrance anchors derive from building rectangles; the market uses its existing prop position. The label manager compensates camera zoom for a steady logical text size. It tries attached world-space placements that avoid HUD, viewport, interaction prompt and character bounds, then resolves competing labels by player distance. Unsafe labels hide immediately; distance visibility fades. The existing world layout/collisions are untouched. Exposed manager properties configure visibility and building/NPC ranges.
+
+`Typography.theme()` supplies Pixelify Sans to every screen interface and world label. The original font and full SIL OFL are bundled; the license is included in exported content. Font import uses no antialiasing, no hinting/subpixel positioning, oversampling 1 and no system-font fallback. The unsupported diamond selector was replaced with an ASCII chevron. Practical fractional window scaling still depends on Godot and display pixels; native Retina inspection remains outstanding.

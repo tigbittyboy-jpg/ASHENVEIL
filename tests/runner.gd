@@ -148,8 +148,8 @@ func _ready():
 	check(g.ui.panel.find_children("*","LineEdit",true,false).is_empty(),"NPC dialogue contains no text input")
 	var focus = get_viewport().gui_get_focus_owner()
 	check(focus is Button and focus.get_parent().get_parent() is ScrollContainer,"conversation choice receives keyboard focus")
-	g.select_dialogue({"next":"work"})
-	g.select_dialogue({"next":"work","action":{"kind":"turn_in","quest":"herbs"}})
+	choose(g,{"next":"work"})
+	choose(g,{"next":"work","action":{"kind":"turn_in","quest":"herbs"}})
 	check(State.s.quests.herbs == "complete" and State.s.crowns == gold+35 and not State.s.inventory.has("herb"),"dialogue turn-in consumes materials and pays exact Crowns")
 	check("35 Crowns" in g.dialogue_text.text,"quest receipt remains visible in the conversation")
 	check(not State.turn_in("herbs") and State.s.crowns == gold+35,"repeated turn-in cannot duplicate rewards")
@@ -174,7 +174,7 @@ func _ready():
 	check(State.valid_save(State.s) and not State.s.settings.has("ollama"),"new offline saves require no AI preference")
 	State.s.memory.tovin_helped = true
 	check("brought him home" in g.dialogue.node_for("tovin","root").text,"relationships change authored greetings")
-	State.s.flags.boss = true
+	State.s.flags.erase("ending"); State.s.flags.boss = true
 	check("anvil sounds louder" in g.dialogue.node_for("brann","root").text,"boss defeat changes NPC dialogue")
 	State.s.flags.erase("boss"); State.s.memory.nell_spoken = true
 	check("chair is still warm" in g.dialogue.node_for("nell","root").text,"previous conversations change greetings")
@@ -184,7 +184,7 @@ func _ready():
 		var valid := true
 		for node_id in tree.nodes:
 			for option in tree.nodes[node_id].choices:
-				if not tree.nodes.has(option.next): valid = false
+				if not tree.nodes.has(option.next) and option.next not in ["@back","@main","@exit"]: valid = false
 		check(valid,"stable dialogue links for "+npc)
 		g.talk(npc)
 		await get_tree().process_frame
@@ -193,12 +193,12 @@ func _ready():
 	var options: Array = g.dialogue.node_for("brann","work").choices
 	check(not options.any(func(c): return c.get("action",{}).get("kind","") == "accept"),"completed quests cannot be accepted again")
 	State.reset(); g.talk("brann","work")
-	g.select_dialogue({"next":"work","action":{"kind":"accept","quest":"iron"}})
+	choose(g,{"next":"work","action":{"kind":"accept","quest":"iron"}})
 	check(State.s.quests.iron == "active","dialogue acceptance activates existing quest state")
 	var no_reward: int = State.s.crowns
-	g.select_dialogue({"next":"work","action":{"kind":"turn_in","quest":"iron"}})
+	choose(g,{"next":"work","action":{"kind":"turn_in","quest":"iron"}})
 	check(State.s.crowns == no_reward and "Not yet" in g.dialogue_text.text,"dialogue missing-material response preserves currency")
-	g.talk("mara"); g.select_dialogue({"next":"root","action":{"kind":"shop"}})
+	g.talk("mara"); choose(g,{"next":"root","action":{"kind":"shop"}})
 	check(g.service_npc == "mara" and g.player.locked,"shop service keeps movement and attacks locked")
 	g.confirm_purchase("potion")
 	await get_tree().process_frame
@@ -211,18 +211,18 @@ func _ready():
 	g.return_to_npc()
 	check(g.mode == "dialogue" and g.active_npc == "mara" and g.player.locked,"service Back returns to conversation")
 	g.talk("brann"); State.add_item("ore",3); State.s.crowns = 100
-	g.select_dialogue({"next":"root","action":{"kind":"upgrade"}})
+	choose(g,{"next":"root","action":{"kind":"upgrade"}})
 	await get_tree().process_frame
 	for control in g.ui.panel.find_children("*","Button",true,false):
 		if control.text == "Improve weapon": control.pressed.emit(); break
 	check(State.s.upgrades.get("rust_sword",0) == 1 and State.s.crowns == 75,"forge choice opens working validated upgrades")
 	g.return_to_npc(); g.talk("sister"); State.s.hp = 10
-	g.select_dialogue({"next":"root","action":{"kind":"heal"}})
+	choose(g,{"next":"root","action":{"kind":"heal"}})
 	await get_tree().process_frame
 	for control in g.ui.panel.find_children("*","Button",true,false):
 		if control.text == "Accept healing": control.pressed.emit(); break
 	check(State.s.hp == State.stat("hp") and g.mode == "dialogue" and State.s.crowns == 67,"healing pays once and returns to dialogue")
-	g.talk("nell"); g.select_dialogue({"next":"root","action":{"kind":"rest"}})
+	g.talk("nell"); choose(g,{"next":"root","action":{"kind":"rest"}})
 	await get_tree().process_frame
 	for control in g.ui.panel.find_children("*","Button",true,false):
 		if control.text == "Take a room": control.pressed.emit(); break
@@ -232,7 +232,7 @@ func _ready():
 	Input.parse_input_event(escape); await get_tree().process_frame
 	escape.pressed = false; Input.parse_input_event(escape)
 	check(g.mode == "dialogue" and g.dialogue_node == "root","Escape backs out of a nested dialogue branch")
-	g.select_dialogue({"next":"root","action":{"kind":"goodbye"}})
+	choose(g,{"next":"root","action":{"kind":"goodbye"}})
 	check(g.mode == "play" and not g.player.locked,"Goodbye restores gameplay input")
 	g.close_menu(); State.reset(); g.load_map("village",Vector2(480,480))
 	await get_tree().process_frame
@@ -262,3 +262,15 @@ func _ready():
 	await get_tree().process_frame
 	print("RESULT: %d passed, %d failed"%[passed,failed])
 	get_tree().quit(1 if failed else 0)
+
+func choose(game, pattern: Dictionary):
+	for option in game.dialogue.node_for(game.active_npc,game.dialogue_node).choices:
+		var matches := true
+		for key in pattern:
+			if key == "next" and pattern.has("action"): continue
+			if key == "action":
+				for action_key in pattern.action:
+					if option.get("action",{}).get(action_key) != pattern.action[action_key]: matches = false
+			elif option.get(key) != pattern[key]: matches = false
+		if matches: game.select_dialogue(option); return
+	check(false,"authored choice exists: "+str(pattern))

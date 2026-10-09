@@ -35,7 +35,7 @@ func _ready():
 				if rect.position.x < panel.position.x or rect.end.x > panel.end.x+1: bounded = false
 			check(bounded,"%s buttons fit panel width %s"%[entry[0],resolution])
 	game.close_menu(); await settle()
-	check(game.ui.hud.visible and game.ui.hud.size.y < 125,"compact HUD returns during gameplay")
+	check(game.ui.hud.visible and game.ui.hud.size.y < 160,"compact HUD returns during gameplay")
 	var bars: Array = game.ui.bar_entries
 	check(bars[0][1].get_global_rect().end.y <= bars[1][1].get_global_rect().position.y and bars[1][1].get_global_rect().end.y <= bars[2][1].get_global_rect().position.y,"HUD resource bars never overlap")
 	game.talk("mara"); await settle()

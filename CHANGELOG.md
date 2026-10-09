@@ -1,5 +1,13 @@
 # Changes
 
+## 0.4.0 — Coherent conversations, village labels and pixel typography
+
+- Removed missing-node greeting fallback and copied unreachable healing branches; rewrote eight NPC backgrounds and linked identity, trade, home, kingdom and motivation follow-ups with explicit local choice IDs.
+- Added temporary conversation history/topic/question tracking and persistent per-NPC discoveries. Back returns to the actual previous branch, main topics has a separate response, services preserve the discussion, and learned introductions become revisit choices.
+- Added reusable world-space building/NPC labels with vicinity visibility, zoom compensation, nearest-label priority and HUD/character/name/viewport avoidance. Labels render above scenery and below menus.
+- Bundled SIL OFL Pixelify Sans and centralized 16/24/32-pixel typography. Disabled smoothing/system fallback, replaced an unsupported symbol, enlarged the title to fit its controls and kept Help's Back outside scrolling text.
+- Validated 407 Godot assertions, 14 validator failure-case tests and all 129 authored nodes; rendered and inspected major menus/labels at multiple sizes. Existing boss strategy, saves, rewards, transactions and waveform checks still pass.
+
 ## 0.3.0 — Gothic graphics, compact UI and authored dialogue
 
 - Replaced the low-detail actors, terrain and props with original detailed gothic art inspired by the supplied reference; added distinct village buildings, eight portraits, item icons, a chained Bellkeeper and 64 eight-direction player animation frames.

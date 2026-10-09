@@ -4,7 +4,7 @@
 
 An original, offline Godot 4 dark fantasy action RPG first playable. Explore Hollowmere, recover the crypt sigil in the Weeping Forest, defeat the Bellkeeper, and learn what waits inside the Veil Shrine.
 
-This is an early playable slice, not the finished 30–60 minute polished release described in the master brief. The core progression and save loop are implemented; encounter variety, narrative depth and balancing need further work. See [CHANGELOG.md](CHANGELOG.md) for the 0.3.0 playtest fixes. No timed human playthrough or Apple Silicon performance measurement has been completed.
+This is an early playable slice, not the finished 30–60 minute polished release described in the master brief. The core progression and save loop are implemented; encounter variety, narrative depth and balancing need further work. See [CHANGELOG.md](CHANGELOG.md) for the 0.4.0 playtest fixes. No timed human playthrough or Apple Silicon performance measurement has been completed.
 
 ![Hollowmere in the updated game](docs/hollowmere.png)
 
@@ -15,7 +15,7 @@ This is an early playable slice, not the finished 30–60 minute polished releas
 3. Press **F6** with `scenes/main.tscn` open, or **F5** to run the project.
 4. Select **New Adventure**. Speak to Captain Ilya in the central square by the banner and accept **The Silent Bell**.
 
-The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or external dialogue service. This is an ad hoc signed, unnotarized development bundle; the revised 0.3.0 launch on macOS has **not** been confirmed. Gatekeeper may block it; see [the damaged-app recovery steps](START_HERE.md#if-macos-says-the-app-is-damaged). Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
+The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or external dialogue service. This is an ad hoc signed, unnotarized development bundle; the revised 0.4.0 launch on macOS has **not** been confirmed. Gatekeeper may block it; see [the damaged-app recovery steps](START_HERE.md#if-macos-says-the-app-is-damaged). Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
 
 ## Controls
 
@@ -55,9 +55,13 @@ Enemy deaths and opened containers persist, so defeated encounters do not respaw
 
 ## Conversations and menus
 
-Press **E** near a villager to open their portrait and authored response choices. Use arrows / Enter, D-pad / A, or click a response. History and story topics branch into further choices. **Back** returns to the greeting; **Goodbye** closes the conversation. Escape backs out of a branch, returns from a service, or closes the greeting. Movement and combat are locked while menus are open.
+Press **E** near a villager to open their portrait and authored response choices. Use arrows / Enter, D-pad / A, or click a response. History and story topics branch into further choices. **Back** returns to the previous branch; **Return to main topics** returns to the greeting; **Goodbye** closes the conversation. Escape backs out of a branch, returns from a service, or closes the greeting. Movement and combat are locked while menus are open.
 
 All dialogue is predetermined and offline. Each of the eight villagers has distinct histories, rumors, dangers, Bellkeeper advice and reactions. Greetings respond to previous visits, saved relationships, quest completion, discoveries and boss/story progress. Jobs offer explicit acceptance and delivery choices; completed jobs stay completed. Mara's wares, Brann's forge, Elowen's healing and Nell's rooms open through their relevant responses, with a return to conversation.
+
+Conversations keep a temporary NPC/node/topic history, so nested Back follows the branch you came from and services return to that same discussion. Lore discoveries and learned backgrounds are stored per NPC in the existing save memory; introductions become revisit choices after you learn them. Missing targets and foreign/stale choices are rejected rather than routed to an unrelated greeting.
+
+The interface uses bundled **Pixelify Sans**, licensed under the [SIL Open Font License](assets/fonts/LICENSE.txt), at 16/24/32 logical pixels, with font smoothing and system fallback disabled. Contextual world labels identify the four actual village buildings and Mara's stall; they appear nearby, avoid characters/HUD/other names, and disappear in menus.
 
 The screen HUD uses compact resource bars and hides behind menus. The journal separates selectable active/completed quests from their objectives and rewards; inventory and shops use selectable items, descriptions and comparisons. Long lists scroll, headings stay outside the scrolling body, and controls/help live in the pause menu.
 
@@ -89,11 +93,11 @@ Art regeneration needs Python 3 and Pillow; both are available in the prepared c
 ```sh
 python tools/generate_assets.py
 python tools/import_art.py
-python tools/generate_dialogue.py
+python tools/validate_dialogue.py
 python tools/check_audio.py
 ```
 
-`import_art.py` deterministically extracts the committed original source atlases; `generate_dialogue.py` rebuilds the authored trees. Review changes before committing. The legacy `generate_content.py` overwrites content defaults and should not be run over edited content. Sprite dimensions and replacement conventions are in `docs/ASSETS.md`.
+`import_art.py` deterministically extracts the committed original source atlases; `validate_dialogue.py` validates the canonical authored trees without rewriting them. Review changes before committing. The legacy `generate_content.py` overwrites content defaults and should not be run over edited content. Sprite dimensions and replacement conventions are in `docs/ASSETS.md`.
 
 ## Export
 

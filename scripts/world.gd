@@ -1,4 +1,7 @@
 extends Node2D
+const WorldLabels = preload("res://scripts/world_labels.gd")
+var labels
+
 var map := "village"
 var objects: Array = []
 var textures: Dictionary = {}
@@ -19,6 +22,7 @@ func _ready():
 	for id in State.npcs: textures[id] = load("res://assets/npcs/"+id+".png")
 	for id in ["inn","forgehouse","chapel","cottage","tower"]: textures[id] = load("res://assets/buildings/"+id+".png")
 	darkness = CanvasModulate.new(); add_child(darkness)
+	labels = WorldLabels.new(); add_child(labels)
 func rect(value: Array) -> Rect2: return Rect2(value[0],value[1],value[2],value[3])
 func setup(id: String):
 	map = id
@@ -43,6 +47,7 @@ func setup(id: String):
 		light.position = Vector2(pos[0],pos[1]); light.texture_scale = 2.8
 		light.color = Color("e2ae74"); light.energy = .75
 		add_child(light); lights.append(light)
+	labels.rebuild(layout,objects)
 	queue_redraw()
 func safe_position(pos: Vector2) -> Vector2:
 	pos = pos.clamp(Vector2(32,32),Vector2(1408,928))
@@ -93,7 +98,6 @@ func _draw():
 		var r := rect(building.rect)
 		var art: String = "inn" if "Inn" in building.label else ("forgehouse" if "Forge" in building.label else ("chapel" if "Chapel" in building.label else "cottage"))
 		draw_texture_rect(textures[art],r,false,Color.WHITE)
-		draw_string(ThemeDB.fallback_font,r.position+Vector2(0,r.size.y+18),building.label,HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("e2cbaa"))
 	# Landmarks: broken sanctuary dais, soot in the boss chamber, and village graves.
 	if map == "crypt":
 		draw_texture_rect(textures.ritual,Rect2(1060,340,280,280),false,Color("767084"))
@@ -111,10 +115,6 @@ func _draw():
 			draw_texture_rect(textures[tex],Rect2(o.pos-Vector2(size.x/2,size.y*.75),size),false,tint)
 		if o.kind == "trap":
 			for i in range(4): draw_line(o.pos+Vector2(i*6-12,8),o.pos+Vector2(i*6-10,-8),Color("9b8580"),2)
-		if o.kind == "npc" and o.pos.distance_to(player_position) < 100:
-			var screen: Vector2 = get_global_transform_with_canvas()*(o.pos+Vector2(0,-55))
-			if screen.y > 122 or screen.x > 280:
-				draw_string(ThemeDB.fallback_font,o.pos+Vector2(-40,-55),State.npcs[o.id].name,HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("e2cbaa"))
 	if map in ["forest","shrine"]:
 		for i in range(10):
 			var p := Vector2(fmod(i*211+time*4,1440),100+(i*113)%780)

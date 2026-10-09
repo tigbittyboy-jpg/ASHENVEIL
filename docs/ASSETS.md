@@ -9,8 +9,12 @@ Three original source atlases are committed under `assets/source/`: `gothic_atla
 - Portraits: eight named NPCs, 128×128.
 - Buildings: 256×192, with distinct inn, forge, chapel, cottage and tower art. Props use 96–128 pixel canvases; world draw sizes differ by function.
 - Terrain: sixteen materials normalized to 48×48; a 192×192 ritual floor. Forest moss blends grass and leaf litter. These are textured materials, not a complete terrain edge/autotile set.
-- Item icons: sword, dagger, axe, staff, bow, draught, iron and charm, 48×48. UI uses Godot's bundled font and shared charcoal/bronze StyleBoxFlat borders.
+- Item icons: sword, dagger, axe, staff, bow, draught, iron and charm, 48×48. UI uses bundled Pixelify Sans under the SIL OFL (`assets/fonts/LICENSE.txt`) and shared charcoal/bronze StyleBoxFlat borders.
 
 Committed PNG/WAV files need no Python or network at runtime. `generate_assets.py` retains the earlier procedural base/audio pipeline, then imports the detailed atlases last so regeneration does not revert the current graphics. The existing `refine_assets.py` retains the smooth 32-second minor-key music and ambient loops, short independent SFX voices and fixed seed. No external song or third-party game sprite was copied.
 
 Audio is mono signed 16-bit PCM at 22,050 Hz. `check_audio.py` verifies adjacent samples and loop boundaries; this detects clicks, not musical preference. Headless/Dummy QA skips playback. Real CoreAudio listening remains a Mac playtest.
+
+## Pixel font provenance
+
+Pixelify Sans: Copyright 2021 The Pixelify Sans Project Authors, https://github.com/eifetx/Pixelify-Sans. Downloaded unchanged from Google Fonts (`ofl/pixelifysans/PixelifySans[wght].ttf`), with the complete SIL Open Font License 1.1 retained beside it and included in app exports. No game-specific copyrighted font was used. The shared theme uses 16-pixel body/labels, 24-pixel headings and 32-pixel major titles. Smoothing, hinting, system fallback and subpixel positioning are disabled; oversampling is 1. Every runtime punctuation/symbol is covered by the font.

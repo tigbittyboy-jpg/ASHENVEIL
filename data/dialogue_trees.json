@@ -7,6 +7,12 @@
         "variants": [
           {
             "condition": {
+              "flag": "ending"
+            },
+            "text": "The road may bring customers again. You did more for this square than any royal promise."
+          },
+          {
+            "condition": {
               "flag": "boss"
             },
             "text": "You silenced it? I will give you fair prices today. Do not make me regret saying that."
@@ -15,13 +21,7 @@
             "condition": {
               "memory": "mara_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. Back again? Good. People who return are better customers."
+            "text": "You can leave your manners outside if you bring your coin. Do not expect credit."
           },
           {
             "condition": {
@@ -33,89 +33,186 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_mara_identity"
+            },
+            "id": "mara:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_mara_identity"
+            },
+            "id": "mara:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "mara:root:2",
+            "condition": {
+              "not_knowledge": "learned_mara_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_mara_history"
+            },
+            "id": "mara:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "mara:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "mara:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "mara:root:6"
           },
           {
             "text": "Show me your wares.",
             "next": "root",
             "action": {
               "kind": "shop"
-            }
+            },
+            "id": "mara:root:7"
           },
           {
             "text": "I would like to sell something.",
             "next": "root",
             "action": {
               "kind": "sell"
-            }
+            },
+            "id": "mara:root:8"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "mara:root:9"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "mara:root:10"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "mara:root:11"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "Mara. If you came for charity, try the chapel. If you came for supplies, we can talk.",
         "choices": [
           {
+            "text": "How did you become a merchant?",
+            "next": "apprenticeship",
+            "id": "mara:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "mara:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "mara:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "mara:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_mara_identity"
         ]
       },
       "past": {
-        "text": "I buried my partner when the caravans stopped. This stall is the only thing the Veil has not taken from me.",
+        "text": "I sold provisions to the king's northern march. The soldiers paid in advance. Their families are still waiting for them. I keep a shop now because a ledger is easier to trust than a crown.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "mara:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "mara:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "How did you become a merchant?",
+            "next": "apprenticeship",
+            "id": "mara:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_mara_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -123,33 +220,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "mara:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "mara:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "mara:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "The king paid his debts with promises. You cannot eat a promise.",
+        "text": "His northern march never reached its next supply station. I know because its ration accounts stop there. Whether the king died in the marshes, I cannot tell you.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "mara:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -157,21 +294,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
         "text": "Brann lets his forge burn all night. Says it keeps the dead away. I think he simply cannot bear the dark.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "mara:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_mara_rumor"
         ]
       },
       "veil": {
@@ -179,16 +350,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "mara:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "mara:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -196,34 +387,84 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "mara:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
         "text": "Keep to the forest road. The east gate needs a sigil. That sentinel has one, if you can persuade it to stop breathing.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "mara:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
         "text": "There is a crystal beyond the crypt. If it offers you a fortune, check what it asks in return.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:shrine:2"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
         ]
       },
       "boss": {
@@ -231,28 +472,31 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "mara:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
-          }
-        ]
-      },
-      "medicine": {
-        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
-        "choices": [
+            "next": "@back",
+            "id": "mara:boss:1"
+          },
           {
-            "text": "Can you heal me?",
-            "next": "root",
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
             "action": {
-              "kind": "heal"
-            }
-          },
-          {
-            "text": "Back.",
-            "next": "root"
+              "kind": "goodbye"
+            },
+            "id": "mara:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "discovery": {
@@ -260,11 +504,105 @@
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "mara:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "mara:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "My mother sold salt beside the crossing. She taught me to weigh the goods twice and the customer once. The army taught me why.",
+        "topic": "history",
+        "reveals": [
+          "learned_mara_trade",
+          "heard_about_king"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "mara:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "mara:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "mara:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "I grew up by the western crossing. When the road emptied, I moved my stall into the square. Fewer customers, but fewer places for them to hide.",
+        "topic": "history",
+        "reveals": [
+          "learned_mara_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "mara:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "mara:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "mara:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "mara:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "mara:home:4"
           }
         ]
       }
@@ -278,6 +616,12 @@
         "variants": [
           {
             "condition": {
+              "flag": "ending"
+            },
+            "text": "The anvil sounds louder without that damned bell. You saw the shrine through. I will keep this forge ready for what comes next."
+          },
+          {
+            "condition": {
               "flag": "boss"
             },
             "text": "The anvil sounds louder without that damned bell. Good work, wanderer."
@@ -286,13 +630,7 @@
             "condition": {
               "memory": "brann_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. Still holding that blade? Let us keep it worth holding."
+            "text": "Mind your tongue near my anvil. Steel is patient. I am less so."
           },
           {
             "condition": {
@@ -304,86 +642,183 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_brann_identity"
+            },
+            "id": "brann:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_brann_identity"
+            },
+            "id": "brann:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "brann:root:2",
+            "condition": {
+              "not_knowledge": "learned_brann_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_brann_history"
+            },
+            "id": "brann:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "brann:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "brann:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "brann:root:6"
           },
           {
             "text": "Have any work for me?",
-            "next": "work"
+            "next": "work",
+            "id": "brann:root:7"
           },
           {
             "text": "Can you improve my weapon?",
             "next": "root",
             "action": {
               "kind": "upgrade"
-            }
+            },
+            "id": "brann:root:8"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "brann:root:9"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "brann:root:10"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "brann:root:11"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "Brann. Blacksmith, grave digger when needed, and a poor liar. Your blade looks tired.",
         "choices": [
           {
+            "text": "How did you learn your trade?",
+            "next": "apprenticeship",
+            "id": "brann:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "brann:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "brann:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "brann:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_brann_identity"
         ]
       },
       "past": {
-        "text": "I forged the old garrison's swords. Most came back without their owners. I still work the iron because stopping would mean listening.",
+        "text": "I forged blades for the king's men. Most came back without their owners. I stayed in Hollowmere because somebody had to keep the forge burning.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "brann:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "brann:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "How did you learn your trade?",
+            "next": "apprenticeship",
+            "id": "brann:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_brann_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -391,33 +826,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "brann:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "brann:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "brann:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "His crest was stamped on every sword. None of those swords could cut a curse.",
+        "text": "Last I heard, his soldiers marched into the northern marshes. None of my blades came home from that march. No one here has seen the king since.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "brann:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -425,21 +900,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
         "text": "Mara knows which roads are still safe. She pretends she does not care who returns from them.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "brann:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_brann_rumor"
         ]
       },
       "veil": {
@@ -447,16 +956,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "brann:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "brann:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -464,34 +993,84 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "brann:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
         "text": "The sentinel wears good iron. The hound in the southwest wears none; it is no less dangerous. Keep your edge ready.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "brann:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
-        "text": "No hammer I own can cut that shrine\u2019s stone. Whatever waits there, you will need more than a weapon.",
+        "text": "No hammer I own can cut that shrine’s stone. Whatever waits there, you will need more than a weapon.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:shrine:2"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
         ]
       },
       "boss": {
@@ -499,28 +1078,31 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "brann:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
-          }
-        ]
-      },
-      "medicine": {
-        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
-        "choices": [
+            "next": "@back",
+            "id": "brann:boss:1"
+          },
           {
-            "text": "Can you heal me?",
-            "next": "root",
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
             "action": {
-              "kind": "heal"
-            }
-          },
-          {
-            "text": "Back.",
-            "next": "root"
+              "kind": "goodbye"
+            },
+            "id": "brann:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "work": {
@@ -552,11 +1134,13 @@
             "condition": {
               "quest": "iron",
               "state": "absent"
-            }
+            },
+            "id": "brann:work:0"
           },
           {
             "text": "What should I look for?",
-            "next": "materials"
+            "next": "materials",
+            "id": "brann:work:1"
           },
           {
             "text": "I have brought what you asked for.",
@@ -569,13 +1153,29 @@
             "condition": {
               "quest": "iron",
               "state": "active"
-            }
+            },
+            "id": "brann:work:2"
           },
           {
             "text": "Not right now.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:work:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:work:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:work:5"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "materials": {
         "text": "Grave Iron comes from the old guardians and forest creatures. Bring three pieces for the job; upgrades use additional iron.",
@@ -590,24 +1190,134 @@
             "condition": {
               "quest": "iron",
               "state": "absent"
-            }
+            },
+            "id": "brann:materials:0"
           },
           {
             "text": "Back.",
-            "next": "work"
+            "next": "@back",
+            "id": "brann:materials:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:materials:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:materials:3"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "discovery": {
         "text": "The sentinel wears good iron. The hound in the southwest wears none; it is no less dangerous. Keep your edge ready. The eastern crypt gate will answer that sigil now.",
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "brann:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "brann:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "My father let me work the bellows before I could lift a hammer. The king's quartermaster came years later. He bought our steel, then tried to buy our patience.",
+        "topic": "history",
+        "reveals": [
+          "learned_brann_trade",
+          "heard_about_king"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "brann:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "brann:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "brann:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "Born here. My father's anvil sits under mine. The forge is younger than the town, but older than my knees.",
+        "topic": "history",
+        "reveals": [
+          "learned_brann_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "brann:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "brann:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "brann:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "brann:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "brann:home:4"
           }
         ]
       }
@@ -621,6 +1331,12 @@
         "variants": [
           {
             "condition": {
+              "flag": "ending"
+            },
+            "text": "You returned from the shrine. Rest a moment. There is still life here that needs tending."
+          },
+          {
+            "condition": {
               "flag": "boss"
             },
             "text": "The fever has broken in two houses. Whatever awaits at the shrine, remember this mercy."
@@ -629,13 +1345,7 @@
             "condition": {
               "memory": "sister_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. Welcome back. Tell me where it hurts, or what you have learned."
+            "text": "I remember what you said. I will still tend your wounds. Kindness need not wait for kindness."
           },
           {
             "condition": {
@@ -647,90 +1357,188 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_sister_identity"
+            },
+            "id": "sister:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_sister_identity"
+            },
+            "id": "sister:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "sister:root:2",
+            "condition": {
+              "not_knowledge": "learned_sister_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_sister_history"
+            },
+            "id": "sister:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "sister:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "sister:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "sister:root:6"
           },
           {
             "text": "Have any work for me?",
-            "next": "work"
+            "next": "work",
+            "id": "sister:root:7"
           },
           {
             "text": "Can you heal me?",
             "next": "root",
             "action": {
               "kind": "heal"
-            }
+            },
+            "id": "sister:root:8"
           },
           {
             "text": "Where can I buy medicine?",
-            "next": "medicine"
+            "next": "medicine",
+            "id": "sister:root:9"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "sister:root:10"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "sister:root:11"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "sister:root:12"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "Elowen. I tend the sick and keep the chapel open. Names are easier to mend than memories.",
         "choices": [
           {
+            "text": "Who taught you to heal?",
+            "next": "apprenticeship",
+            "id": "sister:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "sister:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "sister:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "sister:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_sister_identity"
         ]
       },
       "past": {
-        "text": "I once tended the keeper of the bell. He asked me to forget his face. I have tried, wanderer. I have tried.",
+        "text": "I trained at the royal infirmary, before the king sent its healers north. I returned to this chapel with a box of medicines and no answers for the families who followed me.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "sister:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "sister:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "Who taught you to heal?",
+            "next": "apprenticeship",
+            "id": "sister:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_sister_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -738,33 +1546,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "sister:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "sister:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "sister:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "He wanted to keep everyone safe. Fear makes that wish dangerous.",
+        "text": "The infirmary received his order to send every spare healer north. Then the messengers stopped. I know what he ordered, not what became of him.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "sister:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -772,21 +1620,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
         "text": "Osric has been leaving bread at empty graves. I do not ask whether it is prayer or apology.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "sister:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_sister_rumor"
         ]
       },
       "veil": {
@@ -794,16 +1676,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "sister:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "sister:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -811,34 +1713,84 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "sister:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
         "text": "Three pale herbs grow beside the forest paths. Avoid the green spirits. A blue crystal can cleanse what follows you home.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "sister:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
         "text": "The crystal remembers the first keeper. Go gently. You may find a wound that belongs to you.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:shrine:2"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
         ]
       },
       "boss": {
@@ -846,12 +1798,31 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "sister:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:boss:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "medicine": {
@@ -862,13 +1833,29 @@
             "next": "root",
             "action": {
               "kind": "heal"
-            }
+            },
+            "id": "sister:medicine:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:medicine:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:medicine:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:medicine:3"
           }
-        ]
+        ],
+        "topic": "medicine"
       },
       "work": {
         "text": "Bring three Weeping Herbs to Sister Elowen. I offer 35 Crowns and 60 XP.",
@@ -899,11 +1886,13 @@
             "condition": {
               "quest": "herbs",
               "state": "absent"
-            }
+            },
+            "id": "sister:work:0"
           },
           {
             "text": "What should I look for?",
-            "next": "materials"
+            "next": "materials",
+            "id": "sister:work:1"
           },
           {
             "text": "I have brought what you asked for.",
@@ -916,13 +1905,29 @@
             "condition": {
               "quest": "herbs",
               "state": "active"
-            }
+            },
+            "id": "sister:work:2"
           },
           {
             "text": "Not right now.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:work:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:work:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:work:5"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "materials": {
         "text": "Weeping Herbs grow along the forest paths. Gather three and bring them back. Their pale buds remain visible in the mist.",
@@ -937,24 +1942,133 @@
             "condition": {
               "quest": "herbs",
               "state": "absent"
-            }
+            },
+            "id": "sister:materials:0"
           },
           {
             "text": "Back.",
-            "next": "work"
+            "next": "@back",
+            "id": "sister:materials:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:materials:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:materials:3"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "discovery": {
         "text": "Three pale herbs grow beside the forest paths. Avoid the green spirits. A blue crystal can cleanse what follows you home. The eastern crypt gate will answer that sigil now.",
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "sister:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "sister:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "An old surgeon named Meret. She made us learn the names of our patients before their ailments. I think that is why I still remember them.",
+        "topic": "history",
+        "reveals": [
+          "learned_sister_trade"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "sister:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "sister:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "sister:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "I was born beyond the hills. Hollowmere became home when its people trusted me with their sick. You do not leave a trust like that lightly.",
+        "topic": "history",
+        "reveals": [
+          "learned_sister_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "sister:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "sister:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "sister:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "sister:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "sister:home:4"
           }
         ]
       }
@@ -964,8 +2078,28 @@
     "start": "root",
     "nodes": {
       "root": {
-        "text": "Something wore my brother\u2019s face in the woods. Please find his charm.",
+        "text": "Something wore my brother’s face in the woods. Please find his charm.",
         "variants": [
+          {
+            "condition": {
+              "flag": "ending",
+              "memory": "tovin_helped"
+            },
+            "text": "You brought him home, in the only way left to us. And you came back from the shrine. I hope it gave you peace."
+          },
+          {
+            "condition": {
+              "flag": "ending",
+              "memory": "tovin_betrayed"
+            },
+            "text": "You kept the last piece of him. Whatever you found in the shrine, I hope you understand what that choice cost."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "You came back from the shrine. I hope it gave you something you could bear to remember."
+          },
           {
             "condition": {
               "memory": "tovin_helped"
@@ -988,13 +2122,7 @@
             "condition": {
               "memory": "tovin_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. You came back. That means more than you think."
+            "text": "I have enough grief without your cruelty. Say what you came to say."
           },
           {
             "condition": {
@@ -1006,79 +2134,175 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_tovin_identity"
+            },
+            "id": "tovin:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_tovin_identity"
+            },
+            "id": "tovin:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "tovin:root:2",
+            "condition": {
+              "not_knowledge": "learned_tovin_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_tovin_history"
+            },
+            "id": "tovin:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "tovin:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "tovin:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "tovin:root:6"
           },
           {
             "text": "Have any work for me?",
-            "next": "work"
+            "next": "work",
+            "id": "tovin:root:7"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "tovin:root:8"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "tovin:root:9"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "tovin:root:10"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "Tovin. My brother used to introduce us both. I still wait for him to do it.",
         "choices": [
           {
+            "text": "What did your brother teach you?",
+            "next": "apprenticeship",
+            "id": "tovin:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "tovin:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "tovin:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "tovin:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_tovin_identity"
         ]
       },
       "past": {
-        "text": "My brother taught me the southern forest path. I cannot walk it now without expecting his footsteps behind mine.",
+        "text": "My brother taught me to read the king's road signs. We thought the road would take us somewhere better. Then he went into the woods, and I stopped making plans.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "tovin:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "tovin:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "What did your brother teach you?",
+            "next": "apprenticeship",
+            "id": "tovin:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_tovin_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -1086,33 +2310,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "tovin:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "tovin:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "tovin:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "Kings were stories adults told. My brother was real.",
+        "text": "I never met him. My brother said the northern road swallowed his army. I wish I knew which parts of that story were true.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "tovin:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -1120,21 +2384,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
-        "text": "Nell keeps my brother\u2019s seat empty. I wish she would stop. I wish she never would.",
+        "text": "Nell keeps my brother’s seat empty. I wish she would stop. I wish she never would.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "tovin:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_tovin_rumor"
         ]
       },
       "veil": {
@@ -1142,16 +2440,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "tovin:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "tovin:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -1159,34 +2477,84 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "tovin:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
         "text": "My brother hid things in a chest in the southwest hollow. The hound is still there. Please be careful.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "tovin:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
         "text": "If the shrine returns your memories, hold them carefully. Even the bad ones are yours.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:shrine:2"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
         ]
       },
       "boss": {
@@ -1194,28 +2562,31 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "tovin:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
-          }
-        ]
-      },
-      "medicine": {
-        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
-        "choices": [
+            "next": "@back",
+            "id": "tovin:boss:1"
+          },
           {
-            "text": "Can you heal me?",
-            "next": "root",
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
             "action": {
-              "kind": "heal"
-            }
-          },
-          {
-            "text": "Back.",
-            "next": "root"
+              "kind": "goodbye"
+            },
+            "id": "tovin:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "work": {
@@ -1247,11 +2618,13 @@
             "condition": {
               "quest": "charm",
               "state": "absent"
-            }
+            },
+            "id": "tovin:work:0"
           },
           {
             "text": "What should I look for?",
-            "next": "materials"
+            "next": "materials",
+            "id": "tovin:work:1"
           },
           {
             "text": "I have brought what you asked for.",
@@ -1264,7 +2637,8 @@
             "condition": {
               "quest": "charm",
               "state": "active"
-            }
+            },
+            "id": "tovin:work:2"
           },
           {
             "text": "I want to keep the charm.",
@@ -1277,13 +2651,29 @@
             "condition": {
               "quest": "charm",
               "state": "active"
-            }
+            },
+            "id": "tovin:work:3"
           },
           {
             "text": "Not right now.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:work:4"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:work:5"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:work:6"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "materials": {
         "text": "The charm lies in a chest in the southwest hollow. You may return it or admit you wish to keep it. My payment is the same; my trust is not.",
@@ -1298,24 +2688,133 @@
             "condition": {
               "quest": "charm",
               "state": "absent"
-            }
+            },
+            "id": "tovin:materials:0"
           },
           {
             "text": "Back.",
-            "next": "work"
+            "next": "@back",
+            "id": "tovin:materials:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:materials:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:materials:3"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "discovery": {
         "text": "My brother hid things in a chest in the southwest hollow. The hound is still there. Please be careful. The eastern crypt gate will answer that sigil now.",
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "tovin:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "tovin:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "How to mend a strap. How to set a snare. How to laugh when a snare caught nothing. I am still learning that last part.",
+        "topic": "history",
+        "reveals": [
+          "learned_tovin_trade"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "tovin:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "tovin:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "tovin:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "Always. My brother promised we would see the coast one day. I still do not know whether the sea sounds like the stories.",
+        "topic": "history",
+        "reveals": [
+          "learned_tovin_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "tovin:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "tovin:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "tovin:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "tovin:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "tovin:home:4"
           }
         ]
       }
@@ -1325,8 +2824,14 @@
     "start": "root",
     "nodes": {
       "root": {
-        "text": "The crypt gate needs a sigil. The forest sentinel carries it. End the bell\u2019s silence.",
+        "text": "The crypt gate needs a sigil. The forest sentinel carries it. End the bell’s silence.",
         "variants": [
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The bell is silent, and you returned from the shrine. That is a report worth hearing. Hollowmere owes you its morning."
+          },
           {
             "condition": {
               "flag": "boss"
@@ -1337,13 +2842,7 @@
             "condition": {
               "memory": "ilya_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. Wanderer. Report when you are ready."
+            "text": "We have enemies enough beyond the road. Do not make another in this square."
           },
           {
             "condition": {
@@ -1355,79 +2854,175 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_ilya_identity"
+            },
+            "id": "ilya:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_ilya_identity"
+            },
+            "id": "ilya:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "ilya:root:2",
+            "condition": {
+              "not_knowledge": "learned_ilya_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_ilya_history"
+            },
+            "id": "ilya:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "ilya:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "ilya:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "ilya:root:6"
           },
           {
             "text": "Have any work for me?",
-            "next": "work"
+            "next": "work",
+            "id": "ilya:root:7"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "ilya:root:8"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "ilya:root:9"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "ilya:root:10"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "Captain Ilya. There is no army left to command. Only a square worth defending.",
         "choices": [
           {
+            "text": "How did you become a captain?",
+            "next": "apprenticeship",
+            "id": "ilya:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "ilya:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "ilya:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "ilya:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_ilya_identity"
         ]
       },
       "past": {
-        "text": "I held the western bridge until the dead learned to cross the riverbed. Eight of us returned. I do not count myself among the living yet.",
+        "text": "I led the rear guard of the king's northern march. At the marsh bridge, I turned back with the wounded. People call that desertion. The people I carried home call it something else.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "ilya:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "ilya:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "How did you become a captain?",
+            "next": "apprenticeship",
+            "id": "ilya:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_ilya_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -1435,33 +3030,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "ilya:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "ilya:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "ilya:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "I have not seen him since the western bridge. I no longer trust reports of his death.",
+        "text": "I saw his standard cross the marsh bridge. I never saw it return. Any man who claims to know his fate knows more than I do.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "ilya:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -1469,21 +3104,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
         "text": "Vesper arrived before the curse. I have never seen anyone remember his arrival.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "ilya:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_ilya_rumor"
         ]
       },
       "veil": {
@@ -1491,16 +3160,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "ilya:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "ilya:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -1508,34 +3197,84 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "ilya:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
         "text": "The eastern sentinel carries the crypt sigil. A lost hound haunts the southwest; a knight guards the crypt. Three enemies, three different rhythms.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "ilya:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
         "text": "The shrine lies beyond the Bellkeeper. Once the guardian falls, I cannot follow you. That last report is yours alone.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:shrine:2"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
         ]
       },
       "boss": {
@@ -1543,28 +3282,31 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "ilya:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
-          }
-        ]
-      },
-      "medicine": {
-        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
-        "choices": [
+            "next": "@back",
+            "id": "ilya:boss:1"
+          },
           {
-            "text": "Can you heal me?",
-            "next": "root",
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
             "action": {
-              "kind": "heal"
-            }
-          },
-          {
-            "text": "Back.",
-            "next": "root"
+              "kind": "goodbye"
+            },
+            "id": "ilya:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "work": {
@@ -1596,42 +3338,39 @@
             "condition": {
               "quest": "bell",
               "state": "absent"
-            }
+            },
+            "id": "ilya:work:0"
           },
           {
             "text": "What should I look for?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "ilya:work:1"
           },
           {
             "text": "What about the three unquiet souls?",
-            "next": "elites"
+            "next": "elites",
+            "id": "ilya:work:2"
           },
           {
             "text": "Not right now.",
-            "next": "root"
-          }
-        ]
-      },
-      "materials": {
-        "text": "Follow the forest road.",
-        "choices": [
-          {
-            "text": "I will take the job.",
-            "next": "work",
-            "action": {
-              "kind": "accept",
-              "quest": "bell"
-            },
-            "condition": {
-              "quest": "bell",
-              "state": "absent"
-            }
+            "next": "@back",
+            "id": "ilya:work:3"
           },
           {
-            "text": "Back.",
-            "next": "work"
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:work:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:work:5"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "elites": {
         "text": "The sentinel, the lost hound, and the crypt knight. Lay all three to rest and I will pay 75 Crowns and 60 XP.",
@@ -1655,24 +3394,133 @@
             "condition": {
               "quest": "elites",
               "state": "absent"
-            }
+            },
+            "id": "ilya:elites:0"
           },
           {
             "text": "Back.",
-            "next": "work"
+            "next": "@back",
+            "id": "ilya:elites:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:elites:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:elites:3"
           }
-        ]
+        ],
+        "topic": "quest"
       },
       "discovery": {
         "text": "The eastern sentinel carries the crypt sigil. A lost hound haunts the southwest; a knight guards the crypt. Three enemies, three different rhythms. The eastern crypt gate will answer that sigil now.",
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "ilya:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "ilya:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "I could read maps when most of the recruits could not. After the first winter, I could read a hungry face better than any map.",
+        "topic": "history",
+        "reveals": [
+          "learned_ilya_trade"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "ilya:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "ilya:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "ilya:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "My home was west of the bridge. There may still be a roof there. The people I protect are here, so my duty is here.",
+        "topic": "history",
+        "reveals": [
+          "learned_ilya_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "ilya:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "ilya:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "ilya:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "ilya:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "ilya:home:4"
           }
         ]
       }
@@ -1686,6 +3534,12 @@
         "variants": [
           {
             "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine answered you. Perhaps I can stop asking silence to absolve me and start helping the living."
+          },
+          {
+            "condition": {
               "flag": "boss"
             },
             "text": "I can hear my own prayers again. They sound smaller, but more honest."
@@ -1694,13 +3548,7 @@
             "condition": {
               "memory": "osric_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. I hoped you would return. There are words I should have said sooner."
+            "text": "Your words cut deeper than you knew. Perhaps mine did too. Let us try again."
           },
           {
             "condition": {
@@ -1712,75 +3560,170 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_osric_identity"
+            },
+            "id": "osric:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_osric_identity"
+            },
+            "id": "osric:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "osric:root:2",
+            "condition": {
+              "not_knowledge": "learned_osric_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_osric_history"
+            },
+            "id": "osric:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "osric:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "osric:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "osric:root:6"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "osric:root:7"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "osric:root:8"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "osric:root:9"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "Osric. I once called myself a shepherd of souls. These days I mostly lose the flock.",
         "choices": [
           {
+            "text": "Why did you join the clergy?",
+            "next": "apprenticeship",
+            "id": "osric:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "osric:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "osric:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "osric:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_osric_identity"
         ]
       },
       "past": {
-        "text": "I prayed for an end to pain. When the Veil came, I mistook silence for an answer. Perhaps I was wrong.",
+        "text": "I blessed the king's first bell. We told ourselves it would call the lost home. When the march vanished, we rang it harder. That was my part in this.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "osric:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "osric:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "Why did you join the clergy?",
+            "next": "apprenticeship",
+            "id": "osric:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_osric_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -1788,33 +3731,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "osric:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "osric:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "osric:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "We mistook obedience for faith. I cannot tell you which of us was more afraid.",
+        "text": "After the northern march vanished, the king became a name in our prayers. We prayed loudly enough to drown out the questions.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "osric:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -1822,21 +3805,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
-        "text": "Elowen knows the keeper\u2019s face. Ask gently. Some truths look too much like wounds.",
+        "text": "Elowen knows the keeper’s face. Ask gently. Some truths look too much like wounds.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "osric:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_osric_rumor"
         ]
       },
       "veil": {
@@ -1844,16 +3861,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "osric:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "osric:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -1861,34 +3898,84 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "osric:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
         "text": "The forest dead remember their roads. The crypt dead remember orders. Listen for a pause between them.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "osric:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
         "text": "The prayer I signed began there. I fear the crystal still knows my handwriting.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:shrine:2"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
         ]
       },
       "boss": {
@@ -1896,28 +3983,31 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "osric:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
-          }
-        ]
-      },
-      "medicine": {
-        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
-        "choices": [
+            "next": "@back",
+            "id": "osric:boss:1"
+          },
           {
-            "text": "Can you heal me?",
-            "next": "root",
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
             "action": {
-              "kind": "heal"
-            }
-          },
-          {
-            "text": "Back.",
-            "next": "root"
+              "kind": "goodbye"
+            },
+            "id": "osric:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "discovery": {
@@ -1925,11 +4015,104 @@
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "osric:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "osric:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "I was frightened of death. The chapel gave that fear a uniform and called it certainty. I mistook the two for years.",
+        "topic": "history",
+        "reveals": [
+          "learned_osric_trade"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "osric:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "osric:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "osric:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "I came as a young acolyte. The chapel seemed larger then. Perhaps I was smaller, or the faith was.",
+        "topic": "history",
+        "reveals": [
+          "learned_osric_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "osric:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "osric:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "osric:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "osric:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "osric:home:4"
           }
         ]
       }
@@ -1943,6 +4126,12 @@
         "variants": [
           {
             "condition": {
+              "flag": "ending"
+            },
+            "text": "The crystal has answered. You were the keeper who rang the first bell. What you do with that knowledge is yours now."
+          },
+          {
+            "condition": {
               "flag": "boss"
             },
             "text": "The guardian is gone. The shrine can no longer hide your choice from you."
@@ -1951,13 +4140,7 @@
             "condition": {
               "memory": "vesper_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. Another question, another thread. Which will you follow?"
+            "text": "Cruelty leaves a clear memory. Is that the mark you meant to make?"
           },
           {
             "condition": {
@@ -1969,75 +4152,170 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_vesper_identity"
+            },
+            "id": "vesper:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_vesper_identity"
+            },
+            "id": "vesper:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "vesper:root:2",
+            "condition": {
+              "not_knowledge": "learned_vesper_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_vesper_history"
+            },
+            "id": "vesper:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "vesper:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "vesper:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "vesper:root:6"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "vesper:root:7"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "vesper:root:8"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "vesper:root:9"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "You may call me Vesper. The name you need is your own. We will come to that.",
         "choices": [
           {
+            "text": "Who taught you to remember?",
+            "next": "apprenticeship",
+            "id": "vesper:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "vesper:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "vesper:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "vesper:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_vesper_identity"
         ]
       },
       "past": {
-        "text": "I remember a wanderer ringing the first bell. You wore another name then. I will not give it back before you earn it.",
+        "text": "I followed the king's bell-makers here, long before the silence. I stayed because someone had to remember what the others were asked to forget.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "vesper:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "vesper:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "Who taught you to remember?",
+            "next": "apprenticeship",
+            "id": "vesper:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_vesper_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -2045,33 +4323,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "vesper:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "vesper:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "vesper:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "Ask the shrine what the king asked the bell to forget.",
+        "text": "The king asked the bell to take away the fear of loss. It took the boundary between loss and return instead. His fate is not the only answer buried in the shrine.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "vesper:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -2079,21 +4397,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
         "text": "The healer remembers what the innkeeper repeats in dreams. Between them, a whole kingdom survives.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "vesper:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_vesper_rumor"
         ]
       },
       "veil": {
@@ -2101,16 +4453,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "vesper:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "vesper:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -2118,33 +4490,91 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "vesper:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
-        "text": "The forest tests your patience. The crypt tests your fear. Bring the sentinel\u2019s sigil east, and let neither test choose for you.",
+        "text": "The forest tests your patience. The crypt tests your fear. Bring the sentinel’s sigil east, and let neither test choose for you.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "vesper:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
-        "text": "Beyond the guardian, the crystal keeps your first choice. You were the keeper who rang the bell. This time, you may choose otherwise.",
+        "text": "The crystal beyond the guardian keeps the first choice made here. I cannot give you its answer. You will have to stand before it yourself.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:shrine:2"
+          }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
+        ],
+        "variants": [
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The crystal has answered. You were the keeper who rang the first bell. What you do with that knowledge is yours now."
           }
         ]
       },
@@ -2153,40 +4583,136 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "vesper:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
-          }
-        ]
-      },
-      "medicine": {
-        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
-        "choices": [
+            "next": "@back",
+            "id": "vesper:boss:1"
+          },
           {
-            "text": "Can you heal me?",
-            "next": "root",
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
             "action": {
-              "kind": "heal"
-            }
-          },
-          {
-            "text": "Back.",
-            "next": "root"
+              "kind": "goodbye"
+            },
+            "id": "vesper:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "discovery": {
-        "text": "The forest tests your patience. The crypt tests your fear. Bring the sentinel\u2019s sigil east, and let neither test choose for you. The eastern crypt gate will answer that sigil now.",
+        "text": "The forest tests your patience. The crypt tests your fear. Bring the sentinel’s sigil east, and let neither test choose for you. The eastern crypt gate will answer that sigil now.",
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "vesper:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "vesper:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "No one. Forgetting simply refused me. At first I thought it a gift. I have lived long enough to reconsider.",
+        "topic": "history",
+        "reveals": [
+          "learned_vesper_trade"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "vesper:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "vesper:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "vesper:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "I have lived in many places. Hollowmere is the one that kept bringing me back. Some roads are circles before you notice.",
+        "topic": "history",
+        "reveals": [
+          "learned_vesper_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "vesper:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "vesper:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "vesper:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "vesper:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "vesper:home:4"
           }
         ]
       }
@@ -2200,6 +4726,12 @@
         "variants": [
           {
             "condition": {
+              "flag": "ending"
+            },
+            "text": "The sleepers are quiet and the hearth is warm. Whatever you learned at the shrine, there is a place for you here."
+          },
+          {
+            "condition": {
               "flag": "boss"
             },
             "text": "For the first night in years, the sleepers did not scream. Stay for a while."
@@ -2208,13 +4740,7 @@
             "condition": {
               "memory": "nell_insult"
             },
-            "text": "I have not forgotten your cruelty. Speak honestly this time."
-          },
-          {
-            "condition": {
-              "flag": "ending"
-            },
-            "text": "The shrine has answered. Hollowmere remembers what you have done. Your chair is still warm. What is on your mind?"
+            "text": "My hearth is open. My patience is not bottomless. Speak as a guest."
           },
           {
             "condition": {
@@ -2226,82 +4752,178 @@
         "choices": [
           {
             "text": "Who are you?",
-            "next": "identity"
+            "next": "identity",
+            "condition": {
+              "not_knowledge": "learned_nell_identity"
+            },
+            "id": "nell:root:0"
+          },
+          {
+            "text": "Tell me about yourself again.",
+            "next": "identity",
+            "condition": {
+              "knowledge": "learned_nell_identity"
+            },
+            "id": "nell:root:1"
           },
           {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "nell:root:2",
+            "condition": {
+              "not_knowledge": "learned_nell_history"
+            }
+          },
+          {
+            "text": "About your past...",
+            "next": "past",
+            "condition": {
+              "knowledge": "learned_nell_history"
+            },
+            "id": "nell:root:3"
           },
           {
             "text": "Tell me about Hollowmere.",
-            "next": "town"
+            "next": "town",
+            "id": "nell:root:4"
           },
           {
             "text": "What do you know of the Veil?",
-            "next": "veil"
+            "next": "veil",
+            "id": "nell:root:5"
           },
           {
             "text": "I heard the bell has fallen silent.",
             "next": "boss",
             "condition": {
               "flag": "boss"
-            }
+            },
+            "id": "nell:root:6"
           },
           {
             "text": "May I rest here?",
             "next": "root",
             "action": {
               "kind": "rest"
-            }
+            },
+            "id": "nell:root:7"
           },
           {
             "text": "I found the forest sigil.",
             "next": "discovery",
             "condition": {
               "flag": "sentinel"
-            }
+            },
+            "id": "nell:root:8"
+          },
+          {
+            "text": "About the king you mentioned...",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "nell:root:9"
           },
           {
             "text": "Goodbye.",
-            "next": "root",
+            "next": "@exit",
             "action": {
               "kind": "goodbye"
-            }
+            },
+            "id": "nell:root:10"
           }
-        ]
+        ],
+        "topic": "root"
       },
       "identity": {
         "text": "Nell, keeper of the Last Hearth. Sit near the fire. It still remembers how to be kind.",
         "choices": [
           {
+            "text": "How did you come to run the inn?",
+            "next": "apprenticeship",
+            "id": "nell:identity:0"
+          },
+          {
+            "text": "Have you always lived here?",
+            "next": "home",
+            "id": "nell:identity:1"
+          },
+          {
             "text": "What is your story?",
-            "next": "past"
+            "next": "past",
+            "id": "nell:identity:2"
+          },
+          {
+            "text": "What happened to the king?",
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "nell:identity:3"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:identity:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:identity:5"
           }
+        ],
+        "topic": "identity",
+        "reveals": [
+          "learned_nell_identity"
         ]
       },
       "past": {
-        "text": "My inn used to house traveling players. Their last song is still scratched into a table. Now I rent quiet instead.",
+        "text": "The king once slept upstairs, on his way north. I washed the sheets and kept his room ready. Years passed before I understood he was not coming back.",
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "condition": {
+              "knowledge": "heard_about_king"
+            },
+            "id": "nell:past:0"
           },
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "nell:past:1"
           },
           {
-            "text": "What do you hear about the others?",
-            "next": "rumors"
+            "text": "How did you come to run the inn?",
+            "next": "apprenticeship",
+            "id": "nell:past:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:past:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:past:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:past:5"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "learned_nell_history",
+          "heard_about_king"
         ]
       },
       "town": {
@@ -2309,33 +4931,73 @@
         "choices": [
           {
             "text": "What happened to the king?",
-            "next": "king"
+            "next": "king",
+            "id": "nell:town:0",
+            "condition": {
+              "knowledge": "heard_about_king"
+            }
           },
           {
             "text": "Tell me a local rumor.",
-            "next": "rumors"
+            "next": "rumors",
+            "id": "nell:town:1"
           },
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "nell:town:2"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:town:3"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:town:4"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:town:5"
           }
-        ]
+        ],
+        "topic": "town"
       },
       "king": {
-        "text": "There is still a room upstairs bearing his crest. Nobody sleeps soundly in it.",
+        "text": "He left before dawn without eating. His guards spoke of a road through the northern marshes. That is the last news I can swear to.",
         "choices": [
           {
             "text": "Why did you stay?",
-            "next": "stay"
+            "next": "stay",
+            "id": "nell:king:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:king:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:king:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:king:3"
           }
+        ],
+        "topic": "history",
+        "reveals": [
+          "asked_about_king"
         ]
       },
       "stay": {
@@ -2343,21 +5005,55 @@
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:stay:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:stay:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:stay:2"
           }
-        ]
+        ],
+        "topic": "history"
       },
       "rumors": {
         "text": "Ilya visits the well at dawn. Eight names, spoken softly. Never a ninth.",
         "choices": [
           {
             "text": "What dangers lie nearby?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "nell:rumors:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:rumors:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:rumors:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:rumors:3"
           }
+        ],
+        "topic": "villagers",
+        "reveals": [
+          "learned_nell_rumor"
         ]
       },
       "veil": {
@@ -2365,16 +5061,36 @@
         "choices": [
           {
             "text": "What waits in the crypt?",
-            "next": "bell"
+            "next": "bell",
+            "id": "nell:veil:0"
           },
           {
             "text": "What do you know of the shrine?",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "nell:veil:1"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:veil:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:veil:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:veil:4"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "asked_about_veil"
         ]
       },
       "bell": {
@@ -2382,34 +5098,84 @@
         "choices": [
           {
             "text": "How do I reach it?",
-            "next": "dangers"
+            "next": "dangers",
+            "id": "nell:bell:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:bell:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:bell:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:bell:3"
           }
-        ]
+        ],
+        "topic": "veil"
       },
       "dangers": {
         "text": "Travellers vanished near the southwest hollow. Follow the lamps east, and do not follow any voice calling from the trees.",
         "choices": [
           {
             "text": "And the Bellkeeper?",
-            "next": "bell"
+            "next": "bell",
+            "id": "nell:dangers:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:dangers:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:dangers:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:dangers:3"
           }
-        ]
+        ],
+        "topic": "dangers"
       },
       "shrine": {
         "text": "Vesper speaks of a room without a hearth. Take some warmth with you, if only in memory.",
         "choices": [
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:shrine:0"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:shrine:1"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:shrine:2"
           }
+        ],
+        "topic": "veil",
+        "reveals": [
+          "heard_about_shrine"
         ]
       },
       "boss": {
@@ -2417,28 +5183,31 @@
         "choices": [
           {
             "text": "Tell me about the shrine.",
-            "next": "shrine"
+            "next": "shrine",
+            "id": "nell:boss:0"
           },
           {
             "text": "Back.",
-            "next": "root"
-          }
-        ]
-      },
-      "medicine": {
-        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
-        "choices": [
+            "next": "@back",
+            "id": "nell:boss:1"
+          },
           {
-            "text": "Can you heal me?",
-            "next": "root",
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:boss:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
             "action": {
-              "kind": "heal"
-            }
-          },
-          {
-            "text": "Back.",
-            "next": "root"
+              "kind": "goodbye"
+            },
+            "id": "nell:boss:3"
           }
+        ],
+        "topic": "boss",
+        "reveals": [
+          "bellkeeper_defeated"
         ]
       },
       "discovery": {
@@ -2446,11 +5215,104 @@
         "choices": [
           {
             "text": "What waits below?",
-            "next": "bell"
+            "next": "bell",
+            "id": "nell:discovery:0"
           },
           {
             "text": "Back.",
-            "next": "root"
+            "next": "@back",
+            "id": "nell:discovery:1"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:discovery:2"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:discovery:3"
+          }
+        ],
+        "topic": "dangers",
+        "reveals": [
+          "discovered_crypt"
+        ]
+      },
+      "apprenticeship": {
+        "text": "My husband built the hearth. I built the business around it. After he died, keeping the fire alive gave the days a shape.",
+        "topic": "history",
+        "reveals": [
+          "learned_nell_trade"
+        ],
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "nell:apprenticeship:0"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "nell:apprenticeship:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "nell:apprenticeship:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:apprenticeship:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:apprenticeship:4"
+          }
+        ]
+      },
+      "home": {
+        "text": "I arrived with a cart, a husband and enough flour for a week. The village fed us when the flour ran out. I remember that whenever a guest cannot pay.",
+        "topic": "history",
+        "reveals": [
+          "learned_nell_home"
+        ],
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay",
+            "id": "nell:home:0"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past",
+            "id": "nell:home:1"
+          },
+          {
+            "text": "Back.",
+            "next": "@back",
+            "id": "nell:home:2"
+          },
+          {
+            "text": "Return to main topics.",
+            "next": "@main",
+            "id": "nell:home:3"
+          },
+          {
+            "text": "Goodbye.",
+            "next": "@exit",
+            "action": {
+              "kind": "goodbye"
+            },
+            "id": "nell:home:4"
           }
         ]
       }

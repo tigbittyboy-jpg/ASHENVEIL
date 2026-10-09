@@ -79,6 +79,7 @@ func _process(dt):
 			ui.boss.show(); ui.boss.max_value = enemy.max_hp; ui.boss.value = enemy.hp
 			ui.boss_name.text = "THE BELLKEEPER · %d"%enemy.phase
 	world.player_position = player.position
+	world.labels.update_labels(player.position,mode == "play",ui.hud.get_global_rect(),ui.prompt.get_global_rect(),dt)
 	ui.prompt.text = ""
 	if mode != "play": return
 	var nearby: Dictionary = world.nearest(player.position)
@@ -92,7 +93,7 @@ func _process(dt):
 		if object.kind == "trap" and player.position.distance_to(object.pos) < 22: player.hurt(12,Vector2.ZERO,"Bleeding")
 func _unhandled_input(event):
 	if event.is_action_pressed("pause") and mode not in ["play","title","death"]:
-		if mode == "dialogue" and dialogue_node != "root": talk(active_npc,"root")
+		if mode == "dialogue" and dialogue_node != "root": dialogue.back(); show_dialogue()
 		elif service_npc != "": return_to_npc()
 		else: close_menu()
 		get_viewport().set_input_as_handled()
@@ -205,11 +206,12 @@ func button(text: String, callback: Callable, enabled: bool = true) -> Button:
 	return ui.button(rows,text,func(): sound("menu"); callback.call(),enabled)
 func close_menu():
 	pause_guard = Input.is_action_pressed("pause")
+	dialogue.end()
 	ui.close(); service_npc = ""; active_npc = ""
 	mode = "play"; player.locked = false; enemies.process_mode = Node.PROCESS_MODE_INHERIT; shots.process_mode = Node.PROCESS_MODE_INHERIT
 func title():
 	service_npc = ""
-	menu("ASHEN VEIL","A bell has fallen silent. A wanderer wakes without a name.",Vector2(440,385))
+	menu("ASHEN VEIL","A bell has fallen silent. A wanderer wakes without a name.",Vector2(440,435))
 	mode = "title"
 	button("New Adventure",func(): State.reset(); load_map("village",Vector2(480,480)); close_menu(); message("Find Ilya in the square. Controls are in the pause menu."))
 	for i in range(4):
@@ -227,7 +229,10 @@ func pause_menu():
 	button("Controls & Help",help_menu); button("Settings",settings)
 	button("Save and Return to Title",func(): save(0); title())
 func help_menu():
-	menu("Controls & Help","WASD / left stick — move\nLeft mouse / X — attack\nRight mouse / left shoulder — block\nSpace / A — dodge\nShift — sprint\nE / Y — interact\nQ / right shoulder — healing draught\nF — ember\nI — inventory · J — journal · C — character\nEsc / Start — pause or go back\n\nMenus: arrows or D-pad to select, Enter / A to confirm.\nBlue crystals heal and autosave. Speak to Ilya in the square to begin. Look for orange enemy warnings; dodge clear, then strike during recovery.")
+	menu("Controls & Help","",Vector2(650,450),false)
+	var scroll := ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; rows.add_child(scroll)
+	var body := VBoxContainer.new(); body.size_flags_horizontal = Control.SIZE_EXPAND_FILL; scroll.add_child(body)
+	ui.text(body,"WASD / left stick — move\nLeft mouse / X — attack\nRight mouse / left shoulder — block\nSpace / A — dodge\nShift — sprint\nE / Y — interact\nQ / right shoulder — healing draught\nF — ember\nI — inventory · J — journal · C — character\nEsc / Start — pause or go back\n\nMenus: arrows or D-pad to select, Enter / A to confirm.\nBlue crystals heal and autosave. Speak to Ilya in the square to begin. Look for orange enemy warnings; dodge clear, then strike during recovery.")
 	button("Back",pause_menu)
 func two_columns(left_width: float = 225) -> Array:
 	var columns := HBoxContainer.new(); columns.size_flags_vertical = Control.SIZE_EXPAND_FILL; rows.add_child(columns)
@@ -241,7 +246,7 @@ func inventory(selected: String = ""):
 	var columns := two_columns(); var left: VBoxContainer = columns[0]; var right: VBoxContainer = columns[1]
 	var chosen := selected if State.s.inventory.has(selected) else (str(State.s.inventory.keys()[0]) if not State.s.inventory.is_empty() else "")
 	for id in State.s.inventory:
-		ui.button(left,("◆ " if id == chosen else "")+State.items[id].name+" ×%d"%State.s.inventory[id],func(): inventory(id))
+		ui.button(left,("> " if id == chosen else "")+State.items[id].name+" ×%d"%State.s.inventory[id],func(): inventory(id))
 	if chosen != "":
 		var item: Dictionary = State.items[chosen]
 		ui.item_title(right,chosen); ui.text(right,item.rarity+" · "+(item.slot if item.slot != "" else "material / consumable"),12)
@@ -265,7 +270,7 @@ func journal(selected: String = ""):
 	for status in ["active","complete"]:
 		ui.text(left,status.capitalize(),14)
 		for id in State.s.quests:
-			if State.s.quests[id] == status: ui.button(left,("◆ " if id == selected_quest else "")+State.quest_defs[id].name,func(): journal(id))
+			if State.s.quests[id] == status: ui.button(left,("> " if id == selected_quest else "")+State.quest_defs[id].name,func(): journal(id))
 	if selected_quest != "":
 		var quest: Dictionary = State.quest_defs[selected_quest]
 		ui.text(right,quest.name,18); ui.text(right,State.s.quests[selected_quest].to_upper(),12); ui.text(right,quest.text)
@@ -288,27 +293,44 @@ func settings():
 		slider.value_changed.connect(func(value): State.s.settings[id] = value)
 	button("Back",title if from_title else pause_menu)
 func talk(id: String, node: String = "root", response: String = ""):
-	active_npc = id; dialogue_node = node; service_npc = ""; State.reconcile_quests()
-	var data: Dictionary = dialogue.node_for(id,node)
-	menu(State.npcs[id].name+" · "+State.npcs[id].role.capitalize(),"",Vector2(640,355),false); mode = "dialogue"
+	if dialogue.context.is_empty() or dialogue.context.npc != id:
+		if not dialogue.begin(id): message("This conversation is unavailable."); return
+	if node != dialogue.context.node and not dialogue.enter(node):
+		message("This conversation link is unavailable."); return
+	show_dialogue(response)
+func show_dialogue(response: String = ""):
+	if dialogue.context.is_empty(): return
+	active_npc = dialogue.context.npc; dialogue_node = dialogue.context.node; service_npc = ""; State.reconcile_quests()
+	dialogue.context.quests = State.s.quests.duplicate(true); dialogue.context.flags = State.s.flags.duplicate(true)
+	var data: Dictionary = dialogue.node_for(active_npc,dialogue_node)
+	if data.is_empty(): message("This conversation link is unavailable."); close_menu(); return
+	menu(State.npcs[active_npc].name+" · "+State.npcs[active_npc].role.capitalize(),"",Vector2(640,385),false); mode = "dialogue"
 	var conversation := HBoxContainer.new(); rows.add_child(conversation)
-	var portrait := TextureRect.new(); portrait.texture = load("res://assets/portraits/"+id+".png") if ResourceLoader.exists("res://assets/portraits/"+id+".png") else load("res://assets/npc.png")
-	portrait.custom_minimum_size = Vector2(90,100); portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; conversation.add_child(portrait)
-	dialogue_text = ui.text(conversation,response if response != "" else data.text)
+	var portrait := TextureRect.new(); portrait.texture = load("res://assets/portraits/"+active_npc+".png")
+	portrait.custom_minimum_size = Vector2(80,96); portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; conversation.add_child(portrait)
+	dialogue_text = ui.text(conversation,data.text if response == "" else response)
 	var scroll := ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; rows.add_child(scroll)
 	var choices := VBoxContainer.new(); choices.size_flags_horizontal = Control.SIZE_EXPAND_FILL; scroll.add_child(choices)
+	var owner_npc: String = active_npc; var owner_node: String = dialogue_node
 	for choice in data.choices:
-		ui.button(choices,choice.text,func(): select_dialogue(choice))
-	if node != "root": ui.button(choices,"Goodbye.",close_menu)
-	State.s.memory[id+"_spoken"] = true
-func select_dialogue(choice: Dictionary):
-	var npc := active_npc
+		ui.button(choices,choice.text,func():
+			if mode == "dialogue" and active_npc == owner_npc and dialogue_node == owner_node: select_dialogue(choice))
+	State.s.memory[active_npc+"_spoken"] = true
+func select_dialogue(request: Dictionary):
+	var choice: Dictionary = dialogue.choice(request.get("id",""))
+	if choice.is_empty(): return
+	var npc: String = dialogue.context.npc
+	dialogue.record_question(choice.id)
 	var action: Dictionary = choice.get("action",{})
-	if action.is_empty(): talk(npc,choice.next); return
+	if action.is_empty():
+		if choice.next == "@back": dialogue.back()
+		elif choice.next == "@main": dialogue.main()
+		elif not dialogue.enter(choice.next): message("This conversation link is unavailable."); return
+		show_dialogue(); return
 	if action.kind in ["accept","turn_in"]:
-		talk(npc,choice.next,dialogue.execute(npc,action)); return
-	var services := {"mara":["shop","sell"],"brann":["upgrade"],"sister":["heal"],"nell":["rest"]}
-	if action.kind != "goodbye" and action.kind not in services.get(npc,[]): return
+		var receipt: String = dialogue.execute(npc,action)
+		dialogue.enter(choice.next); show_dialogue(receipt); return
+	if action.kind != "goodbye" and action.kind not in dialogue.SERVICES.get(npc,[]): return
 	service_npc = npc
 	match action.kind:
 		"goodbye": close_menu()
@@ -318,8 +340,7 @@ func select_dialogue(choice: Dictionary):
 		"heal": heal_menu()
 		"rest": rest_menu()
 func return_to_npc():
-	var npc := service_npc
-	if npc != "": talk(npc)
+	if service_npc != "" and not dialogue.context.is_empty(): show_dialogue()
 	else: close_menu()
 func upgrade_menu():
 	var level: int = State.s.upgrades.get(State.s.equipment.weapon,0)
@@ -342,7 +363,7 @@ func shop(selected: String = "potion"):
 	menu("Mara's Wares","%d Crowns"%State.s.crowns,Vector2(690,420),false)
 	var columns := two_columns(); var left: VBoxContainer = columns[0]; var right: VBoxContainer = columns[1]
 	for id in ["potion","ether","tonic","antidote","dagger","axe","staff","bow","hood","mail","gloves","boots","charm","crown"]:
-		ui.button(left,("◆ " if selected == id else "")+State.items[id].name,func(): shop(id))
+		ui.button(left,("> " if selected == id else "")+State.items[id].name,func(): shop(id))
 	var item: Dictionary = State.items[selected]
 	ui.item_title(right,selected); ui.text(right,item.description); ui.text(right,"Price: %d Crowns\nAttack %d · Defense %d"%[item.price,item.get("attack",0),item.get("defense",0)])
 	ui.button(right,"Purchase...",func(): confirm_purchase(selected),State.s.crowns>=item.price)

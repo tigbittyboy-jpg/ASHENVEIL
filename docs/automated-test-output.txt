@@ -1,5 +1,8 @@
-Godot 4.6.3, Linux, 2026-10-09
+Godot 4.6.3, Linux, 2026-10-09; 0.4.0
 
+PASS dialogue validator: 8 NPCs, 129 nodes; explicit paths and conditional discoveries valid
+Ran 14 tests in 0.045s
+OK
 PASS content: twelve equipment and eight consumables/materials
 PASS content: eight NPCs and six enemy types plus boss
 PASS damage has minimum floor
@@ -294,6 +297,123 @@ PASS UI Escape closes dialogue without reopening pause
 PASS UI long choice lists scroll
 PASS UI mouse click selects authored response
 UI RESULT: 166 passed, 0 failed
+PASS CONTEXT mara starts with clean context
+PASS CONTEXT mara king question locked before mention
+PASS CONTEXT mara keeps prior branch and topic
+PASS CONTEXT mara history unlocks relevant king follow-up
+PASS CONTEXT mara records exact selected question
+PASS CONTEXT mara Back returns to the actual previous topic
+PASS CONTEXT mara background knowledge is persistent
+PASS CONTEXT mara Goodbye clears temporary context
+PASS CONTEXT mara learned follow-ups remain on reopen
+PASS CONTEXT mara missing target never becomes greeting
+PASS CONTEXT mara foreign or stale choices rejected
+PASS CONTEXT mara runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT brann starts with clean context
+PASS CONTEXT brann king question locked before mention
+PASS CONTEXT brann keeps prior branch and topic
+PASS CONTEXT brann history unlocks relevant king follow-up
+PASS CONTEXT brann records exact selected question
+PASS CONTEXT brann Back returns to the actual previous topic
+PASS CONTEXT brann background knowledge is persistent
+PASS CONTEXT brann Goodbye clears temporary context
+PASS CONTEXT brann learned follow-ups remain on reopen
+PASS CONTEXT brann missing target never becomes greeting
+PASS CONTEXT brann foreign or stale choices rejected
+PASS CONTEXT brann runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT sister starts with clean context
+PASS CONTEXT sister king question locked before mention
+PASS CONTEXT sister keeps prior branch and topic
+PASS CONTEXT sister history unlocks relevant king follow-up
+PASS CONTEXT sister records exact selected question
+PASS CONTEXT sister Back returns to the actual previous topic
+PASS CONTEXT sister background knowledge is persistent
+PASS CONTEXT sister Goodbye clears temporary context
+PASS CONTEXT sister learned follow-ups remain on reopen
+PASS CONTEXT sister missing target never becomes greeting
+PASS CONTEXT sister foreign or stale choices rejected
+PASS CONTEXT sister runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT tovin starts with clean context
+PASS CONTEXT tovin king question locked before mention
+PASS CONTEXT tovin keeps prior branch and topic
+PASS CONTEXT tovin history unlocks relevant king follow-up
+PASS CONTEXT tovin records exact selected question
+PASS CONTEXT tovin Back returns to the actual previous topic
+PASS CONTEXT tovin background knowledge is persistent
+PASS CONTEXT tovin Goodbye clears temporary context
+PASS CONTEXT tovin learned follow-ups remain on reopen
+PASS CONTEXT tovin missing target never becomes greeting
+PASS CONTEXT tovin foreign or stale choices rejected
+PASS CONTEXT tovin runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT ilya starts with clean context
+PASS CONTEXT ilya king question locked before mention
+PASS CONTEXT ilya keeps prior branch and topic
+PASS CONTEXT ilya history unlocks relevant king follow-up
+PASS CONTEXT ilya records exact selected question
+PASS CONTEXT ilya Back returns to the actual previous topic
+PASS CONTEXT ilya background knowledge is persistent
+PASS CONTEXT ilya Goodbye clears temporary context
+PASS CONTEXT ilya learned follow-ups remain on reopen
+PASS CONTEXT ilya missing target never becomes greeting
+PASS CONTEXT ilya foreign or stale choices rejected
+PASS CONTEXT ilya runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT osric starts with clean context
+PASS CONTEXT osric king question locked before mention
+PASS CONTEXT osric keeps prior branch and topic
+PASS CONTEXT osric history unlocks relevant king follow-up
+PASS CONTEXT osric records exact selected question
+PASS CONTEXT osric Back returns to the actual previous topic
+PASS CONTEXT osric background knowledge is persistent
+PASS CONTEXT osric Goodbye clears temporary context
+PASS CONTEXT osric learned follow-ups remain on reopen
+PASS CONTEXT osric missing target never becomes greeting
+PASS CONTEXT osric foreign or stale choices rejected
+PASS CONTEXT osric runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT vesper starts with clean context
+PASS CONTEXT vesper king question locked before mention
+PASS CONTEXT vesper keeps prior branch and topic
+PASS CONTEXT vesper history unlocks relevant king follow-up
+PASS CONTEXT vesper records exact selected question
+PASS CONTEXT vesper Back returns to the actual previous topic
+PASS CONTEXT vesper background knowledge is persistent
+PASS CONTEXT vesper Goodbye clears temporary context
+PASS CONTEXT vesper learned follow-ups remain on reopen
+PASS CONTEXT vesper missing target never becomes greeting
+PASS CONTEXT vesper foreign or stale choices rejected
+PASS CONTEXT vesper runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT nell starts with clean context
+PASS CONTEXT nell king question locked before mention
+PASS CONTEXT nell keeps prior branch and topic
+PASS CONTEXT nell history unlocks relevant king follow-up
+PASS CONTEXT nell records exact selected question
+PASS CONTEXT nell Back returns to the actual previous topic
+PASS CONTEXT nell background knowledge is persistent
+PASS CONTEXT nell Goodbye clears temporary context
+PASS CONTEXT nell learned follow-ups remain on reopen
+PASS CONTEXT nell missing target never becomes greeting
+PASS CONTEXT nell foreign or stale choices rejected
+PASS CONTEXT nell runtime choice IDs resolve only to authored local nodes
+PASS CONTEXT dialogue discoveries save using existing schema
+PASS CONTEXT all NPC discoveries survive save/load
+PASS CONTEXT NPC knowledge never leaks to another villager
+PASS CONTEXT cyclic topic revisits keep navigation history bounded
+PASS CONTEXT four real buildings, market and eight NPC labels
+PASS CONTEXT world labels avoid HUD, viewport and each other (800, 450) zoom 0.9
+PASS CONTEXT world labels avoid HUD, viewport and each other (800, 450) zoom 1.2
+PASS CONTEXT world labels avoid HUD, viewport and each other (800, 450) zoom 1.5
+PASS CONTEXT world labels avoid HUD, viewport and each other (1152, 648) zoom 0.9
+PASS CONTEXT world labels avoid HUD, viewport and each other (1152, 648) zoom 1.2
+PASS CONTEXT world labels avoid HUD, viewport and each other (1152, 648) zoom 1.5
+PASS CONTEXT world labels avoid HUD, viewport and each other (1600, 900) zoom 0.9
+PASS CONTEXT world labels avoid HUD, viewport and each other (1600, 900) zoom 1.2
+PASS CONTEXT world labels avoid HUD, viewport and each other (1600, 900) zoom 1.5
+PASS CONTEXT menus suppress world labels immediately
+PASS CONTEXT distant building labels are hidden
+PASS CONTEXT camera movement does not detach world labels from buildings
+PASS CONTEXT pixel font disables smoothing and OS fallback
+PASS CONTEXT all current interface text inherits the bundled pixel font
+PASS CONTEXT pixel font supplies game punctuation and UI symbols
+CONTEXT RESULT: 116 passed, 0 failed
 PASS music: 32.00s, maximum adjacent sample difference 100, boundary discontinuity 0
 PASS ambient: 32.00s, maximum adjacent sample difference 37, boundary discontinuity 0
 PASS hit: 0.25s, maximum adjacent sample difference 85, boundary discontinuity 0
@@ -301,3 +421,10 @@ PASS swing: 0.25s, maximum adjacent sample difference 189, boundary discontinuit
 PASS loot: 0.25s, maximum adjacent sample difference 401, boundary discontinuity 0
 PASS bell: 0.25s, maximum adjacent sample difference 55, boundary discontinuity 0
 PASS menu: 0.25s, maximum adjacent sample difference 267, boundary discontinuity 0
+
+PASS architecture 0x1000007: ad hoc signature, 23123 code pages, Info.plist and CodeResources seals
+PASS architecture 0x100000c: ad hoc signature, 21622 code pages, Info.plist and CodeResources seals
+PASS 6 sealed resource hashes; ZIP integrity; app version 0.4.0
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS exported pack: Pixelify Sans, no smoothing/system fallback, full SIL OFL included
