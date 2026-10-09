@@ -5,6 +5,7 @@ func check(condition: bool, name: String):
 	if condition: passed += 1; print("PASS ",name)
 	else: failed += 1; push_error("FAIL "+name)
 func _ready():
+	get_tree().create_timer(40).timeout.connect(func(): push_error("Test runner timed out"); get_tree().quit(2))
 	await get_tree().process_frame
 	State.reset()
 	check(State.items.size() == 20,"content: twelve equipment and eight consumables/materials")
@@ -36,7 +37,8 @@ func _ready():
 	check(State.spend_attribute("Vitality") and State.stat("hp") == before+12,"attribute affects health")
 	check(State.unlock("Ember") and not State.unlock("Ember"),"skill cost and duplicate prevention")
 	State.accept("herbs")
-	check(State.reward("herbs"),"active quest rewards")
+	State.add_item("herb",3)
+	check(State.turn_in("herbs"),"validated quest turn-in rewards and consumes items")
 	var crowns: int = State.s.crowns
 	check(not State.reward("herbs") and State.s.crowns == crowns,"duplicate quest rewards rejected")
 	check(not State.reward("bell"),"unaccepted quest cannot reward")
@@ -141,10 +143,74 @@ func _ready():
 	g.close_menu()
 	State.s.settings.ollama = true
 	g.talk("mara")
-	g.dialogue.ask("mara","forest")
+	g.dialogue.ask("mara","bell")
 	await get_tree().create_timer(4.5).timeout
 	check(is_instance_valid(g.dialogue_text) and "bell is silent" in g.dialogue_text.text,"unavailable Ollama falls back within timeout")
+
 	g.close_menu()
+	State.reset()
+	State.accept("herbs")
+	var gold: int = State.s.crowns
+	check(not State.turn_in("herbs") and State.s.crowns == gold,"missing quest items cannot claim a reward")
+	check(not State.reward("herbs"),"unfinished quest cannot bypass objectives")
+	State.add_item("herb",3)
+	g.talk("sister")
+	await get_tree().process_frame
+	var line: LineEdit
+	for child in g.rows.get_children():
+		if child is LineEdit: line = child
+	check(line.has_focus(),"conversation input automatically receives focus")
+	line.text = "who are you"
+	var enter := InputEventKey.new(); enter.keycode = KEY_ENTER; enter.physical_keycode = KEY_ENTER; enter.pressed = true
+	Input.parse_input_event(enter)
+	await get_tree().process_frame
+	enter.pressed = false; Input.parse_input_event(enter)
+	check("village healer" in g.dialogue_text.text and line.text == "","Enter submits a typed NPC question and displays an answer")
+	for child in g.rows.get_children():
+		if child is Button and child.text == "Deliver Items & Claim Reward": child.pressed.emit(); break
+	check(State.s.quests.herbs == "complete" and State.s.crowns == gold+35 and not State.s.inventory.has("herb"),"real quest menu delivers items and awards exact Crowns")
+	check("+35 Crowns" in g.toast.text,"quest reward receipt remains visible")
+	check(not State.turn_in("herbs") and State.s.crowns == gold+35,"repeated turn-in cannot duplicate rewards")
+	State.add_item("charm"); State.equip("charm"); State.accept("charm")
+	check(State.turn_in("charm") and not State.s.equipment.has("accessory") and State.valid_save(State.s),"returning an equipped quest charm keeps equipment and saves valid")
+	State.s.flags.sentinel = true; State.s.flags.lost_hound = true; State.s.flags.crypt_knight = true
+	State.accept("elites")
+	check(State.s.quests.elites == "complete","accepting elite quest after victories still pays once")
+	State.s.flags.ending = true; State.accept("bell")
+	check(State.s.quests.bell == "complete","late main-quest acceptance recovers the ending reward")
+	State.add_item("ore",3); State.accept("iron")
+	gold = State.s.crowns
+	check(State.turn_in("iron") and State.s.crowns == gold+40 and not State.s.inventory.has("ore"),"iron delivery consumes exact materials and pays once")
+	State.s.quests.erase("charm"); State.add_item("charm"); State.equip("charm")
+	gold = State.s.crowns
+	check(State.turn_in("charm","keep") and State.s.equipment.accessory == "charm" and State.s.crowns == gold+40,"keep-charm branch preserves equipment and rewards")
+	check(State.save_game(2) and State.load_game(2) and not State.turn_in("charm","keep"),"turn-in uniqueness survives save restoration")
+	check(g.dialogue.fallback("mara","past") != g.dialogue.fallback("brann","past"),"NPC backgrounds remain distinct offline")
+	check(g.dialogue.intent_for("sister","accept quest").get("quest","") == "herbs","text recognizes quest acceptance")
+	check(g.dialogue.intent_for("brann","I have iron").get("kind","") == "quest_turnin","text recognizes objective delivery")
+	check(g.dialogue.fallback("tovin","brother") != g.dialogue.fallback("tovin","who are you"),"NPC topics return distinct authored answers")
+	g.close_menu(); State.reset(); g.load_map("village",Vector2(480,480))
+	g.player.immunity = 0; g.player.stun_resistance = 0
+	g.player.hurt(8,Vector2.ZERO,"Stun")
+	check(g.player.statuses.get("Stun",0) <= .2 and g.player.immunity >= .9,"stun is brief and protected by longer hit immunity")
+	await get_tree().create_timer(.3).timeout
+	check(not g.player.statuses.has("Stun"),"stun expires before the next damaging hit can land")
+	g.player.immunity = 0; g.player.hurt(8,Vector2.ZERO,"Stun")
+	check(not g.player.statuses.has("Stun"),"repeat stun rejected during recovery resistance")
+	g.player.immunity = 0; g.player.statuses.Stun = .2; g.player.statuses.Slow = .8
+	Input.action_press("dodge")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("dodge")
+	check(not g.player.statuses.has("Stun") and not g.player.statuses.has("Slow"),"dodge breaks stun and slow")
+	check(not g.world.walkable(Vector2(100,100)),"flooded village edge blocks movement")
+	check(g.world.layout.buildings.size() == 4 and g.world.layout.water.size() == 1,"town has distinct functional buildings and geography")
+	check(g.world.darkness.color.r < .6,"world darkness is separated from the UI")
+	for id in ["village","forest","crypt","shrine"]:
+		g.world.setup(id)
+		for object in g.world.objects:
+			if object.kind in ["npc","checkpoint","door"]: check(g.world.walkable(object.pos),"accessible "+id+" "+object.id)
+	check(g.world.walkable(g.world.safe_position(Vector2(0,0))),"old or unsafe spawn positions relocate to open ground")
 	g.queue_free()
 	await get_tree().process_frame
 	print("RESULT: %d passed, %d failed"%[passed,failed])

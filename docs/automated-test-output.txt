@@ -1,3 +1,25 @@
+4.6.3.stable.official.7d41c59c4
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registering global classes... (2 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  33% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Loading docks...[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
 Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
 
 PASS content: twelve equipment and eight consumables/materials
@@ -20,7 +42,7 @@ PASS materials cannot be consumed
 PASS XP levels and awards points
 PASS attribute affects health
 PASS skill cost and duplicate prevention
-PASS active quest rewards
+PASS validated quest turn-in rewards and consumes items
 PASS duplicate quest rewards rejected
 PASS unaccepted quest cannot reward
 PASS save writes atomically
@@ -57,4 +79,57 @@ PASS chapter conclusion completes main quest
 PASS chapter completion survives autosave restoration
 PASS player death shows respawn interface
 PASS unavailable Ollama falls back within timeout
-RESULT: 57 passed, 0 failed
+PASS missing quest items cannot claim a reward
+PASS unfinished quest cannot bypass objectives
+PASS conversation input automatically receives focus
+PASS Enter submits a typed NPC question and displays an answer
+PASS real quest menu delivers items and awards exact Crowns
+PASS quest reward receipt remains visible
+PASS repeated turn-in cannot duplicate rewards
+PASS returning an equipped quest charm keeps equipment and saves valid
+PASS accepting elite quest after victories still pays once
+PASS late main-quest acceptance recovers the ending reward
+PASS iron delivery consumes exact materials and pays once
+PASS keep-charm branch preserves equipment and rewards
+PASS turn-in uniqueness survives save restoration
+PASS NPC backgrounds remain distinct offline
+PASS text recognizes quest acceptance
+PASS text recognizes objective delivery
+PASS NPC topics return distinct authored answers
+PASS stun is brief and protected by longer hit immunity
+PASS stun expires before the next damaging hit can land
+PASS repeat stun rejected during recovery resistance
+PASS dodge breaks stun and slow
+PASS flooded village edge blocks movement
+PASS town has distinct functional buildings and geography
+PASS world darkness is separated from the UI
+PASS accessible village nell
+PASS accessible village brann
+PASS accessible village sister
+PASS accessible village mara
+PASS accessible village tovin
+PASS accessible village ilya
+PASS accessible village osric
+PASS accessible village vesper
+PASS accessible village village
+PASS accessible village forest
+PASS accessible forest village
+PASS accessible forest crypt
+PASS accessible forest forest
+PASS accessible crypt forest
+PASS accessible crypt shrine
+PASS accessible crypt crypt
+PASS accessible shrine crypt
+PASS accessible shrine shrine
+PASS old or unsafe spawn positions relocate to open ground
+RESULT: 100 passed, 0 failed
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+BOSS PLAYTEST: PASS · 22.9 simulated seconds · 34 sword attacks · 100 HP · 3 potions remaining
+PASS music: 32.00s, maximum adjacent sample difference 100, boundary discontinuity 0
+PASS ambient: 32.00s, maximum adjacent sample difference 37, boundary discontinuity 0
+PASS hit: 0.25s, maximum adjacent sample difference 85, boundary discontinuity 0
+PASS swing: 0.25s, maximum adjacent sample difference 189, boundary discontinuity 0
+PASS loot: 0.25s, maximum adjacent sample difference 401, boundary discontinuity 0
+PASS bell: 0.25s, maximum adjacent sample difference 55, boundary discontinuity 0
+PASS menu: 0.25s, maximum adjacent sample difference 267, boundary discontinuity 0

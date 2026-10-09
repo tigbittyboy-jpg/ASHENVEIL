@@ -8,7 +8,7 @@ Godot 4.6.3 Standard, GDScript, Compatibility renderer. `scenes/main.tscn` is th
 | `scripts/player.gd` | CharacterBody2D movement/collision, facing, dodge, stamina, block, attack intent, hurt response, statuses and death |
 | `scripts/enemy.gd` | CharacterBody2D enemy state machine, sight checks, territory, telegraphs, attacks, armor, boss phases and summons |
 | `scripts/projectile.gd` | Projectile motion, wall ray checks, target collision and damage delivery |
-| `scripts/world.gd` | Four generated connected map layouts, static collision, props, nearest interaction query, tile drawing and ambience |
+| `scripts/world.gd` | Four JSON-defined connected map layouts, static collision, props, nearest interaction query, tile drawing and ambience |
 | `scripts/dialogue.gd` | Authored fallback, bounded optional asynchronous Ollama adapter and authored purchase-intent proposals |
 | `scripts/game.gd` | Scene composition, input registration, menus/HUD, transitions, encounter spawning, interaction orchestration and presentation |
 | `data/*.json` | Stable item, NPC, enemy and quest IDs and definitions |
@@ -30,3 +30,5 @@ Position and checkpoint coordinates are validated inside map boundaries. Item ID
 ## Rendering and performance
 
 Source terrain is 16×16 and actor/prop art 32×32, drawn at consistent whole-number scales with nearest sampling. A 960×540 logical canvas keeps text/UI legible while pixel imagery remains coarse. The camera scrolls within each 1440×960 map. Static tile rendering is redrawn at roughly 7 Hz for ambient effects; CharacterBody2D physics and gameplay run at Godot's regular rate. The slice caps active enemies through fixed map spawns and two boss summons. No Apple Silicon frame-time benchmark is available yet.
+
+The 0.2.0 map layouts are in `data/maps.json`, and NPC background topics in `data/dialogue.json`. State owns `objective_ready`, `turn_in`, `quest_progress` and `reconcile_quests`; reward code rejects unmet objectives. Dialogue emits only text and proposes bounded action IDs. Menus hide and queue-free old controls rather than freeing an emitting button synchronously.

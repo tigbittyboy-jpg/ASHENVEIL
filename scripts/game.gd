@@ -41,12 +41,12 @@ func _ready():
 	ambience.stream = load("res://assets/ambient.wav")
 	ambience.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	ambience.stream.loop_end = ambience.stream.data.size()/2
-	if DisplayServer.get_name() != "headless" and not "Dummy" in OS.get_cmdline_args(): ambience.play()
+	if DisplayServer.get_name() != "headless" and AudioServer.get_driver_name() != "Dummy": ambience.play()
 	music = AudioStreamPlayer.new(); add_child(music)
 	music.stream = load("res://assets/music.wav")
 	music.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	music.stream.loop_end = music.stream.data.size()/2
-	if DisplayServer.get_name() != "headless" and not "Dummy" in OS.get_cmdline_args(): music.play()
+	if DisplayServer.get_name() != "headless" and AudioServer.get_driver_name() != "Dummy": music.play()
 	ui = CanvasLayer.new(); add_child(ui)
 	hud = Label.new(); hud.position = Vector2(18,12); hud.add_theme_font_size_override("font_size",18); ui.add_child(hud)
 	boss_label = Label.new(); boss_label.position = Vector2(330,485); ui.add_child(boss_label)
@@ -99,7 +99,8 @@ func load_map(id: String, pos: Vector2):
 	State.s.map = id
 	State.s.position = [pos.x,pos.y]
 	world.setup(id)
-	player.position = pos
+	player.position = world.safe_position(pos)
+	State.s.position = [player.position.x,player.position.y]
 	if id == "forest":
 		var kinds := ["wanderer","hound","cultist","wraith","wanderer","hound","cultist","knight"]
 		for i in range(kinds.size()): spawn(kinds[i],Vector2(320+(i%4)*250,280+(i/4)*340),"forest%d"%i)
@@ -132,7 +133,7 @@ func enemy_killed(enemy):
 		save(0)
 		menu("The Bellkeeper Falls","The last toll dissolves into dust. Beyond the arena, the Veil Shrine opens.\nThe villagers will remember what you have done.")
 		button("Take the Bellkeeper Blade",close_menu)
-	if State.s.flags.get("sentinel",false) and State.s.flags.get("lost_hound",false) and State.s.flags.get("crypt_knight",false): State.reward("elites")
+	State.reconcile_quests()
 	sound("loot")
 func attack(origin: Vector2, direction: Vector2, magic: bool):
 	sound("swing")
@@ -154,6 +155,7 @@ func fire(origin: Vector2, direction: Vector2, damage: float, hostile: bool, eff
 func interact(object: Dictionary):
 	if object.kind in ["chest","herb"] and State.s.flags.get(object.id,false): return
 	match object.kind:
+		"sign": menu("Weathered words",object.text); button("Close",close_menu)
 		"npc": talk(object.id)
 		"checkpoint":
 			State.s.checkpoint = {"map":State.s.map,"position":[player.position.x,player.position.y]}
@@ -170,7 +172,7 @@ func interact(object: Dictionary):
 		"herb":
 			if State.add_item("herb"): State.s.flags[object.id] = true; world.queue_redraw(); message("Weeping Herb gathered.")
 		"shrine":
-			State.s.flags["ending"] = true; State.reward("bell"); save(0)
+			State.s.flags["ending"] = true; State.accept("bell"); State.reconcile_quests(); save(0)
 			menu("CHAPTER I — THE VEIL REMEMBERS","Within the crystal is your own face.\nYou were the keeper who rang the first bell.\n\nVesper’s voice follows you: ‘A curse can be inherited. A choice cannot.’\n\nThe roads beyond Hollowmere await another chapter.")
 			button("Remain in Hollowmere",close_menu)
 func save(slot: int):
@@ -183,10 +185,18 @@ func death():
 		State.s.crowns = maxi(0,State.s.crowns-10); State.s.hp = State.stat("hp"); player.statuses.clear()
 		var p: Array = State.s.checkpoint.position
 		load_map(State.s.checkpoint.map,Vector2(p[0],p[1])); close_menu())
-func message(text: String): toast.text = text; toast_time = 5
-func sound(id: String): audio.stream = load("res://assets/"+id+".wav"); audio.play()
+func message(text: String): toast.text = text; toast_time = 9
+func sound(id: String):
+	if AudioServer.get_driver_name() == "Dummy": return
+	var voice := AudioStreamPlayer.new(); add_child(voice)
+	voice.stream = load("res://assets/"+id+".wav")
+	voice.volume_db = linear_to_db(maxf(.001,State.s.settings.master*State.s.settings.sfx))
+	voice.finished.connect(voice.queue_free)
+	voice.play()
 func menu(heading: String, text: String = ""):
-	if is_instance_valid(panel): panel.free()
+	if is_instance_valid(panel):
+		panel.hide()
+		panel.queue_free()
 	mode = "menu"; player.locked = true; enemies.process_mode = Node.PROCESS_MODE_DISABLED; shots.process_mode = Node.PROCESS_MODE_DISABLED
 	panel = PanelContainer.new(); panel.position = Vector2(210,78); panel.size = Vector2(570,425); ui.add_child(panel)
 	var style := StyleBoxFlat.new(); style.bg_color = Color("171d2a"); style.border_color = Color("a48c69"); style.set_border_width_all(2); style.content_margin_left = 18; style.content_margin_right = 18; style.content_margin_top = 12; style.content_margin_bottom = 12; panel.add_theme_stylebox_override("panel",style)
@@ -239,6 +249,7 @@ func journal():
 	for id in State.s.quests:
 		label(State.quest_defs[id].name+" — "+State.s.quests[id],19)
 		label(State.quest_defs[id].text)
+		label("Reward: %d Crowns + 60 XP · "%State.quest_defs[id].reward + State.quest_progress(id),14)
 	if State.s.quests.is_empty(): label("Seek Captain Ilya in the village.")
 	button("Close",close_menu)
 func character():
@@ -259,47 +270,76 @@ func settings():
 	button("Back",pause_menu)
 func talk(id: String):
 	active_npc = id
+	State.reconcile_quests()
 	menu(State.npcs[id].name)
 	dialogue_text = label(dialogue.fallback(id,""))
-	var line := LineEdit.new(); line.placeholder_text = "Ask about the forest, the bell, or their past..."; line.max_length = 300; rows.add_child(line)
-	line.text_submitted.connect(func(question):
+	var line := LineEdit.new()
+	line.placeholder_text = "Type a question, then Enter or Send..."
+	line.max_length = 300
+	rows.add_child(line)
+	var submit := func():
+		var question := line.text.strip_edges()
+		if question == "": return
 		var intent: Dictionary = dialogue.intent_for(id,question)
-		if not intent.is_empty(): confirm_purchase(intent.item); return
-		dialogue_text.text = "Listening..."; dialogue.ask(id,question); line.clear())
+		if not intent.is_empty(): confirm_intent(intent,id); return
+		dialogue_text.text = "Listening..."
+		dialogue.ask(id,question)
+		line.clear()
+		line.grab_focus()
+	line.text_submitted.connect(func(_question): submit.call())
+	button("Send question",submit)
+	label("Try: 'who are you', 'forest', 'quest', 'accept quest', 'deliver herbs'.",13)
 	match State.npcs[id].role:
-		"merchant":
-			button("Browse Wares",shop)
+		"merchant": button("Browse Wares",shop)
 		"smith":
-			button("Accept: Iron Remembers",func(): State.accept("iron"); talk(id))
-			button("Deliver three Grave Iron",func():
-				if State.s.quests.get("iron","") == "active" and State.remove_item("ore",3): State.reward("iron")
-				talk(id))
-			button("Upgrade weapon (25 × next level Crowns, next level iron)",func(): message("Weapon improved." if State.upgrade() else "Need more Crowns or Grave Iron, or maximum upgrade reached."); talk(id))
+			quest_buttons("iron",id)
+			button("Upgrade weapon · %d Crowns + %d iron"%[25*(State.s.upgrades.get(State.s.equipment.weapon,0)+1),State.s.upgrades.get(State.s.equipment.weapon,0)+1],func(): message("Weapon improved." if State.upgrade() else "Need more Crowns or Grave Iron, or maximum upgrade reached."); talk(id))
 		"healer":
-			button("Accept: A Gentle Mercy",func(): State.accept("herbs"); talk(id))
-			button("Deliver three Weeping Herbs",func():
-				if State.s.quests.get("herbs","") == "active" and State.remove_item("herb",3): State.reward("herbs"); State.s.memory["sister_helped"] = true
-				talk(id))
-			button("Healing — 8 Crowns",func():
-				if State.s.crowns >= 8: State.s.crowns -= 8; State.s.hp = State.stat("hp")
-				talk(id))
-		"quest":
-			button("Accept: The Silent Bell",func(): State.accept("bell"); talk(id))
-			button("Accept: Three Unquiet Souls",func(): State.accept("elites"); talk(id))
-		"resident":
-			button("Accept: A Brother’s Shadow",func(): State.accept("charm"); talk(id))
-			button("Return the Silver Charm",func():
-				if State.s.quests.get("charm","") == "active" and State.remove_item("charm"): State.reward("charm"); State.s.memory["tovin_helped"] = true
-				talk(id))
-			button("Keep the Charm — choose its power",func():
-				if State.s.quests.get("charm","") == "active" and State.s.inventory.get("charm",0)>0: State.reward("charm"); State.s.memory["tovin_betrayed"] = true
-				talk(id))
-		"innkeeper": button("Rest — 5 Crowns",func():
-			if State.s.crowns >= 5: State.s.crowns -= 5; State.s.hp = State.stat("hp"); save(0)
-			talk(id))
+			quest_buttons("herbs",id)
+			button("Healing — 8 Crowns",func(): heal_at_npc(); talk(id))
+		"quest": quest_buttons("bell",id); quest_buttons("elites",id)
+		"resident": quest_buttons("charm",id)
+		"innkeeper": button("Rest — 5 Crowns",func(): rest_at_npc(); talk(id))
 	if State.s.memory.get("tovin_helped",false) and id == "tovin": label("You brought him home. I will not forget.")
 	if State.s.memory.get("tovin_betrayed",false) and id == "tovin": label("You kept the last piece of him. Leave me alone.")
 	button("Leave",close_menu)
+	line.grab_focus.call_deferred()
+func quest_buttons(quest: String, npc: String):
+	var status: String = State.s.quests.get(quest,"not accepted")
+	label("%s · %s · Reward %d Crowns + 60 XP"%[State.quest_defs[quest].name,status,State.quest_defs[quest].reward],15)
+	if status == "complete": return
+	if status == "not accepted": button("Accept: "+State.quest_defs[quest].name,func(): State.accept(quest); talk(npc))
+	label(State.quest_progress(quest),14)
+	if quest in ["herbs","iron","charm"]:
+		button("Return Charm & Claim Reward" if quest == "charm" else "Deliver Items & Claim Reward",func(): State.turn_in(quest); talk(npc))
+		if quest == "charm": button("Keep Charm & Claim Reward",func(): State.turn_in(quest,"keep"); talk(npc))
+func heal_at_npc():
+	if State.s.crowns < 8: message("Healing costs 8 Crowns."); return
+	State.s.crowns -= 8; State.s.hp = State.stat("hp"); player.statuses.clear(); message("Wounds healed. −8 Crowns.")
+func rest_at_npc():
+	if State.s.crowns < 5: message("A room costs 5 Crowns."); return
+	State.s.crowns -= 5; State.s.hp = State.stat("hp"); player.statuses.clear(); save(0)
+func confirm_intent(intent: Dictionary, npc: String):
+	if intent.kind == "purchase": confirm_purchase(intent.item); return
+	if intent.kind == "shop": shop(); return
+	var heading: String = intent.kind.replace("_"," ").capitalize()
+	var details := ""
+	if intent.has("quest"):
+		details = State.quest_defs[intent.quest].text + "\nReward: %d Crowns + 60 XP"%State.quest_defs[intent.quest].reward
+		if intent.kind == "quest_turnin": details += "\n"+State.quest_progress(intent.quest)+"\nChoice: "+intent.choice
+	elif intent.kind == "heal": details = "Restore health and cleanse ailments for 8 Crowns."
+	elif intent.kind == "rest": details = "Restore health and save for 5 Crowns."
+	elif intent.kind == "upgrade": details = "Upgrade the equipped weapon; costs %d Crowns and %d Grave Iron."%[25*(State.s.upgrades.get(State.s.equipment.weapon,0)+1),State.s.upgrades.get(State.s.equipment.weapon,0)+1]
+	menu(heading,details)
+	button("Confirm",func():
+		match intent.kind:
+			"quest_accept": State.accept(intent.quest)
+			"quest_turnin": State.turn_in(intent.quest,intent.choice)
+			"heal": heal_at_npc()
+			"rest": rest_at_npc()
+			"upgrade": message("Weapon improved." if State.upgrade() else "Insufficient materials or Crowns.")
+		talk(npc))
+	button("Cancel",func(): talk(npc))
 func shop():
 	menu("Mara’s Wares","Crowns: %d — Select an item, then confirm the purchase."%State.s.crowns)
 	for id in ["potion","ether","tonic","antidote","dagger","axe","staff","bow","hood","mail","gloves","boots","charm","crown"]:

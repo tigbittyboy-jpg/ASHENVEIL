@@ -12,6 +12,7 @@ var statuses: Dictionary = {}
 var tick := 0.0
 var sprite: Sprite2D
 var animate_time := 0.0
+var stun_resistance := 0.0
 func _ready():
 	collision_layer = 1
 	collision_mask = 4
@@ -24,6 +25,7 @@ func _ready():
 	sprite.texture = load("res://assets/player.png")
 	sprite.scale = Vector2(1.5,1.5)
 	add_child(sprite)
+	var light := PointLight2D.new(); light.texture = load("res://assets/glow.png"); light.texture_scale = 2.4; light.color = Color("aec0d2"); light.energy = .55; add_child(light)
 	var camera := Camera2D.new()
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 8
@@ -35,6 +37,7 @@ func _ready():
 func _physics_process(dt):
 	cooldown = maxf(0,cooldown-dt)
 	immunity = maxf(0,immunity-dt)
+	stun_resistance = maxf(0,stun_resistance-dt)
 	dodge_time = maxf(0,dodge_time-dt)
 	sprite.modulate = Color(1,1,1,0.5) if immunity > 0 else Color.WHITE
 	if locked: velocity = Vector2.ZERO; return
@@ -45,10 +48,12 @@ func _physics_process(dt):
 	if Input.is_action_pressed("sprint") and move.length() > 0 and State.s.stamina > 1:
 		speed *= 1.5
 		State.s.stamina -= dt*20
-	if Input.is_action_just_pressed("dodge") and State.s.stamina >= 24 and dodge_time == 0:
-		State.s.stamina -= 24
+	if Input.is_action_just_pressed("dodge") and State.s.stamina >= 18 and dodge_time == 0:
+		State.s.stamina -= 18
 		dodge_time = 0.25
-		immunity = 0.32 if "Shadow" not in State.s.skills else 0.5
+		immunity = 0.42 if "Shadow" not in State.s.skills else 0.6
+		statuses.erase("Stun")
+		statuses.erase("Slow")
 	if dodge_time > 0: velocity = facing*420
 	else: velocity = move*speed*(0.55 if blocking else 1.0)*(0.5 if statuses.has("Slow") else 1.0)
 	if statuses.has("Stun"): velocity = Vector2.ZERO
@@ -78,15 +83,23 @@ func _physics_process(dt):
 	if tick >= 1:
 		tick = 0
 		for effect in ["Poison","Burning","Bleeding","Curse"]:
-			if statuses.has(effect): hurt(3,Vector2.ZERO)
+			if statuses.has(effect):
+				State.s.hp = maxf(0,State.s.hp-1)
+				if State.s.hp <= 0: locked = true; died.emit(); return
 	queue_redraw()
 func hurt(amount: float, direction: Vector2, effect: String = ""):
 	if immunity > 0 or locked: return
-	State.s.hp -= State.damage(amount,State.stat("defense"),blocking)
+	State.s.hp = maxf(0,State.s.hp-State.damage(amount,State.stat("defense"),blocking))
 	if blocking: State.s.stamina = maxf(0,State.s.stamina-10)
-	immunity = .55
+	immunity = .9
 	position += direction*12
-	if effect != "": statuses[effect] = 4.0
+	if effect == "Stun":
+		if stun_resistance <= 0 and not blocking:
+			statuses[effect] = .2
+			stun_resistance = 2.5
+			immunity = maxf(immunity,1.0)
+	elif effect == "Slow": statuses[effect] = .8
+	elif effect != "": statuses[effect] = 2.0
 	if State.s.hp <= 0:
 		locked = true
 		died.emit()

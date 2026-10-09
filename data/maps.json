@@ -1,0 +1,1527 @@
+{
+  "village": {
+    "roads": [
+      [
+        16,
+        444,
+        1408,
+        72
+      ],
+      [
+        520,
+        290,
+        350,
+        340
+      ],
+      [
+        325,
+        285,
+        64,
+        195
+      ],
+      [
+        1035,
+        280,
+        70,
+        200
+      ],
+      [
+        195,
+        485,
+        65,
+        260
+      ],
+      [
+        1015,
+        480,
+        80,
+        270
+      ]
+    ],
+    "water": [
+      [
+        42,
+        46,
+        145,
+        285
+      ]
+    ],
+    "walls": [],
+    "buildings": [
+      {
+        "rect": [
+          240,
+          110,
+          235,
+          185
+        ],
+        "label": "The Last Hearth \u00b7 Inn"
+      },
+      {
+        "rect": [
+          120,
+          560,
+          190,
+          145
+        ],
+        "label": "Brann's Forge"
+      },
+      {
+        "rect": [
+          955,
+          90,
+          250,
+          215
+        ],
+        "label": "Chapel of Mercy"
+      },
+      {
+        "rect": [
+          980,
+          750,
+          210,
+          145
+        ],
+        "label": "Tovin's Cottage"
+      }
+    ],
+    "objects": [
+      {
+        "kind": "npc",
+        "id": "nell",
+        "pos": [
+          355,
+          335
+        ]
+      },
+      {
+        "kind": "npc",
+        "id": "brann",
+        "pos": [
+          235,
+          740
+        ]
+      },
+      {
+        "kind": "npc",
+        "id": "sister",
+        "pos": [
+          1075,
+          345
+        ]
+      },
+      {
+        "kind": "npc",
+        "id": "mara",
+        "pos": [
+          700,
+          400
+        ]
+      },
+      {
+        "kind": "npc",
+        "id": "tovin",
+        "pos": [
+          1090,
+          705
+        ]
+      },
+      {
+        "kind": "npc",
+        "id": "ilya",
+        "pos": [
+          565,
+          555
+        ]
+      },
+      {
+        "kind": "npc",
+        "id": "osric",
+        "pos": [
+          945,
+          340
+        ]
+      },
+      {
+        "kind": "npc",
+        "id": "vesper",
+        "pos": [
+          1260,
+          740
+        ]
+      },
+      {
+        "kind": "checkpoint",
+        "id": "village",
+        "pos": [
+          650,
+          480
+        ]
+      },
+      {
+        "kind": "door",
+        "id": "forest",
+        "pos": [
+          1360,
+          480
+        ],
+        "label": "Weeping Forest"
+      },
+      {
+        "kind": "well",
+        "id": "well",
+        "pos": [
+          770,
+          555
+        ]
+      },
+      {
+        "kind": "stall",
+        "id": "market",
+        "pos": [
+          705,
+          355
+        ]
+      },
+      {
+        "kind": "forge",
+        "id": "forge",
+        "pos": [
+          160,
+          725
+        ]
+      },
+      {
+        "kind": "cart",
+        "id": "cart",
+        "pos": [
+          895,
+          520
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "tower",
+        "pos": [
+          1285,
+          820
+        ]
+      },
+      {
+        "kind": "banner",
+        "id": "banner",
+        "pos": [
+          560,
+          505
+        ]
+      },
+      {
+        "kind": "sign",
+        "id": "sign",
+        "pos": [
+          1190,
+          470
+        ],
+        "label": "East: Weeping Forest \u00b7 Ask Ilya at the square",
+        "text": "The Weeping Forest lies east. Captain Ilya guards the square; Nell offers shelter at the Last Hearth."
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave0",
+        "pos": [
+          820,
+          110
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave1",
+        "pos": [
+          875,
+          110
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave2",
+        "pos": [
+          930,
+          110
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave3",
+        "pos": [
+          820,
+          175
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave4",
+        "pos": [
+          875,
+          175
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave5",
+        "pos": [
+          930,
+          175
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave6",
+        "pos": [
+          820,
+          240
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave7",
+        "pos": [
+          875,
+          240
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "town_grave8",
+        "pos": [
+          930,
+          240
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "town_tree0",
+        "pos": [
+          95,
+          380
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "town_tree1",
+        "pos": [
+          95,
+          850
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "town_tree2",
+        "pos": [
+          440,
+          740
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "town_tree3",
+        "pos": [
+          535,
+          170
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "town_tree4",
+        "pos": [
+          1320,
+          150
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "town_tree5",
+        "pos": [
+          1350,
+          300
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "town_tree6",
+        "pos": [
+          60,
+          650
+        ]
+      }
+    ],
+    "lights": [
+      [
+        355,
+        315
+      ],
+      [
+        235,
+        720
+      ],
+      [
+        1075,
+        325
+      ],
+      [
+        700,
+        400
+      ],
+      [
+        565,
+        555
+      ],
+      [
+        1260,
+        740
+      ]
+    ]
+  },
+  "forest": {
+    "roads": [
+      [
+        16,
+        444,
+        350,
+        72
+      ],
+      [
+        300,
+        340,
+        500,
+        90
+      ],
+      [
+        680,
+        340,
+        95,
+        205
+      ],
+      [
+        710,
+        444,
+        714,
+        72
+      ],
+      [
+        360,
+        390,
+        70,
+        440
+      ],
+      [
+        1040,
+        170,
+        70,
+        300
+      ]
+    ],
+    "water": [
+      [
+        960,
+        690,
+        380,
+        220
+      ]
+    ],
+    "walls": [],
+    "buildings": [],
+    "lights": [
+      [
+        700,
+        470
+      ],
+      [
+        1170,
+        465
+      ]
+    ],
+    "objects": [
+      {
+        "kind": "door",
+        "id": "village",
+        "pos": [
+          65,
+          480
+        ],
+        "label": "Hollowmere"
+      },
+      {
+        "kind": "door",
+        "id": "crypt",
+        "pos": [
+          1360,
+          480
+        ],
+        "label": "Crypt \u2014 requires Sigil"
+      },
+      {
+        "kind": "checkpoint",
+        "id": "forest",
+        "pos": [
+          700,
+          470
+        ]
+      },
+      {
+        "kind": "chest",
+        "id": "forest_charm",
+        "pos": [
+          400,
+          790
+        ]
+      },
+      {
+        "kind": "chest",
+        "id": "forest_cache",
+        "pos": [
+          1080,
+          190
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "forest_ruin",
+        "pos": [
+          1110,
+          230
+        ]
+      },
+      {
+        "kind": "cart",
+        "id": "abandoned_cart",
+        "pos": [
+          555,
+          385
+        ]
+      },
+      {
+        "kind": "sign",
+        "id": "forest_sign",
+        "pos": [
+          740,
+          440
+        ],
+        "label": "Trail marker",
+        "text": "North: ruins and a forgotten cache. Southwest: the hound hollow. East: the sentinel and the crypt."
+      },
+      {
+        "kind": "torch",
+        "id": "sentinel_torch",
+        "pos": [
+          1170,
+          465
+        ]
+      },
+      {
+        "kind": "herb",
+        "id": "herb0",
+        "pos": [
+          300,
+          230
+        ]
+      },
+      {
+        "kind": "herb",
+        "id": "herb1",
+        "pos": [
+          475,
+          640
+        ]
+      },
+      {
+        "kind": "herb",
+        "id": "herb2",
+        "pos": [
+          650,
+          230
+        ]
+      },
+      {
+        "kind": "herb",
+        "id": "herb3",
+        "pos": [
+          825,
+          640
+        ]
+      },
+      {
+        "kind": "herb",
+        "id": "herb4",
+        "pos": [
+          1000,
+          230
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree1",
+        "pos": [
+          815,
+          712
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree2",
+        "pos": [
+          566,
+          769
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree3",
+        "pos": [
+          1039,
+          845
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree4",
+        "pos": [
+          745,
+          147
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree5",
+        "pos": [
+          1172,
+          384
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree6",
+        "pos": [
+          529,
+          752
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree7",
+        "pos": [
+          1210,
+          147
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree10",
+        "pos": [
+          724,
+          287
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree11",
+        "pos": [
+          457,
+          130
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree12",
+        "pos": [
+          743,
+          678
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree14",
+        "pos": [
+          252,
+          125
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree16",
+        "pos": [
+          951,
+          65
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree18",
+        "pos": [
+          615,
+          877
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree19",
+        "pos": [
+          959,
+          776
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree21",
+        "pos": [
+          976,
+          337
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree24",
+        "pos": [
+          1346,
+          274
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree25",
+        "pos": [
+          1163,
+          652
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree27",
+        "pos": [
+          1348,
+          772
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree28",
+        "pos": [
+          310,
+          700
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree29",
+        "pos": [
+          1183,
+          568
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree30",
+        "pos": [
+          944,
+          589
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree31",
+        "pos": [
+          1159,
+          897
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree33",
+        "pos": [
+          1238,
+          588
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree34",
+        "pos": [
+          685,
+          155
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree35",
+        "pos": [
+          823,
+          836
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree38",
+        "pos": [
+          88,
+          661
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree40",
+        "pos": [
+          1172,
+          882
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree42",
+        "pos": [
+          1243,
+          160
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree44",
+        "pos": [
+          840,
+          889
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree46",
+        "pos": [
+          138,
+          707
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree47",
+        "pos": [
+          1130,
+          108
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree48",
+        "pos": [
+          231,
+          723
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree49",
+        "pos": [
+          555,
+          758
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree56",
+        "pos": [
+          175,
+          853
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree57",
+        "pos": [
+          109,
+          129
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree58",
+        "pos": [
+          978,
+          743
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree59",
+        "pos": [
+          1230,
+          69
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree60",
+        "pos": [
+          699,
+          384
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree63",
+        "pos": [
+          251,
+          368
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree65",
+        "pos": [
+          472,
+          174
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree66",
+        "pos": [
+          250,
+          71
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree67",
+        "pos": [
+          396,
+          195
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree68",
+        "pos": [
+          172,
+          206
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree69",
+        "pos": [
+          130,
+          378
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree70",
+        "pos": [
+          798,
+          76
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree72",
+        "pos": [
+          178,
+          306
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree73",
+        "pos": [
+          1256,
+          784
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree74",
+        "pos": [
+          700,
+          774
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree75",
+        "pos": [
+          1276,
+          87
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree80",
+        "pos": [
+          124,
+          595
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree81",
+        "pos": [
+          1309,
+          349
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree83",
+        "pos": [
+          737,
+          105
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree86",
+        "pos": [
+          328,
+          886
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree87",
+        "pos": [
+          303,
+          382
+        ]
+      },
+      {
+        "kind": "tree",
+        "id": "forest_tree88",
+        "pos": [
+          847,
+          788
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds0",
+        "pos": [
+          960,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds1",
+        "pos": [
+          994,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds2",
+        "pos": [
+          1028,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds3",
+        "pos": [
+          1062,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds4",
+        "pos": [
+          1096,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds5",
+        "pos": [
+          1130,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds6",
+        "pos": [
+          1164,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds7",
+        "pos": [
+          1198,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds8",
+        "pos": [
+          1232,
+          695
+        ]
+      },
+      {
+        "kind": "reeds",
+        "id": "reeds9",
+        "pos": [
+          1266,
+          695
+        ]
+      }
+    ]
+  },
+  "crypt": {
+    "roads": [
+      [
+        16,
+        405,
+        920,
+        150
+      ],
+      [
+        960,
+        195,
+        440,
+        550
+      ]
+    ],
+    "water": [],
+    "buildings": [],
+    "walls": [
+      [
+        480,
+        16,
+        24,
+        350
+      ],
+      [
+        480,
+        605,
+        24,
+        339
+      ],
+      [
+        950,
+        16,
+        24,
+        340
+      ],
+      [
+        950,
+        605,
+        24,
+        339
+      ]
+    ],
+    "lights": [
+      [
+        180,
+        420
+      ],
+      [
+        580,
+        480
+      ],
+      [
+        890,
+        415
+      ],
+      [
+        1140,
+        220
+      ],
+      [
+        1280,
+        710
+      ]
+    ],
+    "objects": [
+      {
+        "kind": "door",
+        "id": "forest",
+        "pos": [
+          65,
+          480
+        ],
+        "label": "Forest"
+      },
+      {
+        "kind": "door",
+        "id": "shrine",
+        "pos": [
+          1360,
+          480
+        ],
+        "label": "Veil Shrine \u2014 Bellkeeper seal"
+      },
+      {
+        "kind": "checkpoint",
+        "id": "crypt",
+        "pos": [
+          580,
+          480
+        ]
+      },
+      {
+        "kind": "chest",
+        "id": "crypt_cache",
+        "pos": [
+          780,
+          780
+        ]
+      },
+      {
+        "kind": "trap",
+        "id": "trap1",
+        "pos": [
+          730,
+          430
+        ]
+      },
+      {
+        "kind": "trap",
+        "id": "trap2",
+        "pos": [
+          820,
+          530
+        ]
+      },
+      {
+        "kind": "banner",
+        "id": "boss_banner",
+        "pos": [
+          1100,
+          220
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "broken_altar",
+        "pos": [
+          1300,
+          240
+        ]
+      },
+      {
+        "kind": "sign",
+        "id": "crypt_warning",
+        "pos": [
+          970,
+          485
+        ],
+        "label": "Bellkeeper inscription",
+        "text": "When the bell lifts, leave its marked circle. When the bell falls, strike. The waves leave six gaps; no blow binds your feet."
+      },
+      {
+        "kind": "grave",
+        "id": "grave0",
+        "pos": [
+          150,
+          180
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave1",
+        "pos": [
+          355,
+          180
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave2",
+        "pos": [
+          560,
+          180
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave3",
+        "pos": [
+          765,
+          180
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave4",
+        "pos": [
+          970,
+          180
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave5",
+        "pos": [
+          1175,
+          180
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave6",
+        "pos": [
+          150,
+          720
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave7",
+        "pos": [
+          355,
+          720
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave8",
+        "pos": [
+          560,
+          720
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave9",
+        "pos": [
+          765,
+          720
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave10",
+        "pos": [
+          970,
+          720
+        ]
+      },
+      {
+        "kind": "grave",
+        "id": "grave11",
+        "pos": [
+          1175,
+          720
+        ]
+      },
+      {
+        "kind": "rock",
+        "id": "rubble0",
+        "pos": [
+          290,
+          380
+        ]
+      },
+      {
+        "kind": "rock",
+        "id": "rubble1",
+        "pos": [
+          620,
+          185
+        ]
+      },
+      {
+        "kind": "rock",
+        "id": "rubble2",
+        "pos": [
+          710,
+          720
+        ]
+      },
+      {
+        "kind": "rock",
+        "id": "rubble3",
+        "pos": [
+          860,
+          260
+        ]
+      },
+      {
+        "kind": "torch",
+        "id": "crypt_torch0",
+        "pos": [
+          180,
+          420
+        ]
+      },
+      {
+        "kind": "torch",
+        "id": "crypt_torch1",
+        "pos": [
+          580,
+          480
+        ]
+      },
+      {
+        "kind": "torch",
+        "id": "crypt_torch2",
+        "pos": [
+          890,
+          415
+        ]
+      },
+      {
+        "kind": "torch",
+        "id": "crypt_torch3",
+        "pos": [
+          1140,
+          220
+        ]
+      },
+      {
+        "kind": "torch",
+        "id": "crypt_torch4",
+        "pos": [
+          1280,
+          710
+        ]
+      }
+    ]
+  },
+  "shrine": {
+    "roads": [
+      [
+        16,
+        444,
+        960,
+        72
+      ],
+      [
+        750,
+        320,
+        330,
+        330
+      ]
+    ],
+    "water": [
+      [
+        250,
+        90,
+        1100,
+        190
+      ],
+      [
+        250,
+        750,
+        1100,
+        160
+      ]
+    ],
+    "walls": [],
+    "buildings": [],
+    "lights": [
+      [
+        500,
+        480
+      ],
+      [
+        900,
+        480
+      ]
+    ],
+    "objects": [
+      {
+        "kind": "door",
+        "id": "crypt",
+        "pos": [
+          65,
+          480
+        ],
+        "label": "Crypt"
+      },
+      {
+        "kind": "shrine",
+        "id": "ending",
+        "pos": [
+          900,
+          480
+        ]
+      },
+      {
+        "kind": "checkpoint",
+        "id": "shrine",
+        "pos": [
+          500,
+          480
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar0",
+        "pos": [
+          490,
+          325
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar1",
+        "pos": [
+          675,
+          325
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar2",
+        "pos": [
+          860,
+          325
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar3",
+        "pos": [
+          1045,
+          325
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar4",
+        "pos": [
+          490,
+          625
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar5",
+        "pos": [
+          675,
+          625
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar6",
+        "pos": [
+          860,
+          625
+        ]
+      },
+      {
+        "kind": "ruin",
+        "id": "shrine_pillar7",
+        "pos": [
+          1045,
+          625
+        ]
+      }
+    ]
+  }
+}

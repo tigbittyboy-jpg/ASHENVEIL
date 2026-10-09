@@ -4,16 +4,16 @@
 
 An original, offline Godot 4 dark fantasy action RPG first playable. Explore Hollowmere, recover the crypt sigil in the Weeping Forest, defeat the Bellkeeper, and learn what waits inside the Veil Shrine.
 
-This is an early playable slice, not the finished 30–60 minute polished release described in the master brief. The core progression and save loop are implemented; art, encounter variety, narrative depth and balancing need further work. No timed human playthrough or Apple Silicon performance measurement has been completed.
+This is an early playable slice, not the finished 30–60 minute polished release described in the master brief. The core progression and save loop are implemented; art, encounter variety, narrative depth and balancing need further work. See [CHANGELOG.md](CHANGELOG.md) for the 0.2.0 playtest fixes. No timed human playthrough or Apple Silicon performance measurement has been completed.
 
 ## Open and play
 
 1. Install **Godot 4.6.3 Standard** from https://godotengine.org/download/macos/ (GDScript version; .NET is unnecessary).
 2. Import `project.godot` from this repository in Godot's project manager.
 3. Press **F6** with `scenes/main.tscn` open, or **F5** to run the project.
-4. Select **New Adventure**. Speak to Captain Ilya in the southern row of village houses and accept **The Silent Bell**.
+4. Select **New Adventure**. Speak to Captain Ilya in the central square by the banner and accept **The Silent Bell**.
 
-The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or Ollama. This is an ad hoc signed, unnotarized development bundle; launch on macOS has **not** been tested. Gatekeeper may block it; see [the damaged-app recovery steps](START_HERE.md#if-macos-says-the-app-is-damaged). Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
+The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or Ollama. This is an ad hoc signed, unnotarized development bundle; the revised 0.2.0 launch on macOS has **not** been confirmed. Gatekeeper may block it; see [the damaged-app recovery steps](START_HERE.md#if-macos-says-the-app-is-damaged). Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
 
 ## Controls
 
@@ -36,12 +36,12 @@ Menus support mouse, keyboard arrows, Enter and normal Godot UI navigation. The 
 
 ## First chapter walkthrough
 
-- The eight villagers are arranged in two rows. Mara sells five weapon categories, armor and consumables. Brann upgrades your equipped weapon using Grave Iron and Crowns. Sister Elowen heals and wants three Weeping Herbs. Tovin wants his brother's Silver Charm. Nell offers paid rest.
-- Speak to Ilya for the main quest and the three-elite side quest. Accept side quests before delivering their objectives.
+- The villagers occupy a road-linked square, inn, forge, chapel, cottage and ruined watchtower. Mara sells five weapon categories, armor and consumables. Brann upgrades your equipped weapon using Grave Iron and Crowns. Sister Elowen heals and wants three Weeping Herbs. Tovin wants his brother's Silver Charm. Nell offers paid rest.
+- Speak to Ilya for the main quest and the three-elite side quest. Quest delivery accepts an unaccepted delivery quest automatically; late main/elite acceptance also pays for already-completed objectives.
 - Use crystals to heal and autosave. The village crystal is on the central road. Forest and crypt crystals mark later checkpoints.
 - Follow the road east and press E at the door. Fight patrols in the forest; gather three green herbs. A southwest chest holds the Silver Charm. Returning it or keeping it changes Tovin's dialogue.
 - Defeat the armored sentinel near the eastern forest gate for the Crypt Sigil. The lost hound guards the southwest clearing. The crypt gate checks the sigil and will reject entry without it.
-- In the crypt, follow the openings between stone partitions. Avoid spike traps; defeat the crypt knight for the third elite objective. The Bellkeeper occupies the eastern chamber. Watch its orange attack circles, dodge through attacks, and use recovery windows. Blocking costs stamina. Phase two summons enemies and adds radial projectiles; phase three shortens warning and recovery times.
+- In the crypt, follow the openings between stone partitions. Avoid spike traps; defeat the crypt knight for the third elite objective. The Bellkeeper occupies the eastern chamber. Watch its orange attack circles, dodge through attacks, and use recovery windows. Blocking costs stamina; dodge breaks stun/slow. Phase two summons enemies and adds radial projectiles; phase three shortens warnings to 0.85 seconds and recovery to 1.15 seconds. Boss strikes no longer stun.
 - Defeating the boss gives the Bellkeeper Blade and permanently unlocks the eastern shrine. Equip the blade through Inventory. Enter the shrine and interact with its crystal for the chapter conclusion and main quest reward.
 - Esc opens three manual save slots. **Save and Return to Title** writes an autosave. Continue can restore any of the four slots. Death offers checkpoint respawn, retaining discoveries at a cost of ten Crowns.
 
@@ -59,7 +59,7 @@ Generated text cannot invoke gameplay methods. An authored parser recognizes mer
 
 ## Saves and settings
 
-Godot stores `slot_0.json` (autosave), `slot_1.json` to `slot_3.json`, temporary writes and backups under `user://`. On macOS this normally resolves to `~/Library/Application Support/Godot/app_userdata/Ashen Veil/`. Settings are saved with each game slot and restored when loading it. New Adventure resets settings to defaults. A broken primary save falls back to its backup; unsupported save versions are rejected safely. Schema migration is not implemented yet. Tests use a separate data directory and do not modify normal saves.
+Godot stores `slot_0.json` (autosave), `slot_1.json` to `slot_3.json`, temporary writes and backups under `user://`. On macOS this normally resolves to `~/Library/Application Support/Godot/app_userdata/Ashen Veil/`. Existing 0.1.x saves remain compatible; relocated map structures move an unsafe saved position to nearby open ground. Settings are saved with each game slot and restored when loading it. New Adventure resets settings to defaults. A broken primary save falls back to its backup; unsupported save versions are rejected safely. Schema migration is not implemented yet. Tests use a separate data directory and do not modify normal saves.
 
 ## Development and validation
 
@@ -83,6 +83,7 @@ Art regeneration needs Python 3 and Pillow; both are available in the prepared c
 ```sh
 python tools/generate_assets.py
 python tools/generate_content.py
+python tools/check_audio.py
 ```
 
 Content generation overwrites authored JSON defaults; do not run it over edited content without reviewing the diff. Sprite dimensions and replacement conventions are in `docs/ASSETS.md`.

@@ -61,3 +61,7 @@ with wave.open(str(root/'music.wav'),'w') as w:
   t=n/22050; note=notes[int(t)]; u=t%1
   value=(math.sin(t*note*math.tau)*.65+math.sin(t*note*2*math.tau)*.15)*math.sin(u*math.pi)**2*.1
   w.writeframesraw(struct.pack('<h',int(value*32767)))
+
+# Finish with the current environmental art and seamless audio revision.
+import runpy
+runpy.run_path(str(Path(__file__).with_name("refine_assets.py")))

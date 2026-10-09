@@ -45,7 +45,11 @@ func add_item(id: String, count: int = 1) -> bool:
 func remove_item(id: String, count: int = 1) -> bool:
 	if count <= 0 or s.inventory.get(id,0) < count: return false
 	s.inventory[id] -= count
-	if s.inventory[id] == 0: s.inventory.erase(id)
+	if s.inventory[id] == 0:
+		s.inventory.erase(id)
+		for slot in s.equipment.keys():
+			if s.equipment[slot] == id: s.equipment.erase(slot)
+		if not s.equipment.has("weapon") and s.inventory.has("rust_sword"): s.equipment.weapon = "rust_sword"
 	changed.emit()
 	return true
 func buy(id: String) -> bool:
@@ -96,14 +100,56 @@ func gain_xp(amount: int):
 		notice.emit("Level %d — three attribute points earned" % s.level)
 	changed.emit()
 func accept(id: String):
-	if quest_defs.has(id) and not s.quests.has(id): s.quests[id] = "active"
+	if not quest_defs.has(id): return
+	if not s.quests.has(id):
+		s.quests[id] = "active"
+		notice.emit("Quest accepted: " + quest_defs[id].name)
+	if id in ["bell","elites"] and objective_ready(id): reward(id)
 	changed.emit()
+func objective_ready(id: String) -> bool:
+	match id:
+		"herbs": return s.inventory.get("herb",0) >= 3
+		"iron": return s.inventory.get("ore",0) >= 3
+		"charm": return s.inventory.get("charm",0) >= 1
+		"bell": return s.flags.get("ending",false)
+		"elites": return s.flags.get("sentinel",false) and s.flags.get("lost_hound",false) and s.flags.get("crypt_knight",false)
+	return false
+func quest_progress(id: String) -> String:
+	match id:
+		"herbs": return "Weeping Herbs: %d/3 — return to Elowen" % mini(3,s.inventory.get("herb",0))
+		"iron": return "Grave Iron: %d/3 — return to Brann" % mini(3,s.inventory.get("ore",0))
+		"charm": return "Charm found — choose Return or Keep with Tovin" if objective_ready(id) else "Find the southwest forest chest"
+		"elites": return "Elites defeated: %d/3" % (int(s.flags.get("sentinel",false))+int(s.flags.get("lost_hound",false))+int(s.flags.get("crypt_knight",false)))
+		"bell": return "Visit the shrine" if s.flags.get("boss",false) else ("Enter the crypt" if s.flags.get("sentinel",false) else "Defeat the forest sentinel for the sigil")
+	return ""
+func turn_in(id: String, choice: String = "return") -> bool:
+	if not quest_defs.has(id): return false
+	if s.quests.get(id,"") == "complete":
+		notice.emit("Already rewarded: " + quest_defs[id].name); return false
+	if not s.quests.has(id): accept(id)
+	if not objective_ready(id):
+		notice.emit("Not ready: " + quest_progress(id)); return false
+	if id == "charm" and choice not in ["return","keep"]: return false
+	# Reward and item consumption happen together, through one validated path.
+	if not reward(id): return false
+	match id:
+		"herbs": remove_item("herb",3); s.memory["sister_helped"] = true
+		"iron": remove_item("ore",3); s.memory["brann_helped"] = true
+		"charm":
+			if choice == "return": remove_item("charm"); s.memory["tovin_helped"] = true
+			else: s.memory["tovin_betrayed"] = true
+	changed.emit()
+	return true
+func reconcile_quests():
+	for id in ["bell","elites"]:
+		if s.quests.get(id,"") == "active" and objective_ready(id): reward(id)
 func reward(id: String) -> bool:
-	if not quest_defs.has(id) or s.quests.get(id,"") != "active": return false
+	if not quest_defs.has(id) or s.quests.get(id,"") != "active" or not objective_ready(id): return false
 	s.quests[id] = "complete"
-	s.crowns += quest_defs[id].reward
+	var crowns: int = quest_defs[id].reward
+	s.crowns += crowns
 	gain_xp(60)
-	notice.emit("Quest complete: " + quest_defs[id].name)
+	notice.emit("%s COMPLETE · +%d Crowns · +60 XP" % [quest_defs[id].name,crowns])
 	return true
 func spend_attribute(id: String) -> bool:
 	if s.points < 1 or not s.attributes.has(id): return false
@@ -173,6 +219,7 @@ func load_game(slot: int = 0) -> bool:
 		var data = parser.data
 		if valid_save(data):
 			s = data
+			reconcile_quests()
 			changed.emit()
 			return true
 	return false
