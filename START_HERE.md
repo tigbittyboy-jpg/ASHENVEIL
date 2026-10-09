@@ -7,7 +7,21 @@
 3. Move the app to **Applications**, then open it.
 4. Choose **New Adventure**. Find **Captain Ilya** in the village's southern row of houses; accept **The Silent Bell**.
 
-The app includes native Apple Silicon support. It needs no terminal, Godot installation, internet or Ollama. It is an unsigned/unnotarized development build, and native Mac launch has not yet been tested. macOS may ask for approval: after attempting to open it, check **System Settings → Privacy & Security → Open Anyway**, if macOS offers that option and you trust this project. Do not disable system-wide security. If macOS reports the app damaged or refuses it, use the Godot method below and report the exact message.
+The app includes native Apple Silicon support. It needs no terminal, Godot installation, internet or Ollama. Version 0.1.1 is an ad hoc signed, unnotarized development build, and native Mac launch has not yet been tested. macOS may ask for approval: after attempting to open it, check **System Settings → Privacy & Security → Open Anyway**, if macOS offers that option and you trust this project. Do not disable system-wide security. If macOS reports the app damaged, use the recovery steps below or the Godot method.
+
+## If macOS says the app is damaged
+
+The original 0.1.0 upload had signing disabled. Replace it with the updated 0.1.1 ZIP above; it now contains verified ad hoc executable signatures and sealed app resources. Move the new app to **Applications**, replacing the old app. Existing saves live separately and are retained.
+
+If you trust this repository's build but macOS still blocks it, open **Terminal** and paste this one-time command:
+
+```sh
+codesign --verify --deep --strict "/Applications/Ashen Veil.app" && xattr -dr com.apple.quarantine "/Applications/Ashen Veil.app" && open "/Applications/Ashen Veil.app"
+```
+
+The first step checks the signature using Apple's tooling. Only if it passes does the command remove the download quarantine flag from this one app and launch it. It does not disable Gatekeeper system-wide. Terminal can be closed afterward; it does not need to keep running. If signature verification fails, stop and report the displayed error; do not bypass that failure. No `sudo` should be needed for an app installed by your user.
+
+Ad hoc signing is not Apple Developer ID signing or notarization. Actual Mac launch still requires your testing; cross-platform signature checks cannot prove Gatekeeper acceptance.
 
 ## Run with Godot — development fallback
 

@@ -30,3 +30,7 @@ The selected GitHub repository was verified empty: unborn local branch, no remot
 ## Scope still outstanding
 
 This is an early first playable, not a full polished 30–60 minute release. Required follow-up includes a real macOS playthrough and performance test, richer map/NPC content, full directional animation and feedback, deeper enemy navigation/behaviors, stronger boss presentation, elemental combat details, reusable UI scenes and expanded quest resources. Detailed limitations and exact launch instructions are in README.md.
+
+## macOS damaged-app report and 0.1.1 correction
+
+The user reported macOS's “damaged and can't be opened” dialog on the original download. The initial export had signing disabled. Enabled Godot's documented built-in ad hoc signing, bumped the bundle version to 0.1.1, excluded download archives from future exports, and rebuilt the app. Independently checked the ARM64 and x86_64 CodeDirectory page hashes, ad hoc flags, Info.plist seal, CodeResources seal and all six resource hashes. ZIP integrity also passed. Updated START_HERE.md with app-specific recovery guarded by Apple's signature verification. Ad hoc signatures do not grant Developer ID trust or notarization; actual macOS launch/Gatekeeper validation remain outstanding.

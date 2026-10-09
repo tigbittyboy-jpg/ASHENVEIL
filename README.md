@@ -13,7 +13,7 @@ This is an early playable slice, not the finished 30–60 minute polished releas
 3. Press **F6** with `scenes/main.tscn` open, or **F5** to run the project.
 4. Select **New Adventure**. Speak to Captain Ilya in the southern row of village houses and accept **The Silent Bell**.
 
-The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or Ollama. This is an unsigned, unnotarized development bundle; launch on macOS has **not** been tested. Gatekeeper may block it. Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
+The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or Ollama. This is an ad hoc signed, unnotarized development bundle; launch on macOS has **not** been tested. Gatekeeper may block it; see [the damaged-app recovery steps](START_HERE.md#if-macos-says-the-app-is-damaged). Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
 
 ## Controls
 
@@ -106,6 +106,6 @@ The official template is universal and includes native ARM64. The project enable
 - Core health, stamina, mana, attack, armor, crits and movement work. Full elemental resistances, separate magic-attack equipment statistics and broader status interactions remain unfinished. Hex briefly stuns projectile targets; Ember increases projectile damage.
 - The boss has phases, telegraphs, summons, radial waves and a victory screen, but lacks a cinematic intro, arena doors and bespoke animation/audio for every pattern.
 - Save corruption validation and backups work. Settings persist per slot; standalone settings storage, save migration and asynchronous disk I/O remain future work.
-- Real Ollama responses, gamepad hardware, native macOS launch, Retina behavior, real audio-device playback, signing, notarization and Apple Silicon 60 FPS performance have not been verified.
+- Real Ollama responses, gamepad hardware, native macOS launch, Retina behavior, real audio-device playback, Developer ID signing, notarization and Apple Silicon 60 FPS performance have not been verified.
 
 Continue development by first performing the manual smoke procedure on macOS, fixing discovered blockers, then replacing the primitive art and deepening encounters and dialogue. `ARCHITECTURE.md` identifies the ownership of each system.
