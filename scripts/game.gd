@@ -3,26 +3,28 @@ const Player = preload("res://scripts/player.gd")
 const Enemy = preload("res://scripts/enemy.gd")
 const World = preload("res://scripts/world.gd")
 const Projectile = preload("res://scripts/projectile.gd")
+const Interface = preload("res://scripts/interface.gd")
 const Dialogue = preload("res://scripts/dialogue.gd")
 var player
 var world
 var enemies: Node2D
 var shots: Node2D
 var ui: CanvasLayer
-var hud: Label
 var toast: Label
 var panel: PanelContainer
 var rows: VBoxContainer
 var dialogue
 var dialogue_text: Label
 var active_npc := ""
+var dialogue_node := "root"
+var service_npc := ""
+var selected_quest := ""
 var mode := "title"
 var audio: AudioStreamPlayer
 var ambience: AudioStreamPlayer
 var music: AudioStreamPlayer
-var bars: Array = []
 var toast_time := 0.0
-var boss_label: Label
+var pause_guard := false
 func _ready():
 	inputs()
 	world = World.new()
@@ -34,8 +36,6 @@ func _ready():
 	State.cleansed.connect(func(): player.statuses.clear())
 	player.died.connect(death)
 	dialogue = Dialogue.new(); add_child(dialogue)
-	dialogue.reply.connect(func(text):
-		if is_instance_valid(dialogue_text): dialogue_text.text = text)
 	audio = AudioStreamPlayer.new(); add_child(audio)
 	ambience = AudioStreamPlayer.new(); add_child(ambience)
 	ambience.stream = load("res://assets/ambient.wav")
@@ -47,13 +47,8 @@ func _ready():
 	music.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	music.stream.loop_end = music.stream.data.size()/2
 	if DisplayServer.get_name() != "headless" and AudioServer.get_driver_name() != "Dummy": music.play()
-	ui = CanvasLayer.new(); add_child(ui)
-	hud = Label.new(); hud.position = Vector2(18,12); hud.add_theme_font_size_override("font_size",18); ui.add_child(hud)
-	boss_label = Label.new(); boss_label.position = Vector2(330,485); ui.add_child(boss_label)
-	toast = Label.new(); toast.position = Vector2(18,510); toast.add_theme_color_override("font_color",Color("e9c58c")); ui.add_child(toast)
-	for entry in [["hp",Color("b65a68")],["stamina",Color("8fab81")],["mana",Color("739bbd")]]:
-		var bar := ProgressBar.new(); bar.position = Vector2(18+bars.size()*155,108); bar.size = Vector2(145,8); bar.show_percentage = false
-		var fill := StyleBoxFlat.new(); fill.bg_color = entry[1]; bar.add_theme_stylebox_override("fill",fill); ui.add_child(bar); bars.append([entry[0],bar])
+	ui = Interface.new(); add_child(ui)
+	toast = ui.toast
 	State.notice.connect(message)
 	load_map("village",Vector2(480,480))
 	title()
@@ -72,27 +67,35 @@ func inputs():
 		var e := InputEventJoypadMotion.new(); e.axis = entry[1]; e.axis_value = entry[2]; InputMap.action_add_event(entry[0],e)
 func _process(dt):
 	toast_time -= dt
-	for entry in bars: entry[1].max_value = State.stat(entry[0]); entry[1].value = State.s[entry[0]]
+	ui.update_hud()
+	ui.hud.visible = mode == "play"
+	if not Input.is_action_pressed("pause"): pause_guard = false
 	if toast_time <= 0: toast.text = ""
 	music.volume_db = linear_to_db(maxf(.001,State.s.settings.master*State.s.settings.music))
 	ambience.volume_db = linear_to_db(maxf(.001,State.s.settings.master*State.s.settings.ambient))
-	audio.volume_db = linear_to_db(maxf(.001,State.s.settings.master*State.s.settings.sfx))
-	hud.text = "%s   |   Level %d   Crowns %d\nHP %d/%d   Stamina %d   Mana %d   |   %s\nE Interact · Q Draught · F Ember · I Inventory · J Journal · C Character · Esc Menu" % [World.MAP_NAMES[State.s.map],State.s.level,State.s.crowns,State.s.hp,State.stat("hp"),State.s.stamina,State.s.mana,State.items[State.s.equipment.weapon].name]
-	boss_label.text = ""
+	ui.boss.hide(); ui.boss_name.text = ""
 	for enemy in enemies.get_children():
-		if enemy.kind == "boss": boss_label.text = "THE BELLKEEPER   %d / %d   PHASE %d" % [enemy.hp,enemy.max_hp,enemy.phase]
+		if enemy.kind == "boss":
+			ui.boss.show(); ui.boss.max_value = enemy.max_hp; ui.boss.value = enemy.hp
+			ui.boss_name.text = "THE BELLKEEPER · %d"%enemy.phase
+	world.player_position = player.position
+	ui.prompt.text = ""
 	if mode != "play": return
 	var nearby: Dictionary = world.nearest(player.position)
-	if not nearby.is_empty(): hud.text += "\n[E] " + str(nearby.get("label",State.npcs[nearby.id].name if nearby.kind == "npc" else nearby.kind.capitalize()))
+	if not nearby.is_empty(): ui.prompt.text = "[E] " + str(nearby.get("label",State.npcs[nearby.id].name if nearby.kind == "npc" else nearby.kind.capitalize()))
 	if Input.is_action_just_pressed("interact") and not nearby.is_empty(): interact(nearby)
 	if Input.is_action_just_pressed("inventory"): inventory()
 	if Input.is_action_just_pressed("journal"): journal()
 	if Input.is_action_just_pressed("stats"): character()
-	if Input.is_action_just_pressed("pause"): pause_menu()
+	if Input.is_action_just_pressed("pause") and not pause_guard: pause_menu()
 	for object in world.objects:
 		if object.kind == "trap" and player.position.distance_to(object.pos) < 22: player.hurt(12,Vector2.ZERO,"Bleeding")
 func _unhandled_input(event):
-	if event.is_action_pressed("pause") and mode not in ["play","title","death"]: close_menu(); get_viewport().set_input_as_handled()
+	if event.is_action_pressed("pause") and mode not in ["play","title","death"]:
+		if mode == "dialogue" and dialogue_node != "root": talk(active_npc,"root")
+		elif service_npc != "": return_to_npc()
+		else: close_menu()
+		get_viewport().set_input_as_handled()
 func load_map(id: String, pos: Vector2):
 	for child in enemies.get_children(): child.free()
 	for child in shots.get_children(): child.free()
@@ -193,178 +196,166 @@ func sound(id: String):
 	voice.volume_db = linear_to_db(maxf(.001,State.s.settings.master*State.s.settings.sfx))
 	voice.finished.connect(voice.queue_free)
 	voice.play()
-func menu(heading: String, text: String = ""):
-	if is_instance_valid(panel):
-		panel.hide()
-		panel.queue_free()
+func menu(heading: String, text: String = "", size: Vector2 = Vector2(650,410), scrolling: bool = true):
 	mode = "menu"; player.locked = true; enemies.process_mode = Node.PROCESS_MODE_DISABLED; shots.process_mode = Node.PROCESS_MODE_DISABLED
-	panel = PanelContainer.new(); panel.position = Vector2(210,78); panel.size = Vector2(570,425); ui.add_child(panel)
-	var style := StyleBoxFlat.new(); style.bg_color = Color("171d2a"); style.border_color = Color("a48c69"); style.set_border_width_all(2); style.content_margin_left = 18; style.content_margin_right = 18; style.content_margin_top = 12; style.content_margin_bottom = 12; panel.add_theme_stylebox_override("panel",style)
-	var scroll := ScrollContainer.new(); scroll.custom_minimum_size = Vector2(530,390); panel.add_child(scroll)
-	rows = VBoxContainer.new(); rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL; scroll.add_child(rows)
-	label(heading,25)
-	if text != "": label(text,16)
-func label(text: String, size: int = 16) -> Label:
-	var l := Label.new(); l.text = text; l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; l.custom_minimum_size.x = 505; l.add_theme_font_size_override("font_size",size); rows.add_child(l); return l
-func button(text: String, callback: Callable):
-	var b := Button.new(); b.text = text; b.custom_minimum_size.y = 30; rows.add_child(b)
-	b.pressed.connect(func(): sound("menu"); callback.call())
-	if rows.get_child_count() <= 3: b.grab_focus()
+	rows = ui.open(heading,size,scrolling); panel = ui.panel
+	if text != "": label(text)
+func label(text: String, size: int = 14) -> Label: return ui.text(rows,text,size)
+func button(text: String, callback: Callable, enabled: bool = true) -> Button:
+	return ui.button(rows,text,func(): sound("menu"); callback.call(),enabled)
 func close_menu():
-	dialogue.cancel()
-	if is_instance_valid(panel): panel.queue_free()
+	pause_guard = Input.is_action_pressed("pause")
+	ui.close(); service_npc = ""; active_npc = ""
 	mode = "play"; player.locked = false; enemies.process_mode = Node.PROCESS_MODE_INHERIT; shots.process_mode = Node.PROCESS_MODE_INHERIT
 func title():
-	menu("ASHEN VEIL","A bell has fallen silent. A wanderer wakes without a name.\nAn original dark fantasy action RPG — Chapter I")
+	service_npc = ""
+	menu("ASHEN VEIL","A bell has fallen silent. A wanderer wakes without a name.",Vector2(440,385))
 	mode = "title"
-	button("New Adventure",func(): State.reset(); load_map("village",Vector2(480,480)); close_menu(); message("Find Captain Ilya. WASD move, mouse attack, Space dodge, E interact."))
+	button("New Adventure",func(): State.reset(); load_map("village",Vector2(480,480)); close_menu(); message("Find Ilya in the square. Controls are in the pause menu."))
 	for i in range(4):
 		var slot := i
 		button("Continue "+("Autosave" if i == 0 else "Slot %d"%i),func():
 			if State.load_game(slot): load_map(State.s.map,Vector2(State.s.position[0],State.s.position[1])); close_menu()
 			else: message("No valid save in this slot."))
-	button("Settings",settings)
-	button("Exit",shutdown)
+	button("Settings",settings); button("Exit",shutdown)
 func pause_menu():
-	menu("Rest in the Ashes")
+	service_npc = ""
+	menu("Rest in the Ashes","",Vector2(440,380))
 	button("Resume",close_menu)
 	for i in range(1,4):
 		var slot := i; button("Save Slot %d"%i,func(): save(slot))
-	button("Settings",settings)
+	button("Controls & Help",help_menu); button("Settings",settings)
 	button("Save and Return to Title",func(): save(0); title())
-func inventory():
-	menu("Satchel & Equipment","24 distinct item slots. Click equipment to equip; consumables to use. Right below each item is a sale option.")
-	for id in State.s.inventory.keys():
-		var item: Dictionary = State.items[id]
-		var equipped := " [Equipped]" if id in State.s.equipment.values() else ""
-		button("%s ×%d%s · %s · ATK %d DEF %d"%[item.name,State.s.inventory[id],equipped,item.rarity,item.get("attack",0),item.get("defense",0)],func():
-			if item.slot != "": State.equip(id)
-			else: State.use(id)
-			inventory())
-		label(item.description,13)
-		if item.price > 0: button("Sell one for %d Crowns"%maxi(1,int(item.price/2)),func(): State.sell(id); inventory())
-	button("Close",close_menu)
-func journal():
-	menu("The Wanderer’s Journal")
-	for id in State.s.quests:
-		label(State.quest_defs[id].name+" — "+State.s.quests[id],19)
-		label(State.quest_defs[id].text)
-		label("Reward: %d Crowns + 60 XP · "%State.quest_defs[id].reward + State.quest_progress(id),14)
-	if State.s.quests.is_empty(): label("Seek Captain Ilya in the village.")
+func help_menu():
+	menu("Controls & Help","WASD / left stick — move\nLeft mouse / X — attack\nRight mouse / left shoulder — block\nSpace / A — dodge\nShift — sprint\nE / Y — interact\nQ / right shoulder — healing draught\nF — ember\nI — inventory · J — journal · C — character\nEsc / Start — pause or go back\n\nMenus: arrows or D-pad to select, Enter / A to confirm.\nBlue crystals heal and autosave. Speak to Ilya in the square to begin. Look for orange enemy warnings; dodge clear, then strike during recovery.")
+	button("Back",pause_menu)
+func two_columns(left_width: float = 225) -> Array:
+	var columns := HBoxContainer.new(); columns.size_flags_vertical = Control.SIZE_EXPAND_FILL; rows.add_child(columns)
+	var left_scroll := ScrollContainer.new(); left_scroll.custom_minimum_size.x = left_width; left_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; left_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; columns.add_child(left_scroll)
+	var left := VBoxContainer.new(); left.size_flags_horizontal = Control.SIZE_EXPAND_FILL; left_scroll.add_child(left)
+	var right_scroll := ScrollContainer.new(); right_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL; right_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; right_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; columns.add_child(right_scroll)
+	var right := VBoxContainer.new(); right.size_flags_horizontal = Control.SIZE_EXPAND_FILL; right_scroll.add_child(right)
+	return [left,right]
+func inventory(selected: String = ""):
+	menu("Satchel & Equipment","%d / 24 item kinds · %d Crowns"%[State.s.inventory.size(),State.s.crowns],Vector2(700,425),false)
+	var columns := two_columns(); var left: VBoxContainer = columns[0]; var right: VBoxContainer = columns[1]
+	var chosen := selected if State.s.inventory.has(selected) else (str(State.s.inventory.keys()[0]) if not State.s.inventory.is_empty() else "")
+	for id in State.s.inventory:
+		ui.button(left,("◆ " if id == chosen else "")+State.items[id].name+" ×%d"%State.s.inventory[id],func(): inventory(id))
+	if chosen != "":
+		var item: Dictionary = State.items[chosen]
+		ui.item_title(right,chosen); ui.text(right,item.rarity+" · "+(item.slot if item.slot != "" else "material / consumable"),12)
+		ui.text(right,item.description)
+		var current: String = State.s.equipment.get(item.slot,"")
+		var comparison := ""
+		for stat in ["attack","defense"]:
+			var change: int = int(item.get(stat,0))-int(State.items[current].get(stat,0) if current != "" else 0)
+			comparison += "%s %d  (%+d vs equipped)\n"%[stat.capitalize(),item.get(stat,0),change]
+		ui.text(right,comparison)
+		if item.slot != "": ui.button(right,"Equipped" if chosen == current else "Equip",func(): State.equip(chosen); inventory(chosen),chosen != current)
+		elif item.get("effect","") != "": ui.button(right,"Use",func(): State.use(chosen); inventory(chosen))
+		if item.price > 0: ui.button(right,"Sell one · %d Crowns"%maxi(1,int(item.price/2)),func(): State.sell(chosen); inventory(chosen),chosen not in State.s.equipment.values())
+		ui.text(right,"Equipped",15)
+		for slot in ["weapon","head","chest","gloves","boots","accessory"]: ui.text(right,slot.capitalize()+": "+State.items[State.s.equipment[slot]].name if State.s.equipment.has(slot) else slot.capitalize()+": —",12)
+	button("Back to conversation" if service_npc != "" else "Close",return_to_npc if service_npc != "" else close_menu)
+func journal(selected: String = ""):
+	menu("The Wanderer's Journal","",Vector2(730,425),false)
+	var columns := two_columns(235); var left: VBoxContainer = columns[0]; var right: VBoxContainer = columns[1]
+	selected_quest = selected if State.s.quests.has(selected) else (str(State.s.quests.keys()[0]) if not State.s.quests.is_empty() else "")
+	for status in ["active","complete"]:
+		ui.text(left,status.capitalize(),14)
+		for id in State.s.quests:
+			if State.s.quests[id] == status: ui.button(left,("◆ " if id == selected_quest else "")+State.quest_defs[id].name,func(): journal(id))
+	if selected_quest != "":
+		var quest: Dictionary = State.quest_defs[selected_quest]
+		ui.text(right,quest.name,18); ui.text(right,State.s.quests[selected_quest].to_upper(),12); ui.text(right,quest.text)
+		ui.text(right,"Objectives",15); ui.text(right,State.quest_progress(selected_quest)); ui.text(right,"Reward",15)
+		ui.text(right,"%d Crowns · 60 XP"%quest.reward)
+	else: ui.text(right,"Speak with Captain Ilya in the square. Your accepted quests will appear here.")
 	button("Close",close_menu)
 func character():
 	menu("Character & Paths","Level %d · XP %d/%d · Points %d\nAttack %d · Defense %d · Speed %d"%[State.s.level,State.s.xp,State.s.level*45,State.s.points,State.stat("attack"),State.stat("defense"),State.stat("speed")])
-	for id in State.s.attributes:
-		button("%s %d — spend one point"%[id,State.s.attributes[id]],func(): State.spend_attribute(id); character())
-	for entry in [["Warrior","Cleave","+5 melee damage"],["Warrior","Bulwark","+20 health"],["Rogue","Fleet","+20 movement speed"],["Rogue","Shadow","Longer dodge immunity"],["Occultist","Ember","+8 Ember damage"],["Occultist","Hex","Projectiles weaken enemies"]]:
+	for id in State.s.attributes: button("%s %d · spend one point"%[id,State.s.attributes[id]],func(): State.spend_attribute(id); character(),State.s.points>0)
+	for entry in [["Warrior","Cleave","+5 melee damage"],["Warrior","Bulwark","+20 health"],["Rogue","Fleet","+20 speed"],["Rogue","Shadow","Longer dodge immunity"],["Occultist","Ember","+8 magic damage"],["Occultist","Hex","Projectile stun"]]:
 		var id: String = entry[1]
-		button("%s: %s — %s %s"%[entry[0],id,entry[2],"[Learned]" if id in State.s.skills else "(2 points)"],func(): State.unlock(id); character())
+		button("%s · %s · %s%s"%[entry[0],id,entry[2]," [Learned]" if id in State.s.skills else " (2 points)"],func(): State.unlock(id); character(),id not in State.s.skills and State.s.points>=2)
 	button("Close",close_menu)
 func settings():
-	menu("Settings","Optional Ollama uses llama3.2 at localhost:11434. Failure falls back to authored dialogue.")
+	var from_title := mode == "title"
+	menu("Settings","This chapter runs entirely offline.",Vector2(450,350))
 	for id in ["master","music","sfx","ambient"]:
-		label(id.capitalize())
-		var slider := HSlider.new(); slider.min_value = 0; slider.max_value = 1; slider.step = .05; slider.value = State.s.settings[id]; rows.add_child(slider)
+		label(id.capitalize()); var slider := HSlider.new(); slider.min_value = 0; slider.max_value = 1; slider.step = .05; slider.value = State.s.settings[id]; rows.add_child(slider)
 		slider.value_changed.connect(func(value): State.s.settings[id] = value)
-	button("Ollama: "+str(State.s.settings.ollama),func(): State.s.settings.ollama = not State.s.settings.ollama; settings())
-	button("Back",pause_menu)
-func talk(id: String):
-	active_npc = id
-	State.reconcile_quests()
-	menu(State.npcs[id].name)
-	dialogue_text = label(dialogue.fallback(id,""))
-	var line := LineEdit.new()
-	line.placeholder_text = "Type a question, then Enter or Send..."
-	line.max_length = 300
-	rows.add_child(line)
-	var submit := func():
-		var question := line.text.strip_edges()
-		if question == "": return
-		var intent: Dictionary = dialogue.intent_for(id,question)
-		if not intent.is_empty(): confirm_intent(intent,id); return
-		dialogue_text.text = "Listening..."
-		dialogue.ask(id,question)
-		line.clear()
-		line.grab_focus()
-	line.text_submitted.connect(func(_question): submit.call())
-	button("Send question",submit)
-	label("Try: 'who are you', 'forest', 'quest', 'accept quest', 'deliver herbs'.",13)
-	match State.npcs[id].role:
-		"merchant": button("Browse Wares",shop)
-		"smith":
-			quest_buttons("iron",id)
-			button("Upgrade weapon · %d Crowns + %d iron"%[25*(State.s.upgrades.get(State.s.equipment.weapon,0)+1),State.s.upgrades.get(State.s.equipment.weapon,0)+1],func(): message("Weapon improved." if State.upgrade() else "Need more Crowns or Grave Iron, or maximum upgrade reached."); talk(id))
-		"healer":
-			quest_buttons("herbs",id)
-			button("Healing — 8 Crowns",func(): heal_at_npc(); talk(id))
-		"quest": quest_buttons("bell",id); quest_buttons("elites",id)
-		"resident": quest_buttons("charm",id)
-		"innkeeper": button("Rest — 5 Crowns",func(): rest_at_npc(); talk(id))
-	if State.s.memory.get("tovin_helped",false) and id == "tovin": label("You brought him home. I will not forget.")
-	if State.s.memory.get("tovin_betrayed",false) and id == "tovin": label("You kept the last piece of him. Leave me alone.")
-	button("Leave",close_menu)
-	line.grab_focus.call_deferred()
-func quest_buttons(quest: String, npc: String):
-	var status: String = State.s.quests.get(quest,"not accepted")
-	label("%s · %s · Reward %d Crowns + 60 XP"%[State.quest_defs[quest].name,status,State.quest_defs[quest].reward],15)
-	if status == "complete": return
-	if status == "not accepted": button("Accept: "+State.quest_defs[quest].name,func(): State.accept(quest); talk(npc))
-	label(State.quest_progress(quest),14)
-	if quest in ["herbs","iron","charm"]:
-		button("Return Charm & Claim Reward" if quest == "charm" else "Deliver Items & Claim Reward",func(): State.turn_in(quest); talk(npc))
-		if quest == "charm": button("Keep Charm & Claim Reward",func(): State.turn_in(quest,"keep"); talk(npc))
+	button("Back",title if from_title else pause_menu)
+func talk(id: String, node: String = "root", response: String = ""):
+	active_npc = id; dialogue_node = node; service_npc = ""; State.reconcile_quests()
+	var data: Dictionary = dialogue.node_for(id,node)
+	menu(State.npcs[id].name+" · "+State.npcs[id].role.capitalize(),"",Vector2(640,355),false); mode = "dialogue"
+	var conversation := HBoxContainer.new(); rows.add_child(conversation)
+	var portrait := TextureRect.new(); portrait.texture = load("res://assets/portraits/"+id+".png") if ResourceLoader.exists("res://assets/portraits/"+id+".png") else load("res://assets/npc.png")
+	portrait.custom_minimum_size = Vector2(90,100); portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; conversation.add_child(portrait)
+	dialogue_text = ui.text(conversation,response if response != "" else data.text)
+	var scroll := ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; rows.add_child(scroll)
+	var choices := VBoxContainer.new(); choices.size_flags_horizontal = Control.SIZE_EXPAND_FILL; scroll.add_child(choices)
+	for choice in data.choices:
+		ui.button(choices,choice.text,func(): select_dialogue(choice))
+	if node != "root": ui.button(choices,"Goodbye.",close_menu)
+	State.s.memory[id+"_spoken"] = true
+func select_dialogue(choice: Dictionary):
+	var npc := active_npc
+	var action: Dictionary = choice.get("action",{})
+	if action.is_empty(): talk(npc,choice.next); return
+	if action.kind in ["accept","turn_in"]:
+		talk(npc,choice.next,dialogue.execute(npc,action)); return
+	var services := {"mara":["shop","sell"],"brann":["upgrade"],"sister":["heal"],"nell":["rest"]}
+	if action.kind != "goodbye" and action.kind not in services.get(npc,[]): return
+	service_npc = npc
+	match action.kind:
+		"goodbye": close_menu()
+		"shop": shop()
+		"sell": inventory()
+		"upgrade": upgrade_menu()
+		"heal": heal_menu()
+		"rest": rest_menu()
+func return_to_npc():
+	var npc := service_npc
+	if npc != "": talk(npc)
+	else: close_menu()
+func upgrade_menu():
+	var level: int = State.s.upgrades.get(State.s.equipment.weapon,0)
+	menu("Brann's Forge",State.items[State.s.equipment.weapon].name+" · Upgrade +%d\nNext improvement: +4 attack\nCost: %d Crowns and %d Grave Iron"%[level,25*(level+1),level+1],Vector2(480,280))
+	button("Improve weapon",func(): message("Weapon improved." if State.upgrade() else "Insufficient Crowns or iron."); upgrade_menu(),level<5 and State.s.crowns>=25*(level+1) and State.s.inventory.get("ore",0)>=level+1)
+	button("Back to Brann",return_to_npc)
+func heal_menu():
+	menu("Elowen's Care","Restore health and cleanse ailments · 8 Crowns",Vector2(450,240))
+	button("Accept healing",func(): heal_at_npc(); return_to_npc(),State.s.crowns>=8); button("Back",return_to_npc)
 func heal_at_npc():
 	if State.s.crowns < 8: message("Healing costs 8 Crowns."); return
 	State.s.crowns -= 8; State.s.hp = State.stat("hp"); player.statuses.clear(); message("Wounds healed. −8 Crowns.")
+func rest_menu():
+	menu("The Last Hearth","Rest, recover and save · 5 Crowns",Vector2(450,240))
+	button("Take a room",func(): rest_at_npc(); return_to_npc(),State.s.crowns>=5); button("Back",return_to_npc)
 func rest_at_npc():
 	if State.s.crowns < 5: message("A room costs 5 Crowns."); return
 	State.s.crowns -= 5; State.s.hp = State.stat("hp"); player.statuses.clear(); save(0)
-func confirm_intent(intent: Dictionary, npc: String):
-	if intent.kind == "purchase": confirm_purchase(intent.item); return
-	if intent.kind == "shop": shop(); return
-	var heading: String = intent.kind.replace("_"," ").capitalize()
-	var details := ""
-	if intent.has("quest"):
-		details = State.quest_defs[intent.quest].text + "\nReward: %d Crowns + 60 XP"%State.quest_defs[intent.quest].reward
-		if intent.kind == "quest_turnin": details += "\n"+State.quest_progress(intent.quest)+"\nChoice: "+intent.choice
-	elif intent.kind == "heal": details = "Restore health and cleanse ailments for 8 Crowns."
-	elif intent.kind == "rest": details = "Restore health and save for 5 Crowns."
-	elif intent.kind == "upgrade": details = "Upgrade the equipped weapon; costs %d Crowns and %d Grave Iron."%[25*(State.s.upgrades.get(State.s.equipment.weapon,0)+1),State.s.upgrades.get(State.s.equipment.weapon,0)+1]
-	menu(heading,details)
-	button("Confirm",func():
-		match intent.kind:
-			"quest_accept": State.accept(intent.quest)
-			"quest_turnin": State.turn_in(intent.quest,intent.choice)
-			"heal": heal_at_npc()
-			"rest": rest_at_npc()
-			"upgrade": message("Weapon improved." if State.upgrade() else "Insufficient materials or Crowns.")
-		talk(npc))
-	button("Cancel",func(): talk(npc))
-func shop():
-	menu("Mara’s Wares","Crowns: %d — Select an item, then confirm the purchase."%State.s.crowns)
+func shop(selected: String = "potion"):
+	menu("Mara's Wares","%d Crowns"%State.s.crowns,Vector2(690,420),false)
+	var columns := two_columns(); var left: VBoxContainer = columns[0]; var right: VBoxContainer = columns[1]
 	for id in ["potion","ether","tonic","antidote","dagger","axe","staff","bow","hood","mail","gloves","boots","charm","crown"]:
-		button("%s — %d Crowns"%[State.items[id].name,State.items[id].price],func():
-			menu("Confirm Purchase",State.items[id].name+"\n"+State.items[id].description)
-			button("Buy for %d Crowns"%State.items[id].price,func(): message("Purchased." if State.buy(id) else "Insufficient Crowns or full satchel."); shop())
-			button("Cancel",shop))
-	button("Leave",close_menu)
-
+		ui.button(left,("◆ " if selected == id else "")+State.items[id].name,func(): shop(id))
+	var item: Dictionary = State.items[selected]
+	ui.item_title(right,selected); ui.text(right,item.description); ui.text(right,"Price: %d Crowns\nAttack %d · Defense %d"%[item.price,item.get("attack",0),item.get("defense",0)])
+	ui.button(right,"Purchase...",func(): confirm_purchase(selected),State.s.crowns>=item.price)
+	button("Back to Mara",return_to_npc)
+func confirm_purchase(id: String):
+	if not State.items.has(id) or State.items[id].price<=0: return
+	menu("Confirm Purchase",State.items[id].name+" · %d Crowns"%State.items[id].price,Vector2(420,230))
+	button("Buy",func(): message("Purchased." if State.buy(id) else "Insufficient Crowns or full satchel."); shop(id),State.s.crowns>=State.items[id].price)
+	button("Cancel",func(): shop(id))
 func _exit_tree():
-	if dialogue: dialogue.cancel()
 	if ambience: ambience.stop(); ambience.stream = null
 	if audio: audio.stop(); audio.stream = null
 	if music: music.stop(); music.stream = null
-
 func shutdown():
-	music.stop()
-	ambience.stop()
-	audio.stop()
-	await get_tree().process_frame
-	await get_tree().process_frame
-	get_tree().quit()
-
-func confirm_purchase(id: String):
-	if not State.items.has(id) or State.items[id].price <= 0: return
-	menu("Confirm Purchase",State.items[id].name+"\n"+State.items[id].description)
-	button("Buy for %d Crowns"%State.items[id].price,func(): message("Purchased." if State.buy(id) else "Insufficient Crowns or full satchel."); shop())
-	button("Cancel",shop)
+	music.stop(); ambience.stop(); audio.stop()
+	await get_tree().process_frame; await get_tree().process_frame; get_tree().quit()

@@ -17,7 +17,7 @@ func _ready():
 func read_data(id: String) -> Dictionary:
 	return JSON.parse_string(FileAccess.get_file_as_string("res://data/" + id + ".json"))
 func reset():
-	s = {"version":SAVE_VERSION,"map":"village","position":[480,480],"hp":100.0,"mana":60.0,"stamina":100.0,"level":1,"xp":0,"points":0,"crowns":85,"inventory":{"rust_sword":1,"potion":3},"equipment":{"weapon":"rust_sword"},"upgrades":{},"attributes":{"Vitality":0,"Strength":0,"Dexterity":0,"Intelligence":0,"Endurance":0},"skills":[],"quests":{},"flags":{},"memory":{},"checkpoint":{"map":"village","position":[480,480]},"settings":{"master":0.8,"music":0.35,"sfx":0.7,"ambient":0.5,"ollama":false}}
+	s = {"version":SAVE_VERSION,"map":"village","position":[480,480],"hp":100.0,"mana":60.0,"stamina":100.0,"level":1,"xp":0,"points":0,"crowns":85,"inventory":{"rust_sword":1,"potion":3},"equipment":{"weapon":"rust_sword"},"upgrades":{},"attributes":{"Vitality":0,"Strength":0,"Dexterity":0,"Intelligence":0,"Endurance":0},"skills":[],"quests":{},"flags":{},"memory":{},"checkpoint":{"map":"village","position":[480,480]},"settings":{"master":0.8,"music":0.35,"sfx":0.7,"ambient":0.5}}
 	changed.emit()
 func stat(id: String) -> float:
 	var a: Dictionary = s.attributes
@@ -194,7 +194,6 @@ func valid_save(data) -> bool:
 		if not number(data.attributes.get(key)) or data.attributes[key] < 0: return false
 	for key in ["master","music","sfx","ambient"]:
 		if not number(data.settings.get(key)) or data.settings[key] < 0 or data.settings[key] > 1: return false
-	if not data.settings.get("ollama") is bool: return false
 	for pos in [data.position,data.checkpoint.get("position")]:
 		if not pos is Array or pos.size() != 2 or not number(pos[0]) or not number(pos[1]): return false
 		if pos[0] < 16 or pos[0] > 1424 or pos[1] < 16 or pos[1] > 944: return false
@@ -219,6 +218,8 @@ func load_game(slot: int = 0) -> bool:
 		var data = parser.data
 		if valid_save(data):
 			s = data
+			# Obsolete conversation preferences never affect offline dialogue.
+			s.settings.erase("ollama")
 			reconcile_quests()
 			changed.emit()
 			return true

@@ -7,14 +7,17 @@ var walls: Array[Rect2] = []
 var layout: Dictionary = {}
 var map_data: Dictionary
 var lights: Array = []
+var player_position := Vector2.ZERO
 var time := 0.0
 var redraw_timer := 0.0
 var darkness: CanvasModulate
 const MAP_NAMES = {"village":"Hollowmere Village","forest":"Weeping Forest","crypt":"Forgotten Crypt","shrine":"The Veil Shrine"}
 func _ready():
 	map_data = State.read_data("maps")
-	for id in ["grass","stone","dirt","shrine","tree","grave","chest","checkpoint","door","npc","house","water","cobble","mud","moss","ash","well","forge","stall","cart","rock","ruin","torch","banner","sign","reeds","herb"]:
+	for id in ["grass","stone","dirt","shrine","tree","grave","chest","checkpoint","door","npc","house","water","cobble","mud","moss","ash","well","forge","stall","cart","rock","ruin","torch","banner","sign","reeds","herb","shrine_altar","ritual","column","sarcophagus","statue","dead_tree"]:
 		textures[id] = load("res://assets/"+id+".png")
+	for id in State.npcs: textures[id] = load("res://assets/npcs/"+id+".png")
+	for id in ["inn","forgehouse","chapel","cottage","tower"]: textures[id] = load("res://assets/buildings/"+id+".png")
 	darkness = CanvasModulate.new(); add_child(darkness)
 func rect(value: Array) -> Rect2: return Rect2(value[0],value[1],value[2],value[3])
 func setup(id: String):
@@ -72,13 +75,13 @@ func nearest(pos: Vector2) -> Dictionary:
 	return result
 func _draw():
 	if layout.is_empty(): return
-	var tile: String = "grass" if map == "village" else ("moss" if map == "forest" else "ash")
+	var tile: String = "grass" if map == "village" else ("moss" if map == "forest" else ("shrine" if map == "shrine" else "ash"))
 	for y in range(20):
 		for x in range(30):
 			var p := Vector2(x*48+24,y*48+24)
 			var t := tile
 			for road in layout.roads:
-				if rect(road).has_point(p): t = "cobble" if map in ["village","crypt","shrine"] else "mud"
+				if rect(road).has_point(p): t = "cobble" if map == "village" else ("stone" if map == "crypt" else ("shrine" if map == "shrine" else "mud"))
 			for water in layout.water:
 				if rect(water).has_point(p): t = "water"
 			var tint := Color(.87,.88,.92) if (x*7+y*11)%5 == 0 else Color.WHITE
@@ -88,27 +91,30 @@ func _draw():
 		draw_rect(rect(r),Color("181a23"),false,3)
 	for building in layout.buildings:
 		var r := rect(building.rect)
-		draw_texture_rect(textures.house,r,false,Color("aaa0a5"))
+		var art: String = "inn" if "Inn" in building.label else ("forgehouse" if "Forge" in building.label else ("chapel" if "Chapel" in building.label else "cottage"))
+		draw_texture_rect(textures[art],r,false,Color.WHITE)
 		draw_string(ThemeDB.fallback_font,r.position+Vector2(0,r.size.y+18),building.label,HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("e2cbaa"))
 	# Landmarks: broken sanctuary dais, soot in the boss chamber, and village graves.
 	if map == "crypt":
-		draw_circle(Vector2(1200,480),145,Color("292431"))
-		draw_arc(Vector2(1200,480),140,0,TAU,48,Color("59505d"),3)
+		draw_texture_rect(textures.ritual,Rect2(1060,340,280,280),false,Color("767084"))
 	if map == "shrine":
-		for radius in [100,135,170]: draw_arc(Vector2(900,480),radius,0,TAU,48,Color("6c657d"),2)
+		draw_texture_rect(textures.ritual,Rect2(780,360,240,240),false,Color("a497b1"))
 	var sorted := objects.duplicate()
 	sorted.sort_custom(func(a,b): return a.pos.y < b.pos.y)
 	for o in sorted:
 		if State.s.flags.get(o.id,false) and o.kind in ["chest","herb"]: continue
-		var tex: String = "checkpoint" if o.kind == "shrine" else o.kind
+		var tex: String = "shrine_altar" if o.kind == "shrine" else (o.id if o.kind == "npc" else ("column" if map == "shrine" and o.kind == "ruin" else o.kind))
 		if textures.has(tex):
-			var size := Vector2(72,72) if o.kind in ["tree","ruin","well","stall"] else Vector2(48,48)
+			var size := Vector2(112,112) if o.kind in ["tree","ruin"] else (Vector2(78,78) if o.kind in ["well","stall","shrine"] else Vector2(64,64))
 			var tint := Color.WHITE
-			if o.kind == "npc": tint = Color.from_hsv(float(State.npcs.keys().find(o.id))/12,.25,1)
+			if o.kind == "npc": tint = Color.WHITE
 			draw_texture_rect(textures[tex],Rect2(o.pos-Vector2(size.x/2,size.y*.75),size),false,tint)
 		if o.kind == "trap":
 			for i in range(4): draw_line(o.pos+Vector2(i*6-12,8),o.pos+Vector2(i*6-10,-8),Color("9b8580"),2)
-		if o.kind == "npc": draw_string(ThemeDB.fallback_font,o.pos+Vector2(-40,-39),State.npcs[o.id].name,HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("e2cbaa"))
+		if o.kind == "npc" and o.pos.distance_to(player_position) < 100:
+			var screen: Vector2 = get_global_transform_with_canvas()*(o.pos+Vector2(0,-55))
+			if screen.y > 122 or screen.x > 280:
+				draw_string(ThemeDB.fallback_font,o.pos+Vector2(-40,-55),State.npcs[o.id].name,HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("e2cbaa"))
 	if map in ["forest","shrine"]:
 		for i in range(10):
 			var p := Vector2(fmod(i*211+time*4,1440),100+(i*113)%780)

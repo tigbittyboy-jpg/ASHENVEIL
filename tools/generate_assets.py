@@ -65,3 +65,7 @@ with wave.open(str(root/'music.wav'),'w') as w:
 # Finish with the current environmental art and seamless audio revision.
 import runpy
 runpy.run_path(str(Path(__file__).with_name("refine_assets.py")))
+
+# Preserve the current detailed art when regenerating the original audio/base assets.
+if (Path(__file__).resolve().parents[1]/"assets/source/gothic_atlas.png").exists():
+ runpy.run_path(str(Path(__file__).with_name("import_art.py")))

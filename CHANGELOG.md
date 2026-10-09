@@ -1,5 +1,13 @@
 # Changes
 
+## 0.3.0 — Gothic graphics, compact UI and authored dialogue
+
+- Replaced the low-detail actors, terrain and props with original detailed gothic art inspired by the supplied reference; added distinct village buildings, eight portraits, item icons, a chained Bellkeeper and 64 eight-direction player animation frames.
+- Added the shared charcoal/bronze UI, compact resource HUD, pause controls/help, two-column quest journal, selectable inventory/equipment comparisons and focused shop confirmations. Headings remain outside scrolling content; menus hide the HUD.
+- Removed typing, Send, parsing and all runtime AI/network conversations. Eight NPCs now use authored branching trees with conditional greetings, history, rumors, discoveries, quest choices and separate services that return to dialogue.
+- Preserved version-one saves, relationships, once-only quest rewards, gameplay tuning and existing map collision/navigation. Obsolete AI preferences are safely discarded on load.
+- Validated 125 gameplay/save/dialogue assertions and 166 UI/input/layout assertions, a starter-sword boss strategy and audio waveform continuity. Visually inspected software-rendered screenshots at three physical sizes; native Mac launch/audio remain outstanding.
+
 ## 0.2.0 — playtest fixes
 
 - Replaced the short bass melody/drone with subdued 32-second minor chord and distant-bell loops. Loop boundaries match; effects have smooth attack/release envelopes and separate playback voices, so hits no longer cut off swings or menus.

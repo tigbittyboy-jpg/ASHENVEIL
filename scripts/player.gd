@@ -13,7 +13,16 @@ var tick := 0.0
 var sprite: Sprite2D
 var animate_time := 0.0
 var stun_resistance := 0.0
+var frames: Array = []
+var attack_time := 0.0
+var hit_time := 0.0
+var weapon_icons: Dictionary = {}
 func _ready():
+	for action in range(8):
+		var directions: Array = []
+		for direction in range(8): directions.append(load("res://assets/player/action_%d_%d.png"%[action,direction]))
+		frames.append(directions)
+	for kind in ["bow","staff","dagger","axe"]: weapon_icons[kind] = load("res://assets/icons/"+kind+".png")
 	collision_layer = 1
 	collision_mask = 4
 	var shape := CollisionShape2D.new()
@@ -23,10 +32,11 @@ func _ready():
 	add_child(shape)
 	sprite = Sprite2D.new()
 	sprite.texture = load("res://assets/player.png")
-	sprite.scale = Vector2(1.5,1.5)
+	sprite.scale = Vector2(1.1,1.1)
 	add_child(sprite)
 	var light := PointLight2D.new(); light.texture = load("res://assets/glow.png"); light.texture_scale = 2.4; light.color = Color("aec0d2"); light.energy = .55; add_child(light)
 	var camera := Camera2D.new()
+	camera.zoom = Vector2(1.2,1.2)
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 8
 	camera.limit_left = 0
@@ -36,6 +46,8 @@ func _ready():
 	add_child(camera)
 func _physics_process(dt):
 	cooldown = maxf(0,cooldown-dt)
+	attack_time = maxf(0,attack_time-dt)
+	hit_time = maxf(0,hit_time-dt)
 	immunity = maxf(0,immunity-dt)
 	stun_resistance = maxf(0,stun_resistance-dt)
 	dodge_time = maxf(0,dodge_time-dt)
@@ -59,19 +71,28 @@ func _physics_process(dt):
 	if statuses.has("Stun"): velocity = Vector2.ZERO
 	move_and_slide()
 	animate_time += dt
-	sprite.position.y = sin(animate_time*16)*2 if velocity.length()>5 else 0
-	sprite.flip_h = facing.x < -.1
+	var direction := posmod(int(round((facing.angle()-PI/2)/(PI/4))),8)
+	var frame := 0
+	if velocity.length()>5: frame = [1,2,3,2][int(animate_time*(14 if Input.is_action_pressed("sprint") else 10))%4]
+	if dodge_time > 0: frame = 6
+	elif hit_time > 0: frame = 7
+	elif attack_time > 0: frame = 4 if attack_time>.15 else 5
+	sprite.texture = frames[frame][direction]
+	sprite.position.y = -4
+	sprite.flip_h = false
 	position = position.clamp(Vector2(30,30),Vector2(1410,930))
 	if Input.is_action_just_pressed("attack") and cooldown <= 0:
 		var weapon: Dictionary = State.items[State.s.equipment.weapon]
 		if State.s.stamina >= weapon.cost:
 			State.s.stamina -= weapon.cost
 			cooldown = weapon.speed
+			attack_time = .3
 			facing = (get_global_mouse_position()-global_position).normalized() if Input.get_connected_joypads().is_empty() else facing
 			attacked.emit(global_position,facing,false)
 	if Input.is_action_just_pressed("magic") and cooldown <= 0 and State.s.mana >= 12:
 		State.s.mana -= 12
 		cooldown = 0.5
+		attack_time = .3
 		attacked.emit(global_position,facing,true)
 	if Input.is_action_just_pressed("quick"): State.use("potion")
 	State.s.stamina = minf(State.stat("stamina"),State.s.stamina+dt*18)
@@ -92,6 +113,7 @@ func hurt(amount: float, direction: Vector2, effect: String = ""):
 	State.s.hp = maxf(0,State.s.hp-State.damage(amount,State.stat("defense"),blocking))
 	if blocking: State.s.stamina = maxf(0,State.s.stamina-10)
 	immunity = .9
+	hit_time = .18
 	position += direction*12
 	if effect == "Stun":
 		if stun_resistance <= 0 and not blocking:
@@ -104,6 +126,9 @@ func hurt(amount: float, direction: Vector2, effect: String = ""):
 		locked = true
 		died.emit()
 func _draw():
+	# Equipment remains the same deterministic inventory; only the held art changes.
+	var kind: String = State.items[State.s.equipment.weapon].kind
+	if weapon_icons.has(kind): draw_texture_rect(weapon_icons[kind],Rect2(Vector2(8,-22),Vector2(24,32)),false)
 	if cooldown > 0:
 		draw_arc(Vector2.ZERO,38,facing.angle()-.65,facing.angle()+.65,12,Color("ead8ab"),3)
 	if blocking: draw_arc(Vector2.ZERO,24,facing.angle()-.8,facing.angle()+.8,10,Color("8bc9d0"),3)

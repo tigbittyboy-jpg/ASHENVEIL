@@ -33,7 +33,7 @@ func _ready():
 	add_child(c)
 	sprite = Sprite2D.new()
 	sprite.texture = load("res://assets/"+kind+".png")
-	sprite.scale = Vector2.ONE*(3.0 if kind == "boss" else 1.5)
+	sprite.scale = Vector2.ONE*(1.15 if kind == "boss" else 1.0)
 	add_child(sprite)
 func _physics_process(dt):
 	if not is_instance_valid(target) or target.locked: return

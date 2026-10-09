@@ -4,7 +4,9 @@
 
 An original, offline Godot 4 dark fantasy action RPG first playable. Explore Hollowmere, recover the crypt sigil in the Weeping Forest, defeat the Bellkeeper, and learn what waits inside the Veil Shrine.
 
-This is an early playable slice, not the finished 30–60 minute polished release described in the master brief. The core progression and save loop are implemented; art, encounter variety, narrative depth and balancing need further work. See [CHANGELOG.md](CHANGELOG.md) for the 0.2.0 playtest fixes. No timed human playthrough or Apple Silicon performance measurement has been completed.
+This is an early playable slice, not the finished 30–60 minute polished release described in the master brief. The core progression and save loop are implemented; encounter variety, narrative depth and balancing need further work. See [CHANGELOG.md](CHANGELOG.md) for the 0.3.0 playtest fixes. No timed human playthrough or Apple Silicon performance measurement has been completed.
+
+![Hollowmere in the updated game](docs/hollowmere.png)
 
 ## Open and play
 
@@ -13,7 +15,7 @@ This is an early playable slice, not the finished 30–60 minute polished releas
 3. Press **F6** with `scenes/main.tscn` open, or **F5** to run the project.
 4. Select **New Adventure**. Speak to Captain Ilya in the central square by the banner and accept **The Silent Bell**.
 
-The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or Ollama. This is an ad hoc signed, unnotarized development bundle; the revised 0.2.0 launch on macOS has **not** been confirmed. Gatekeeper may block it; see [the damaged-app recovery steps](START_HERE.md#if-macos-says-the-app-is-damaged). Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
+The downloadable `downloads/AshenVeil-macOS.zip` (also generated locally under `builds/`) contains a standalone `.app` with native ARM64 and x86_64 slices. Extract it in Finder and launch the application. It needs no Godot installation, terminal process, internet connection or external dialogue service. This is an ad hoc signed, unnotarized development bundle; the revised 0.3.0 launch on macOS has **not** been confirmed. Gatekeeper may block it; see [the damaged-app recovery steps](START_HERE.md#if-macos-says-the-app-is-damaged). Review the source and use your own local Godot export if you prefer. For local development signing on a Mac, `codesign --force --deep --sign - /path/to/Ashen\ Veil.app` applies an ad hoc signature, not notarization. Do not disable macOS security system-wide.
 
 ## Controls
 
@@ -47,19 +49,23 @@ Menus support mouse, keyboard arrows, Enter and normal Godot UI navigation. The 
 
 ## Systems present
 
-Four connected map layouts; eight named NPCs; six enemy archetypes; three elites; a three-phase boss; five quests; twelve equipment items; eight consumables/materials; sword, dagger, axe, staff and bow combat; stamina, blocking, dodge immunity, projectiles, damage and statuses; leveling to 20; five attributes; six skills; validated buying/selling and upgrades; equipment slots; inventory stacking; authored conversations and structured relationship memories; checkpoint/manual saves with schema validation and backup recovery; volume controls; original sprites, tiles, props and synthesized audio.
+Four connected map layouts; eight named NPCs; six enemy archetypes; three elites; a three-phase boss; five quests; twelve equipment items; eight consumables/materials; sword, dagger, axe, staff and bow combat; stamina, blocking, dodge immunity, projectiles, damage and statuses; leveling to 20; five attributes; six skills; validated buying/selling and upgrades; equipment slots; inventory stacking; authored conversations and structured relationship memories; checkpoint/manual saves with schema validation and backup recovery; volume controls; original generated gothic sprites, tiles, portraits, props and synthesized audio.
 
 Enemy deaths and opened containers persist, so defeated encounters do not respawn when you revisit maps. Restart a new adventure for a fresh world. The full item catalogue fits within the 24 distinct-item capacity.
 
-## Optional Ollama
+## Conversations and menus
 
-Install Ollama separately from https://ollama.com/, download `llama3.2` with `ollama pull llama3.2`, and start its local service. Enable Ollama in Settings. NPC requests use `http://127.0.0.1:11434/api/generate`, a four-second timeout, bounded histories, bounded input/output, asynchronous HTTP, and authored fallback. Ollama is off by default and never required. Closing dialogue cancels pending requests.
+Press **E** near a villager to open their portrait and authored response choices. Use arrows / Enter, D-pad / A, or click a response. History and story topics branch into further choices. **Back** returns to the greeting; **Goodbye** closes the conversation. Escape backs out of a branch, returns from a service, or closes the greeting. Movement and combat are locked while menus are open.
 
-Generated text cannot invoke gameplay methods. An authored parser recognizes merchant requests such as “buy potion” and opens a confirmation menu. Only pressing Buy runs the validated transaction. No service credentials are needed. Actual model-generated responses have not been tested in this environment; absence/error fallback has.
+All dialogue is predetermined and offline. Each of the eight villagers has distinct histories, rumors, dangers, Bellkeeper advice and reactions. Greetings respond to previous visits, saved relationships, quest completion, discoveries and boss/story progress. Jobs offer explicit acceptance and delivery choices; completed jobs stay completed. Mara's wares, Brann's forge, Elowen's healing and Nell's rooms open through their relevant responses, with a return to conversation.
+
+The screen HUD uses compact resource bars and hides behind menus. The journal separates selectable active/completed quests from their objectives and rewards; inventory and shops use selectable items, descriptions and comparisons. Long lists scroll, headings stay outside the scrolling body, and controls/help live in the pause menu.
+
+![Authored portrait dialogue](docs/dialogue.png)
 
 ## Saves and settings
 
-Godot stores `slot_0.json` (autosave), `slot_1.json` to `slot_3.json`, temporary writes and backups under `user://`. On macOS this normally resolves to `~/Library/Application Support/Godot/app_userdata/Ashen Veil/`. Existing 0.1.x saves remain compatible; relocated map structures move an unsafe saved position to nearby open ground. Settings are saved with each game slot and restored when loading it. New Adventure resets settings to defaults. A broken primary save falls back to its backup; unsupported save versions are rejected safely. Schema migration is not implemented yet. Tests use a separate data directory and do not modify normal saves.
+Godot stores `slot_0.json` (autosave), `slot_1.json` to `slot_3.json`, temporary writes and backups under `user://`. On macOS this normally resolves to `~/Library/Application Support/Godot/app_userdata/Ashen Veil/`. Existing version-one saves from 0.1.x and 0.2.0 remain compatible; relocated map structures move an unsafe saved position to nearby open ground. Settings are saved with each game slot and restored when loading it. New Adventure resets settings to defaults. A broken primary save falls back to its backup; unsupported save versions are rejected safely. Loading an older save discards its obsolete AI preference while preserving inventory, quests and NPC memories. Unsupported schema versions still require future migration. Tests use a separate data directory and do not modify normal saves.
 
 ## Development and validation
 
@@ -82,11 +88,12 @@ Art regeneration needs Python 3 and Pillow; both are available in the prepared c
 
 ```sh
 python tools/generate_assets.py
-python tools/generate_content.py
+python tools/import_art.py
+python tools/generate_dialogue.py
 python tools/check_audio.py
 ```
 
-Content generation overwrites authored JSON defaults; do not run it over edited content without reviewing the diff. Sprite dimensions and replacement conventions are in `docs/ASSETS.md`.
+`import_art.py` deterministically extracts the committed original source atlases; `generate_dialogue.py` rebuilds the authored trees. Review changes before committing. The legacy `generate_content.py` overwrites content defaults and should not be run over edited content. Sprite dimensions and replacement conventions are in `docs/ASSETS.md`.
 
 ## Export
 
@@ -101,12 +108,12 @@ The official template is universal and includes native ARM64. The project enable
 ## Known limitations and next work
 
 - Maps and content are compact; play duration and balance have not been validated by a complete unassisted playthrough.
-- Single-frame sprites use bobbing, facing and procedural attack effects; full directional sprite-sheet animation, hitstop, damage numbers, death sequences, screen shake and dynamic shadows remain unfinished.
-- NPCs have distinct text and reactions but no daily routines, richer schedules or authored multi-stage dialogue trees. Shops have unlimited stock. Containers deliver immediate loot rather than physical ground drops.
+- Player art has eight directions with idle, three walking poses, two sword attack poses, dodge and hurt. Enemies and NPCs use detailed single-frame sprites with procedural movement; full enemy/boss animation, weapon-specific attack sheets, player death animation, hitstop and screen shake remain future work.
+- NPCs have authored branching trees and saved contextual reactions, but no daily routines or schedules. Shops have unlimited stock. Containers deliver immediate loot rather than physical ground drops.
 - Enemy AI implements patrol/chase/attack/recover/retreat/stunned/dead, sight checks and simple territory control. Investigate/alert/ally coordination and sophisticated navigation are absent. Enemies can stall against obstacles. The hound is fast melee rather than a dedicated lunge state.
 - Core health, stamina, mana, attack, armor, crits and movement work. Full elemental resistances, separate magic-attack equipment statistics and broader status interactions remain unfinished. Hex briefly stuns projectile targets; Ember increases projectile damage.
 - The boss has phases, telegraphs, summons, radial waves and a victory screen, but lacks a cinematic intro, arena doors and bespoke animation/audio for every pattern.
 - Save corruption validation and backups work. Settings persist per slot; standalone settings storage, save migration and asynchronous disk I/O remain future work.
-- Real Ollama responses, gamepad hardware, native macOS launch, Retina behavior, real audio-device playback, Developer ID signing, notarization and Apple Silicon 60 FPS performance have not been verified.
+- Gamepad hardware, native macOS launch, Retina behavior, real audio-device playback, Developer ID signing, notarization and Apple Silicon 60 FPS performance have not been verified.
 
-Continue development by first performing the manual smoke procedure on macOS, fixing discovered blockers, then replacing the primitive art and deepening encounters and dialogue. `ARCHITECTURE.md` identifies the ownership of each system.
+Continue development by first performing the manual smoke procedure on macOS, fixing discovered blockers, then deepening encounters and dialogue. `ARCHITECTURE.md` identifies the ownership of each system.

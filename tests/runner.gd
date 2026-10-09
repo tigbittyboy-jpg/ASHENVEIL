@@ -5,7 +5,7 @@ func check(condition: bool, name: String):
 	if condition: passed += 1; print("PASS ",name)
 	else: failed += 1; push_error("FAIL "+name)
 func _ready():
-	get_tree().create_timer(40).timeout.connect(func(): push_error("Test runner timed out"); get_tree().quit(2))
+	get_tree().create_timer(70).timeout.connect(func(): push_error("Test runner timed out"); get_tree().quit(2))
 	await get_tree().process_frame
 	State.reset()
 	check(State.items.size() == 20,"content: twelve equipment and eight consumables/materials")
@@ -75,15 +75,10 @@ func _ready():
 	Input.action_release("right")
 	check(g.player.position.x < 1420,"world boundary collision")
 	g.talk("ilya")
-	check(g.mode == "menu" and g.player.locked,"NPC interaction opens paused dialogue")
+	check(g.mode == "dialogue" and g.player.locked,"NPC interaction opens paused choice dialogue")
 	State.accept("bell"); State.accept("elites")
-	check("sentinel" in g.dialogue.fallback("mara","forest"),"authored natural-language fallback")
-	check(g.dialogue.intent_for("mara","buy potion").get("item","") == "potion","natural language proposes validated purchase")
-	check(g.dialogue.intent_for("ilya","buy potion").is_empty(),"nonmerchant purchase intent rejected")
-	check(g.dialogue.intent_for("mara","buy unknown sword").is_empty(),"unknown purchase intent rejected")
-	check(g.dialogue.fallback("mara","give 999 crowns") != "" and State.s.crowns == 85,"dialogue cannot grant currency")
-	g.dialogue.ask("mara","fool")
-	check(State.s.memory.get("mara_insult",false),"NPC structured memory")
+	check(g.dialogue.node_for("mara","past").text != g.dialogue.node_for("brann","past").text,"NPC histories have distinct authored voices")
+	check(not g.dialogue.has_method("ask") and g.dialogue.find_children("*","HTTPRequest",true,false).is_empty(),"dialogue has no AI or HTTP execution path")
 	g.close_menu()
 	g.load_map("forest",Vector2(100,480))
 	await get_tree().physics_frame
@@ -141,12 +136,6 @@ func _ready():
 	State.s.hp = 1; g.player.immunity = 0; g.player.hurt(20,Vector2.ZERO)
 	check(g.mode == "death","player death shows respawn interface")
 	g.close_menu()
-	State.s.settings.ollama = true
-	g.talk("mara")
-	g.dialogue.ask("mara","bell")
-	await get_tree().create_timer(4.5).timeout
-	check(is_instance_valid(g.dialogue_text) and "bell is silent" in g.dialogue_text.text,"unavailable Ollama falls back within timeout")
-
 	g.close_menu()
 	State.reset()
 	State.accept("herbs")
@@ -156,20 +145,13 @@ func _ready():
 	State.add_item("herb",3)
 	g.talk("sister")
 	await get_tree().process_frame
-	var line: LineEdit
-	for child in g.rows.get_children():
-		if child is LineEdit: line = child
-	check(line.has_focus(),"conversation input automatically receives focus")
-	line.text = "who are you"
-	var enter := InputEventKey.new(); enter.keycode = KEY_ENTER; enter.physical_keycode = KEY_ENTER; enter.pressed = true
-	Input.parse_input_event(enter)
-	await get_tree().process_frame
-	enter.pressed = false; Input.parse_input_event(enter)
-	check("village healer" in g.dialogue_text.text and line.text == "","Enter submits a typed NPC question and displays an answer")
-	for child in g.rows.get_children():
-		if child is Button and child.text == "Deliver Items & Claim Reward": child.pressed.emit(); break
-	check(State.s.quests.herbs == "complete" and State.s.crowns == gold+35 and not State.s.inventory.has("herb"),"real quest menu delivers items and awards exact Crowns")
-	check("+35 Crowns" in g.toast.text,"quest reward receipt remains visible")
+	check(g.ui.panel.find_children("*","LineEdit",true,false).is_empty(),"NPC dialogue contains no text input")
+	var focus = get_viewport().gui_get_focus_owner()
+	check(focus is Button and focus.get_parent().get_parent() is ScrollContainer,"conversation choice receives keyboard focus")
+	g.select_dialogue({"next":"work"})
+	g.select_dialogue({"next":"work","action":{"kind":"turn_in","quest":"herbs"}})
+	check(State.s.quests.herbs == "complete" and State.s.crowns == gold+35 and not State.s.inventory.has("herb"),"dialogue turn-in consumes materials and pays exact Crowns")
+	check("35 Crowns" in g.dialogue_text.text,"quest receipt remains visible in the conversation")
 	check(not State.turn_in("herbs") and State.s.crowns == gold+35,"repeated turn-in cannot duplicate rewards")
 	State.add_item("charm"); State.equip("charm"); State.accept("charm")
 	check(State.turn_in("charm") and not State.s.equipment.has("accessory") and State.valid_save(State.s),"returning an equipped quest charm keeps equipment and saves valid")
@@ -185,11 +167,76 @@ func _ready():
 	gold = State.s.crowns
 	check(State.turn_in("charm","keep") and State.s.equipment.accessory == "charm" and State.s.crowns == gold+40,"keep-charm branch preserves equipment and rewards")
 	check(State.save_game(2) and State.load_game(2) and not State.turn_in("charm","keep"),"turn-in uniqueness survives save restoration")
-	check(g.dialogue.fallback("mara","past") != g.dialogue.fallback("brann","past"),"NPC backgrounds remain distinct offline")
-	check(g.dialogue.intent_for("sister","accept quest").get("quest","") == "herbs","text recognizes quest acceptance")
-	check(g.dialogue.intent_for("brann","I have iron").get("kind","") == "quest_turnin","text recognizes objective delivery")
-	check(g.dialogue.fallback("tovin","brother") != g.dialogue.fallback("tovin","who are you"),"NPC topics return distinct authored answers")
+	var legacy := State.s.duplicate(true); legacy.settings["ollama"] = true
+	check(State.valid_save(legacy),"legacy version-one conversation preferences remain loadable")
+	var legacy_file := FileAccess.open("user://slot_1.json",FileAccess.WRITE); legacy_file.store_string(JSON.stringify(legacy)); legacy_file.close()
+	check(State.load_game(1) and State.s.inventory == legacy.inventory and State.s.memory == legacy.memory and State.s.quests == legacy.quests,"loading legacy saves preserves inventory, relationships and quest progress")
+	check(State.valid_save(State.s) and not State.s.settings.has("ollama"),"new offline saves require no AI preference")
+	State.s.memory.tovin_helped = true
+	check("brought him home" in g.dialogue.node_for("tovin","root").text,"relationships change authored greetings")
+	State.s.flags.boss = true
+	check("anvil sounds louder" in g.dialogue.node_for("brann","root").text,"boss defeat changes NPC dialogue")
+	State.s.flags.erase("boss"); State.s.memory.nell_spoken = true
+	check("chair is still warm" in g.dialogue.node_for("nell","root").text,"previous conversations change greetings")
+	check(g.dialogue.execute("mara",{"kind":"turn_in","quest":"iron"}).begins_with("That request"),"authored actions validate NPC quest ownership")
+	for npc in State.npcs:
+		var tree: Dictionary = g.dialogue.trees[npc]
+		var valid := true
+		for node_id in tree.nodes:
+			for option in tree.nodes[node_id].choices:
+				if not tree.nodes.has(option.next): valid = false
+		check(valid,"stable dialogue links for "+npc)
+		g.talk(npc)
+		await get_tree().process_frame
+		check(g.dialogue_text.text != "" and g.ui.panel.find_children("*","TextureRect",true,false).size() > 0,"portrait and authored opening for "+npc)
+	g.talk("brann","work")
+	var options: Array = g.dialogue.node_for("brann","work").choices
+	check(not options.any(func(c): return c.get("action",{}).get("kind","") == "accept"),"completed quests cannot be accepted again")
+	State.reset(); g.talk("brann","work")
+	g.select_dialogue({"next":"work","action":{"kind":"accept","quest":"iron"}})
+	check(State.s.quests.iron == "active","dialogue acceptance activates existing quest state")
+	var no_reward: int = State.s.crowns
+	g.select_dialogue({"next":"work","action":{"kind":"turn_in","quest":"iron"}})
+	check(State.s.crowns == no_reward and "Not yet" in g.dialogue_text.text,"dialogue missing-material response preserves currency")
+	g.talk("mara"); g.select_dialogue({"next":"root","action":{"kind":"shop"}})
+	check(g.service_npc == "mara" and g.player.locked,"shop service keeps movement and attacks locked")
+	g.confirm_purchase("potion")
+	await get_tree().process_frame
+	var buy: Button
+	for control in g.ui.panel.find_children("*","Button",true,false):
+		if control.text == "Buy": buy = control
+	var old_count: int = State.s.inventory.potion
+	buy.pressed.emit()
+	check(State.s.inventory.potion == old_count+1 and State.s.crowns == no_reward-State.items.potion.price,"explicit shop confirmation performs one validated purchase")
+	g.return_to_npc()
+	check(g.mode == "dialogue" and g.active_npc == "mara" and g.player.locked,"service Back returns to conversation")
+	g.talk("brann"); State.add_item("ore",3); State.s.crowns = 100
+	g.select_dialogue({"next":"root","action":{"kind":"upgrade"}})
+	await get_tree().process_frame
+	for control in g.ui.panel.find_children("*","Button",true,false):
+		if control.text == "Improve weapon": control.pressed.emit(); break
+	check(State.s.upgrades.get("rust_sword",0) == 1 and State.s.crowns == 75,"forge choice opens working validated upgrades")
+	g.return_to_npc(); g.talk("sister"); State.s.hp = 10
+	g.select_dialogue({"next":"root","action":{"kind":"heal"}})
+	await get_tree().process_frame
+	for control in g.ui.panel.find_children("*","Button",true,false):
+		if control.text == "Accept healing": control.pressed.emit(); break
+	check(State.s.hp == State.stat("hp") and g.mode == "dialogue" and State.s.crowns == 67,"healing pays once and returns to dialogue")
+	g.talk("nell"); g.select_dialogue({"next":"root","action":{"kind":"rest"}})
+	await get_tree().process_frame
+	for control in g.ui.panel.find_children("*","Button",true,false):
+		if control.text == "Take a room": control.pressed.emit(); break
+	check(State.s.crowns == 62 and State.load_game(0),"inn service restores and saves through its choice")
+	g.talk("mara","past")
+	var escape := InputEventKey.new(); escape.physical_keycode = KEY_ESCAPE; escape.keycode = KEY_ESCAPE; escape.pressed = true
+	Input.parse_input_event(escape); await get_tree().process_frame
+	escape.pressed = false; Input.parse_input_event(escape)
+	check(g.mode == "dialogue" and g.dialogue_node == "root","Escape backs out of a nested dialogue branch")
+	g.select_dialogue({"next":"root","action":{"kind":"goodbye"}})
+	check(g.mode == "play" and not g.player.locked,"Goodbye restores gameplay input")
 	g.close_menu(); State.reset(); g.load_map("village",Vector2(480,480))
+	await get_tree().process_frame
+	g.close_menu()
 	g.player.immunity = 0; g.player.stun_resistance = 0
 	g.player.hurt(8,Vector2.ZERO,"Stun")
 	check(g.player.statuses.get("Stun",0) <= .2 and g.player.immunity >= .9,"stun is brief and protected by longer hit immunity")

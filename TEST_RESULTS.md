@@ -1,35 +1,26 @@
-# Test results
+# Test results — 0.3.0
 
-Engine: Godot 4.6.3 Standard (official), Linux x86_64. Date: 2026-10-09.
+Godot 4.6.3 Standard (official), Linux x86_64, 2026-10-09.
 
-## Executed checks
-
-| Check | Observed result |
+| Executed check | Observed result |
 |---|---|
-| `bash tools/cloud_setup.sh` | Completed successfully: editor import followed by isolated test scene |
-| `godot --headless --path . res://tests/runner.tscn` | **100 passed, 0 failed** |
-| Graphics scene capture | Village and boss arena rendered through Xorg/Mesa Compatibility renderer; screenshots under `docs/` |
-| macOS export | Universal standalone app ZIP generated with official matching templates |
-| Template integrity | Official SHA-512 checksum matched the downloaded template archive |
-| Exported content pack launch | Packaged `.pck` launched in headless Godot on Linux without script/resource errors |
-| Version 0.2.0 ad hoc signatures | Both native slices passed all CodeDirectory page-hash checks; Info.plist, CodeResources and six sealed resource hashes verified using `tools/verify_macos_bundle.py` |
-| ZIP integrity | macOS and source archives passed ZIP integrity checks |
-| App architecture | Mach-O contains ARM64 (`0x100000c`) and x86_64 slices; external `.pck` present |
+| `bash tools/cloud_setup.sh` | Editor import, isolated gameplay/UI/boss tests and audio checks completed without script/runtime errors |
+| `tests/runner.tscn` | **125 passed, 0 failed** |
+| `tests/ui_layout.tscn` | **166 passed, 0 failed** |
+| `tests/boss_playtest.tscn` | Starter sword won in 22.9 simulated seconds / 34 attacks; 100 HP and three potions remaining; shrine reached |
+| `tools/check_audio.py` | All seven loops/effects passed sample and boundary checks |
+| Software-rendered screenshots | Actual village, forest, crypt, shrine, dialogue, journal and inventory renders inspected; 800×450, 1152×648 and 1600×900 captures |
+| macOS export | Universal standalone development app, version 0.3.0, 64,493,947-byte ZIP |
+| `tools/verify_macos_bundle.py` | x86_64 and ARM64 ad hoc CodeDirectories verified (23,123 / 21,622 code pages), Info.plist/CodeResources seals and six resource hashes verified; ZIP integrity passed |
+| Exported content pack | Packaged `.pck` launched in headless Linux Godot without script/resource errors |
+| Repository checks | `git diff --check` passed |
 
-The suite covers content counts, damage floors/blocking, invalid quantities, stacking, equipment ownership/stat effects, sales and purchases, insufficient currency, upgrades, consumables, XP, attributes, skills, quest reward uniqueness, save restoration/schema checks/backup recovery, input-driven movement, world collisions, NPC menus/fallback/memory, validated shopping intents, actual enemy damage and directional player attacks, crypt gate checks, sigil drops, duplicate chests, all three elite encounters, boss phase transitions/defeat/reward, shrine unlocking, chapter quest completion, persisted ending, death interface and absent-Ollama timeout fallback.
+The gameplay suite covers inventory/transaction validation, equipment and upgrades, stats/skills/XP, exact quest consumption and reward uniqueness, both charm outcomes, legacy save restoration with relationships/progress intact, backup recovery, input movement, world collision, actual enemy damage, melee, sigil gates, chests, elites, boss phases/reward, shrine completion, death, stun resistance and dodge escape. It exercises authored dialogue links for every NPC, contextual greetings, quest acceptance/delivery, explicit purchases, forge/heal/inn services and returning to dialogue. No HTTP or typed-input controls remain in the runtime conversation path.
 
-The automated chapter test uses controlled positioning and direct damage to accelerate progression and inspect phases. It is an integration test of progression and state, **not** evidence of encounter balance, a full human playthrough, intended duration or controller usability. No tests were disabled or reported as passed without execution.
+UI tests check 13 major interfaces at 800×450, 1152×648, 1600×900 and 1024×768: panel bounds, unclipped headings and button widths. They also check HUD bar separation, keyboard focus, arrow/Enter branch navigation, real mouse input, scrolling, Escape Back/close without reopening pause, and HUD/menu separation. Screenshots come from Xorg/Mesa software rendering with Dummy audio, not a mockup. The display logs the expected unsupported V-Sync-setting warning. Export logs missing desktop folder-opener helpers (`gio`/`kioclient5`/`gvfs-trash`); export and bundle verification nevertheless complete successfully.
 
-## 0.2.0 playtest regression evidence
+The accelerated chapter integration test deliberately uses direct damage/positioning to inspect progression. The separate boss test uses collision-driven movement, real stamina and cooldowns with reactive dodging. It proves a viable strategy, not comfortable human balance, intended duration or a full unassisted playthrough.
 
-The checked setup script also completed the starter-sword boss simulation: 22.9 simulated seconds, 34 sword attacks, no potions used. It uses real collision-driven movement and normal stamina/cooldowns, then enters the shrine; it does not set boss HP or grant player health. Reactive automated dodging is more consistent than a human player, so this proves a viable avoidance strategy rather than comfortable human balance. The original accelerated chapter test still uses shortcuts to inspect persistence.
+Waveform measurements show zero boundary discontinuity for the 32-second music and ambience loops, with maximum adjacent sample differences of 100 and 37 (16-bit PCM). This checks clicks, not musical preference or actual CoreAudio output.
 
-Additional tests exercise actual LineEdit Enter submission and NPC delivery button signals, visible reward receipts, exact material consumption, both charm outcomes with equipment integrity, duplicate prevention across save/load, late main/elite acceptance, stun expiration/resistance/dodge escape, accessible map interactions and blocked flooded terrain. The final run printed no script/runtime errors.
-
-Waveform tests passed for all seven tracks/effects: music and ambient loops are 32 seconds with zero boundary discontinuity; maximum adjacent sample changes are 100 and 37 respectively (16-bit PCM). This detects waveform clicks, not listening quality or playback behavior on the Mac.
-
-## Not yet verified
-
-Version 0.2.0 native Apple Silicon launch, Gatekeeper behavior, real CoreAudio playback, physical gamepad input, real Ollama model responses, Retina readability, 60 FPS frame-time performance, Apple codesign/Gatekeeper validation, Developer ID signing/notarization and a complete unassisted playthrough. Follow `docs/SMOKE_TEST.md` on a Mac before treating the build as a release candidate.
-
-The software-display capture logs report that V-Sync cannot be changed. This does not validate V-Sync or performance on macOS. Continuous sound is intentionally skipped for the Dummy-audio screenshot run. No known blocking script/runtime errors were observed in the final automated suite; untested behavior can still contain defects.
+Native macOS launch, Gatekeeper acceptance, Apple's own `codesign` validation, CoreAudio listening, physical gamepad use, Retina readability, Apple Silicon frame times and a complete human playthrough remain unverified. The app is ad hoc signed, not Developer ID signed or notarized. Follow [the Mac smoke procedure](docs/SMOKE_TEST.md) for those device checks. Automated output is preserved in [docs/automated-test-output.txt](docs/automated-test-output.txt).

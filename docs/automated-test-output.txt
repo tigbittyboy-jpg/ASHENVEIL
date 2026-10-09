@@ -1,26 +1,4 @@
-4.6.3.stable.official.7d41c59c4
-Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
-
-[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
-[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
-[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
-[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
-[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
-[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
-[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
-[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
-[0m
-[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registering global classes... (2 steps)[39m[0m
-[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[  33% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
-[92m[ DONE ][39m [1mupdate_scripts_classes[22m
-[0m
-[   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
-[   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
-[  16% ] [90m[1mloading_editor_layout[22m | Loading docks...[39m[0m
-[92m[ DONE ][39m [1mloading_editor_layout[22m
-[0m
-Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Godot 4.6.3, Linux, 2026-10-09
 
 PASS content: twelve equipment and eight consumables/materials
 PASS content: eight NPCs and six enemy types plus boss
@@ -55,13 +33,9 @@ PASS corrupt primary recovers from backup
 PASS title screen loads
 PASS input moves CharacterBody2D
 PASS world boundary collision
-PASS NPC interaction opens paused dialogue
-PASS authored natural-language fallback
-PASS natural language proposes validated purchase
-PASS nonmerchant purchase intent rejected
-PASS unknown purchase intent rejected
-PASS dialogue cannot grant currency
-PASS NPC structured memory
+PASS NPC interaction opens paused choice dialogue
+PASS NPC histories have distinct authored voices
+PASS dialogue has no AI or HTTP execution path
 PASS forest spawns enemies and two elites
 PASS crypt locked without sigil
 PASS enemy attacks player
@@ -78,13 +52,12 @@ PASS boss unlocks shrine
 PASS chapter conclusion completes main quest
 PASS chapter completion survives autosave restoration
 PASS player death shows respawn interface
-PASS unavailable Ollama falls back within timeout
 PASS missing quest items cannot claim a reward
 PASS unfinished quest cannot bypass objectives
-PASS conversation input automatically receives focus
-PASS Enter submits a typed NPC question and displays an answer
-PASS real quest menu delivers items and awards exact Crowns
-PASS quest reward receipt remains visible
+PASS NPC dialogue contains no text input
+PASS conversation choice receives keyboard focus
+PASS dialogue turn-in consumes materials and pays exact Crowns
+PASS quest receipt remains visible in the conversation
 PASS repeated turn-in cannot duplicate rewards
 PASS returning an equipped quest charm keeps equipment and saves valid
 PASS accepting elite quest after victories still pays once
@@ -92,10 +65,40 @@ PASS late main-quest acceptance recovers the ending reward
 PASS iron delivery consumes exact materials and pays once
 PASS keep-charm branch preserves equipment and rewards
 PASS turn-in uniqueness survives save restoration
-PASS NPC backgrounds remain distinct offline
-PASS text recognizes quest acceptance
-PASS text recognizes objective delivery
-PASS NPC topics return distinct authored answers
+PASS legacy version-one conversation preferences remain loadable
+PASS loading legacy saves preserves inventory, relationships and quest progress
+PASS new offline saves require no AI preference
+PASS relationships change authored greetings
+PASS boss defeat changes NPC dialogue
+PASS previous conversations change greetings
+PASS authored actions validate NPC quest ownership
+PASS stable dialogue links for mara
+PASS portrait and authored opening for mara
+PASS stable dialogue links for brann
+PASS portrait and authored opening for brann
+PASS stable dialogue links for sister
+PASS portrait and authored opening for sister
+PASS stable dialogue links for tovin
+PASS portrait and authored opening for tovin
+PASS stable dialogue links for ilya
+PASS portrait and authored opening for ilya
+PASS stable dialogue links for osric
+PASS portrait and authored opening for osric
+PASS stable dialogue links for vesper
+PASS portrait and authored opening for vesper
+PASS stable dialogue links for nell
+PASS portrait and authored opening for nell
+PASS completed quests cannot be accepted again
+PASS dialogue acceptance activates existing quest state
+PASS dialogue missing-material response preserves currency
+PASS shop service keeps movement and attacks locked
+PASS explicit shop confirmation performs one validated purchase
+PASS service Back returns to conversation
+PASS forge choice opens working validated upgrades
+PASS healing pays once and returns to dialogue
+PASS inn service restores and saves through its choice
+PASS Escape backs out of a nested dialogue branch
+PASS Goodbye restores gameplay input
 PASS stun is brief and protected by longer hit immunity
 PASS stun expires before the next damaging hit can land
 PASS repeat stun rejected during recovery resistance
@@ -122,10 +125,175 @@ PASS accessible crypt crypt
 PASS accessible shrine crypt
 PASS accessible shrine shrine
 PASS old or unsafe spawn positions relocate to open ground
-RESULT: 100 passed, 0 failed
-Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
-
+RESULT: 125 passed, 0 failed
 BOSS PLAYTEST: PASS · 22.9 simulated seconds · 34 sword attacks · 100 HP · 3 potions remaining
+PASS UI title panel fits (800, 450)
+PASS UI title heading remains inside panel (800, 450)
+PASS UI title buttons fit panel width (800, 450)
+PASS UI pause panel fits (800, 450)
+PASS UI pause heading remains inside panel (800, 450)
+PASS UI pause buttons fit panel width (800, 450)
+PASS UI help panel fits (800, 450)
+PASS UI help heading remains inside panel (800, 450)
+PASS UI help buttons fit panel width (800, 450)
+PASS UI settings panel fits (800, 450)
+PASS UI settings heading remains inside panel (800, 450)
+PASS UI settings buttons fit panel width (800, 450)
+PASS UI inventory panel fits (800, 450)
+PASS UI inventory heading remains inside panel (800, 450)
+PASS UI inventory buttons fit panel width (800, 450)
+PASS UI journal panel fits (800, 450)
+PASS UI journal heading remains inside panel (800, 450)
+PASS UI journal buttons fit panel width (800, 450)
+PASS UI character panel fits (800, 450)
+PASS UI character heading remains inside panel (800, 450)
+PASS UI character buttons fit panel width (800, 450)
+PASS UI dialogue panel fits (800, 450)
+PASS UI dialogue heading remains inside panel (800, 450)
+PASS UI dialogue buttons fit panel width (800, 450)
+PASS UI shop panel fits (800, 450)
+PASS UI shop heading remains inside panel (800, 450)
+PASS UI shop buttons fit panel width (800, 450)
+PASS UI forge panel fits (800, 450)
+PASS UI forge heading remains inside panel (800, 450)
+PASS UI forge buttons fit panel width (800, 450)
+PASS UI healing panel fits (800, 450)
+PASS UI healing heading remains inside panel (800, 450)
+PASS UI healing buttons fit panel width (800, 450)
+PASS UI inn panel fits (800, 450)
+PASS UI inn heading remains inside panel (800, 450)
+PASS UI inn buttons fit panel width (800, 450)
+PASS UI purchase panel fits (800, 450)
+PASS UI purchase heading remains inside panel (800, 450)
+PASS UI purchase buttons fit panel width (800, 450)
+PASS UI title panel fits (1152, 648)
+PASS UI title heading remains inside panel (1152, 648)
+PASS UI title buttons fit panel width (1152, 648)
+PASS UI pause panel fits (1152, 648)
+PASS UI pause heading remains inside panel (1152, 648)
+PASS UI pause buttons fit panel width (1152, 648)
+PASS UI help panel fits (1152, 648)
+PASS UI help heading remains inside panel (1152, 648)
+PASS UI help buttons fit panel width (1152, 648)
+PASS UI settings panel fits (1152, 648)
+PASS UI settings heading remains inside panel (1152, 648)
+PASS UI settings buttons fit panel width (1152, 648)
+PASS UI inventory panel fits (1152, 648)
+PASS UI inventory heading remains inside panel (1152, 648)
+PASS UI inventory buttons fit panel width (1152, 648)
+PASS UI journal panel fits (1152, 648)
+PASS UI journal heading remains inside panel (1152, 648)
+PASS UI journal buttons fit panel width (1152, 648)
+PASS UI character panel fits (1152, 648)
+PASS UI character heading remains inside panel (1152, 648)
+PASS UI character buttons fit panel width (1152, 648)
+PASS UI dialogue panel fits (1152, 648)
+PASS UI dialogue heading remains inside panel (1152, 648)
+PASS UI dialogue buttons fit panel width (1152, 648)
+PASS UI shop panel fits (1152, 648)
+PASS UI shop heading remains inside panel (1152, 648)
+PASS UI shop buttons fit panel width (1152, 648)
+PASS UI forge panel fits (1152, 648)
+PASS UI forge heading remains inside panel (1152, 648)
+PASS UI forge buttons fit panel width (1152, 648)
+PASS UI healing panel fits (1152, 648)
+PASS UI healing heading remains inside panel (1152, 648)
+PASS UI healing buttons fit panel width (1152, 648)
+PASS UI inn panel fits (1152, 648)
+PASS UI inn heading remains inside panel (1152, 648)
+PASS UI inn buttons fit panel width (1152, 648)
+PASS UI purchase panel fits (1152, 648)
+PASS UI purchase heading remains inside panel (1152, 648)
+PASS UI purchase buttons fit panel width (1152, 648)
+PASS UI title panel fits (1600, 900)
+PASS UI title heading remains inside panel (1600, 900)
+PASS UI title buttons fit panel width (1600, 900)
+PASS UI pause panel fits (1600, 900)
+PASS UI pause heading remains inside panel (1600, 900)
+PASS UI pause buttons fit panel width (1600, 900)
+PASS UI help panel fits (1600, 900)
+PASS UI help heading remains inside panel (1600, 900)
+PASS UI help buttons fit panel width (1600, 900)
+PASS UI settings panel fits (1600, 900)
+PASS UI settings heading remains inside panel (1600, 900)
+PASS UI settings buttons fit panel width (1600, 900)
+PASS UI inventory panel fits (1600, 900)
+PASS UI inventory heading remains inside panel (1600, 900)
+PASS UI inventory buttons fit panel width (1600, 900)
+PASS UI journal panel fits (1600, 900)
+PASS UI journal heading remains inside panel (1600, 900)
+PASS UI journal buttons fit panel width (1600, 900)
+PASS UI character panel fits (1600, 900)
+PASS UI character heading remains inside panel (1600, 900)
+PASS UI character buttons fit panel width (1600, 900)
+PASS UI dialogue panel fits (1600, 900)
+PASS UI dialogue heading remains inside panel (1600, 900)
+PASS UI dialogue buttons fit panel width (1600, 900)
+PASS UI shop panel fits (1600, 900)
+PASS UI shop heading remains inside panel (1600, 900)
+PASS UI shop buttons fit panel width (1600, 900)
+PASS UI forge panel fits (1600, 900)
+PASS UI forge heading remains inside panel (1600, 900)
+PASS UI forge buttons fit panel width (1600, 900)
+PASS UI healing panel fits (1600, 900)
+PASS UI healing heading remains inside panel (1600, 900)
+PASS UI healing buttons fit panel width (1600, 900)
+PASS UI inn panel fits (1600, 900)
+PASS UI inn heading remains inside panel (1600, 900)
+PASS UI inn buttons fit panel width (1600, 900)
+PASS UI purchase panel fits (1600, 900)
+PASS UI purchase heading remains inside panel (1600, 900)
+PASS UI purchase buttons fit panel width (1600, 900)
+PASS UI title panel fits (1024, 768)
+PASS UI title heading remains inside panel (1024, 768)
+PASS UI title buttons fit panel width (1024, 768)
+PASS UI pause panel fits (1024, 768)
+PASS UI pause heading remains inside panel (1024, 768)
+PASS UI pause buttons fit panel width (1024, 768)
+PASS UI help panel fits (1024, 768)
+PASS UI help heading remains inside panel (1024, 768)
+PASS UI help buttons fit panel width (1024, 768)
+PASS UI settings panel fits (1024, 768)
+PASS UI settings heading remains inside panel (1024, 768)
+PASS UI settings buttons fit panel width (1024, 768)
+PASS UI inventory panel fits (1024, 768)
+PASS UI inventory heading remains inside panel (1024, 768)
+PASS UI inventory buttons fit panel width (1024, 768)
+PASS UI journal panel fits (1024, 768)
+PASS UI journal heading remains inside panel (1024, 768)
+PASS UI journal buttons fit panel width (1024, 768)
+PASS UI character panel fits (1024, 768)
+PASS UI character heading remains inside panel (1024, 768)
+PASS UI character buttons fit panel width (1024, 768)
+PASS UI dialogue panel fits (1024, 768)
+PASS UI dialogue heading remains inside panel (1024, 768)
+PASS UI dialogue buttons fit panel width (1024, 768)
+PASS UI shop panel fits (1024, 768)
+PASS UI shop heading remains inside panel (1024, 768)
+PASS UI shop buttons fit panel width (1024, 768)
+PASS UI forge panel fits (1024, 768)
+PASS UI forge heading remains inside panel (1024, 768)
+PASS UI forge buttons fit panel width (1024, 768)
+PASS UI healing panel fits (1024, 768)
+PASS UI healing heading remains inside panel (1024, 768)
+PASS UI healing buttons fit panel width (1024, 768)
+PASS UI inn panel fits (1024, 768)
+PASS UI inn heading remains inside panel (1024, 768)
+PASS UI inn buttons fit panel width (1024, 768)
+PASS UI purchase panel fits (1024, 768)
+PASS UI purchase heading remains inside panel (1024, 768)
+PASS UI purchase buttons fit panel width (1024, 768)
+PASS UI compact HUD returns during gameplay
+PASS UI HUD resource bars never overlap
+PASS UI menu hides HUD instead of overlapping it
+PASS UI opening dialogue selects first response
+PASS UI arrow key navigates dialogue responses
+PASS UI Enter selects a nested authored branch
+PASS UI Escape returns from branch to greeting
+PASS UI Escape closes dialogue without reopening pause
+PASS UI long choice lists scroll
+PASS UI mouse click selects authored response
+UI RESULT: 166 passed, 0 failed
 PASS music: 32.00s, maximum adjacent sample difference 100, boundary discontinuity 0
 PASS ambient: 32.00s, maximum adjacent sample difference 37, boundary discontinuity 0
 PASS hit: 0.25s, maximum adjacent sample difference 85, boundary discontinuity 0

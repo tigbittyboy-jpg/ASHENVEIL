@@ -19,4 +19,5 @@ run_checked() {
 run_checked godot --headless --path . --editor --quit
 run_checked env XDG_DATA_HOME=/workspace/ashen-test/data XDG_CONFIG_HOME=/workspace/ashen-test/config XDG_CACHE_HOME=/workspace/ashen-test/cache godot --headless --path . res://tests/runner.tscn
 run_checked env XDG_DATA_HOME=/workspace/ashen-boss-test/data XDG_CONFIG_HOME=/workspace/ashen-boss-test/config XDG_CACHE_HOME=/workspace/ashen-boss-test/cache godot --headless --path . res://tests/boss_playtest.tscn
+run_checked env XDG_DATA_HOME=/workspace/ashen-ui-test/data XDG_CONFIG_HOME=/workspace/ashen-ui-test/config XDG_CACHE_HOME=/workspace/ashen-ui-test/cache godot --headless --path . res://tests/ui_layout.tscn
 python tools/check_audio.py

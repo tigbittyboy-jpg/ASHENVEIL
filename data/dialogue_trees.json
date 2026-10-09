@@ -1,0 +1,2459 @@
+{
+  "mara": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "Keep your hands where I can see them. Crowns speak clearer than promises.",
+        "variants": [
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "You silenced it? I will give you fair prices today. Do not make me regret saying that."
+          },
+          {
+            "condition": {
+              "memory": "mara_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. Back again? Good. People who return are better customers."
+          },
+          {
+            "condition": {
+              "memory": "mara_spoken"
+            },
+            "text": "Back again? Good. People who return are better customers."
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "Show me your wares.",
+            "next": "root",
+            "action": {
+              "kind": "shop"
+            }
+          },
+          {
+            "text": "I would like to sell something.",
+            "next": "root",
+            "action": {
+              "kind": "sell"
+            }
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "Mara. If you came for charity, try the chapel. If you came for supplies, we can talk.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "I buried my partner when the caravans stopped. This stall is the only thing the Veil has not taken from me.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "The town grew around the road and its tollhouse. Now the road brings nobody, and the toll is paid in memories.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "The king paid his debts with promises. You cannot eat a promise.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "Because leaving means trusting a road. Here I can at least see who owes me.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "Brann lets his forge burn all night. Says it keeps the dead away. I think he simply cannot bear the dark.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "Nobody buys from a dead merchant. I trade in daylight and bar my door when the bell stirs.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "A very large bell, a very small space to stand safely. Get out of its marked circle. Hit it while it hauls itself upright. Simple advice; expensive to ignore.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "Keep to the forest road. The east gate needs a sigil. That sentinel has one, if you can persuade it to stop breathing.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "There is a crystal beyond the crypt. If it offers you a fortune, check what it asks in return.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "You silenced it? I will give you fair prices today. Do not make me regret saying that.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "Keep to the forest road. The east gate needs a sigil. That sentinel has one, if you can persuade it to stop breathing. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  },
+  "brann": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "The bell broke. My anvil did not. Bring iron and I will make you dangerous.",
+        "variants": [
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "The anvil sounds louder without that damned bell. Good work, wanderer."
+          },
+          {
+            "condition": {
+              "memory": "brann_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. Still holding that blade? Let us keep it worth holding."
+          },
+          {
+            "condition": {
+              "memory": "brann_spoken"
+            },
+            "text": "Still holding that blade? Let us keep it worth holding."
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "Have any work for me?",
+            "next": "work"
+          },
+          {
+            "text": "Can you improve my weapon?",
+            "next": "root",
+            "action": {
+              "kind": "upgrade"
+            }
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "Brann. Blacksmith, grave digger when needed, and a poor liar. Your blade looks tired.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "I forged the old garrison's swords. Most came back without their owners. I still work the iron because stopping would mean listening.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "The king wanted iron from these hills. Hollowmere fed his armies until his armies came home hollow.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "His crest was stamped on every sword. None of those swords could cut a curse.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "Someone must keep their tools sharp. Someone must be here when they return.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "Mara knows which roads are still safe. She pretends she does not care who returns from them.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "The curse has found its way into grave iron. Heat it long enough and it starts to sing. Bring me three pieces; I will pay you.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "Watch the ground, not its face. Leave the marked circle, wait for the crash, then hit the joints before it recovers.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "The sentinel wears good iron. The hound in the southwest wears none; it is no less dangerous. Keep your edge ready.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "No hammer I own can cut that shrine\u2019s stone. Whatever waits there, you will need more than a weapon.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "The anvil sounds louder without that damned bell. Good work, wanderer.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "work": {
+        "text": "Bring three Grave Iron to Brann. I offer 40 Crowns and 60 XP.",
+        "variants": [
+          {
+            "condition": {
+              "quest": "iron",
+              "state": "complete"
+            },
+            "text": "You have done what I asked. Your promised reward has been paid; I will remember your help."
+          },
+          {
+            "condition": {
+              "quest": "iron",
+              "state": "active"
+            },
+            "text": "The work is not forgotten. Bring three Grave Iron to Brann."
+          }
+        ],
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "iron"
+            },
+            "condition": {
+              "quest": "iron",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "What should I look for?",
+            "next": "materials"
+          },
+          {
+            "text": "I have brought what you asked for.",
+            "next": "work",
+            "action": {
+              "kind": "turn_in",
+              "quest": "iron",
+              "choice": "return"
+            },
+            "condition": {
+              "quest": "iron",
+              "state": "active"
+            }
+          },
+          {
+            "text": "Not right now.",
+            "next": "root"
+          }
+        ]
+      },
+      "materials": {
+        "text": "Grave Iron comes from the old guardians and forest creatures. Bring three pieces for the job; upgrades use additional iron.",
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "iron"
+            },
+            "condition": {
+              "quest": "iron",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "work"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "The sentinel wears good iron. The hound in the southwest wears none; it is no less dangerous. Keep your edge ready. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  },
+  "sister": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "Sit. Your wounds are honest, even if your memories are not.",
+        "variants": [
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "The fever has broken in two houses. Whatever awaits at the shrine, remember this mercy."
+          },
+          {
+            "condition": {
+              "memory": "sister_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. Welcome back. Tell me where it hurts, or what you have learned."
+          },
+          {
+            "condition": {
+              "memory": "sister_spoken"
+            },
+            "text": "Welcome back. Tell me where it hurts, or what you have learned."
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "Have any work for me?",
+            "next": "work"
+          },
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Where can I buy medicine?",
+            "next": "medicine"
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "Elowen. I tend the sick and keep the chapel open. Names are easier to mend than memories.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "I once tended the keeper of the bell. He asked me to forget his face. I have tried, wanderer. I have tried.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "There was a spring under this chapel. Pilgrims came for its water. The first bell was meant to guide them home.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "He wanted to keep everyone safe. Fear makes that wish dangerous.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "The sick cannot leave. Neither can I.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "Osric has been leaving bread at empty graves. I do not ask whether it is prayer or apology.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "The herbs ease its fever, but not its dreams. Gather three Weeping Herbs and return them; I will pay 35 Crowns and 60 XP.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "You need not endure every blow. Leave the orange circle and let it fall on empty stone. There is time to answer afterward.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "Three pale herbs grow beside the forest paths. Avoid the green spirits. A blue crystal can cleanse what follows you home.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "The crystal remembers the first keeper. Go gently. You may find a wound that belongs to you.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "The fever has broken in two houses. Whatever awaits at the shrine, remember this mercy.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "work": {
+        "text": "Bring three Weeping Herbs to Sister Elowen. I offer 35 Crowns and 60 XP.",
+        "variants": [
+          {
+            "condition": {
+              "quest": "herbs",
+              "state": "complete"
+            },
+            "text": "You have done what I asked. Your promised reward has been paid; I will remember your help."
+          },
+          {
+            "condition": {
+              "quest": "herbs",
+              "state": "active"
+            },
+            "text": "The work is not forgotten. Bring three Weeping Herbs to Sister Elowen."
+          }
+        ],
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "herbs"
+            },
+            "condition": {
+              "quest": "herbs",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "What should I look for?",
+            "next": "materials"
+          },
+          {
+            "text": "I have brought what you asked for.",
+            "next": "work",
+            "action": {
+              "kind": "turn_in",
+              "quest": "herbs",
+              "choice": "return"
+            },
+            "condition": {
+              "quest": "herbs",
+              "state": "active"
+            }
+          },
+          {
+            "text": "Not right now.",
+            "next": "root"
+          }
+        ]
+      },
+      "materials": {
+        "text": "Weeping Herbs grow along the forest paths. Gather three and bring them back. Their pale buds remain visible in the mist.",
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "herbs"
+            },
+            "condition": {
+              "quest": "herbs",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "work"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "Three pale herbs grow beside the forest paths. Avoid the green spirits. A blue crystal can cleanse what follows you home. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  },
+  "tovin": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "Something wore my brother\u2019s face in the woods. Please find his charm.",
+        "variants": [
+          {
+            "condition": {
+              "memory": "tovin_helped"
+            },
+            "text": "You brought him home, in the only way left to us. I will not forget."
+          },
+          {
+            "condition": {
+              "memory": "tovin_betrayed"
+            },
+            "text": "You kept the last piece of him. I paid what I promised. Do not ask for my trust."
+          },
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "I dreamed of my brother without the forest behind him. Thank you."
+          },
+          {
+            "condition": {
+              "memory": "tovin_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. You came back. That means more than you think."
+          },
+          {
+            "condition": {
+              "memory": "tovin_spoken"
+            },
+            "text": "You came back. That means more than you think."
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "Have any work for me?",
+            "next": "work"
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "Tovin. My brother used to introduce us both. I still wait for him to do it.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "My brother taught me the southern forest path. I cannot walk it now without expecting his footsteps behind mine.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "It was a small place even then. The forest sounded ordinary. That is what I miss most.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "Kings were stories adults told. My brother was real.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "If my brother ever finds his way back, someone must answer the door.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "Nell keeps my brother\u2019s seat empty. I wish she would stop. I wish she never would.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "Something came home wearing his face. His Silver Charm is in the southwest forest chest. Bring it back, or tell me honestly why you will not.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "I heard it strike the same patch of stone twice. It cannot follow you through every step. Move when the ground glows.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "My brother hid things in a chest in the southwest hollow. The hound is still there. Please be careful.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "If the shrine returns your memories, hold them carefully. Even the bad ones are yours.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "I dreamed of my brother without the forest behind him. Thank you.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "work": {
+        "text": "Recover the Silver Charm from a forest chest. Return it or keep it. I offer 40 Crowns and 60 XP.",
+        "variants": [
+          {
+            "condition": {
+              "quest": "charm",
+              "state": "complete"
+            },
+            "text": "You have done what I asked. Your promised reward has been paid; I will remember your help."
+          },
+          {
+            "condition": {
+              "quest": "charm",
+              "state": "active"
+            },
+            "text": "The work is not forgotten. Recover the Silver Charm from a forest chest. Return it or keep it."
+          }
+        ],
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "charm"
+            },
+            "condition": {
+              "quest": "charm",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "What should I look for?",
+            "next": "materials"
+          },
+          {
+            "text": "I have brought what you asked for.",
+            "next": "work",
+            "action": {
+              "kind": "turn_in",
+              "quest": "charm",
+              "choice": "return"
+            },
+            "condition": {
+              "quest": "charm",
+              "state": "active"
+            }
+          },
+          {
+            "text": "I want to keep the charm.",
+            "next": "work",
+            "action": {
+              "kind": "turn_in",
+              "quest": "charm",
+              "choice": "keep"
+            },
+            "condition": {
+              "quest": "charm",
+              "state": "active"
+            }
+          },
+          {
+            "text": "Not right now.",
+            "next": "root"
+          }
+        ]
+      },
+      "materials": {
+        "text": "The charm lies in a chest in the southwest hollow. You may return it or admit you wish to keep it. My payment is the same; my trust is not.",
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "charm"
+            },
+            "condition": {
+              "quest": "charm",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "work"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "My brother hid things in a chest in the southwest hollow. The hound is still there. Please be careful. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  },
+  "ilya": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "The crypt gate needs a sigil. The forest sentinel carries it. End the bell\u2019s silence.",
+        "variants": [
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "The bell is silent. You gave us a morning I thought we had lost. The shrine is open."
+          },
+          {
+            "condition": {
+              "memory": "ilya_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. Wanderer. Report when you are ready."
+          },
+          {
+            "condition": {
+              "memory": "ilya_spoken"
+            },
+            "text": "Wanderer. Report when you are ready."
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "Have any work for me?",
+            "next": "work"
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "Captain Ilya. There is no army left to command. Only a square worth defending.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "I held the western bridge until the dead learned to cross the riverbed. Eight of us returned. I do not count myself among the living yet.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "We defended a crossing, then a road, then a village. The kingdom shrank until it fit inside this square.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "I have not seen him since the western bridge. I no longer trust reports of his death.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "There are still people behind me. That is reason enough.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "Vesper arrived before the curse. I have never seen anyone remember his arrival.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "We can lose the forest or we can lose everyone. Defeat the sentinel for its sigil, then enter the crypt and silence the Bellkeeper.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "Its blast is telegraphed. Clear the circle, keep stamina for a dodge, then counter during recovery. Do not trade blows with it.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "The eastern sentinel carries the crypt sigil. A lost hound haunts the southwest; a knight guards the crypt. Three enemies, three different rhythms.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "The shrine lies beyond the Bellkeeper. Once the guardian falls, I cannot follow you. That last report is yours alone.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "The bell is silent. You gave us a morning I thought we had lost. The shrine is open.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "work": {
+        "text": "Speak to Ilya. Defeat the forest sentinel for the sigil, enter the crypt, silence the Bellkeeper, then visit the shrine. I offer 100 Crowns and 60 XP.",
+        "variants": [
+          {
+            "condition": {
+              "quest": "bell",
+              "state": "complete"
+            },
+            "text": "You have done what I asked. Your promised reward has been paid; I will remember your help."
+          },
+          {
+            "condition": {
+              "quest": "bell",
+              "state": "active"
+            },
+            "text": "The work is not forgotten. Speak to Ilya. Defeat the forest sentinel for the sigil, enter the crypt, silence the Bellkeeper, then visit the shrine."
+          }
+        ],
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "bell"
+            },
+            "condition": {
+              "quest": "bell",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "What should I look for?",
+            "next": "dangers"
+          },
+          {
+            "text": "What about the three unquiet souls?",
+            "next": "elites"
+          },
+          {
+            "text": "Not right now.",
+            "next": "root"
+          }
+        ]
+      },
+      "materials": {
+        "text": "Follow the forest road.",
+        "choices": [
+          {
+            "text": "I will take the job.",
+            "next": "work",
+            "action": {
+              "kind": "accept",
+              "quest": "bell"
+            },
+            "condition": {
+              "quest": "bell",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "work"
+          }
+        ]
+      },
+      "elites": {
+        "text": "The sentinel, the lost hound, and the crypt knight. Lay all three to rest and I will pay 75 Crowns and 60 XP.",
+        "variants": [
+          {
+            "condition": {
+              "quest": "elites",
+              "state": "complete"
+            },
+            "text": "All three are at peace. Your payment has been made. Thank you."
+          }
+        ],
+        "choices": [
+          {
+            "text": "I will lay them to rest.",
+            "next": "elites",
+            "action": {
+              "kind": "accept",
+              "quest": "elites"
+            },
+            "condition": {
+              "quest": "elites",
+              "state": "absent"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "work"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "The eastern sentinel carries the crypt sigil. A lost hound haunts the southwest; a knight guards the crypt. Three enemies, three different rhythms. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  },
+  "osric": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "The Veil is a mercy! Or perhaps... I need it to be.",
+        "variants": [
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "I can hear my own prayers again. They sound smaller, but more honest."
+          },
+          {
+            "condition": {
+              "memory": "osric_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. I hoped you would return. There are words I should have said sooner."
+          },
+          {
+            "condition": {
+              "memory": "osric_spoken"
+            },
+            "text": "I hoped you would return. There are words I should have said sooner."
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "Osric. I once called myself a shepherd of souls. These days I mostly lose the flock.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "I prayed for an end to pain. When the Veil came, I mistook silence for an answer. Perhaps I was wrong.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "The bells were blessed before they were weapons. I signed the prayer that hung beside the first one.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "We mistook obedience for faith. I cannot tell you which of us was more afraid.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "I helped invite this silence. Walking away would be another prayer without meaning.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "Elowen knows the keeper\u2019s face. Ask gently. Some truths look too much like wounds.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "If mercy has a face, why do I hide from it? Ask Elowen what she saw beneath the chapel.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "That bell was made to call souls home. Now its keeper mistakes living feet for answers. Leave the circle before it calls.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "The forest dead remember their roads. The crypt dead remember orders. Listen for a pause between them.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "The prayer I signed began there. I fear the crystal still knows my handwriting.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "I can hear my own prayers again. They sound smaller, but more honest.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "The forest dead remember their roads. The crypt dead remember orders. Listen for a pause between them. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  },
+  "vesper": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "You have been here before. Ask the shrine what you chose to forget.",
+        "variants": [
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "The guardian is gone. The shrine can no longer hide your choice from you."
+          },
+          {
+            "condition": {
+              "memory": "vesper_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. Another question, another thread. Which will you follow?"
+          },
+          {
+            "condition": {
+              "memory": "vesper_spoken"
+            },
+            "text": "Another question, another thread. Which will you follow?"
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "You may call me Vesper. The name you need is your own. We will come to that.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "I remember a wanderer ringing the first bell. You wore another name then. I will not give it back before you earn it.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "Hollowmere is where endings gather. Kingdoms fall elsewhere; here we learn what survived them.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "Ask the shrine what the king asked the bell to forget.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "Because you would wake here again. I wanted this time to be different.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "The healer remembers what the innkeeper repeats in dreams. Between them, a whole kingdom survives.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "Beyond the Bellkeeper lies the shrine. Its crystal remembers a choice you have spent your life escaping.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "The keeper has mistaken repetition for purpose. Break the pattern: leave its circle, survive the toll, strike the pause.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "The forest tests your patience. The crypt tests your fear. Bring the sentinel\u2019s sigil east, and let neither test choose for you.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "Beyond the guardian, the crystal keeps your first choice. You were the keeper who rang the bell. This time, you may choose otherwise.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "The guardian is gone. The shrine can no longer hide your choice from you.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "The forest tests your patience. The crypt tests your fear. Bring the sentinel\u2019s sigil east, and let neither test choose for you. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  },
+  "nell": {
+    "start": "root",
+    "nodes": {
+      "root": {
+        "text": "Beds cost coin. Rumors cost courage. The hounds fear fire.",
+        "variants": [
+          {
+            "condition": {
+              "flag": "boss"
+            },
+            "text": "For the first night in years, the sleepers did not scream. Stay for a while."
+          },
+          {
+            "condition": {
+              "memory": "nell_insult"
+            },
+            "text": "I have not forgotten your cruelty. Speak honestly this time."
+          },
+          {
+            "condition": {
+              "flag": "ending"
+            },
+            "text": "The shrine has answered. Hollowmere remembers what you have done. Your chair is still warm. What is on your mind?"
+          },
+          {
+            "condition": {
+              "memory": "nell_spoken"
+            },
+            "text": "Your chair is still warm. What is on your mind?"
+          }
+        ],
+        "choices": [
+          {
+            "text": "Who are you?",
+            "next": "identity"
+          },
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Tell me about Hollowmere.",
+            "next": "town"
+          },
+          {
+            "text": "What do you know of the Veil?",
+            "next": "veil"
+          },
+          {
+            "text": "I heard the bell has fallen silent.",
+            "next": "boss",
+            "condition": {
+              "flag": "boss"
+            }
+          },
+          {
+            "text": "May I rest here?",
+            "next": "root",
+            "action": {
+              "kind": "rest"
+            }
+          },
+          {
+            "text": "I found the forest sigil.",
+            "next": "discovery",
+            "condition": {
+              "flag": "sentinel"
+            }
+          },
+          {
+            "text": "Goodbye.",
+            "next": "root",
+            "action": {
+              "kind": "goodbye"
+            }
+          }
+        ]
+      },
+      "identity": {
+        "text": "Nell, keeper of the Last Hearth. Sit near the fire. It still remembers how to be kind.",
+        "choices": [
+          {
+            "text": "What is your story?",
+            "next": "past"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "past": {
+        "text": "My inn used to house traveling players. Their last song is still scratched into a table. Now I rent quiet instead.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "What do you hear about the others?",
+            "next": "rumors"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "town": {
+        "text": "Miners, pilgrims, merchants. Everyone passed through the Last Hearth. I kept their songs; the Veil took their names.",
+        "choices": [
+          {
+            "text": "What happened to the king?",
+            "next": "king"
+          },
+          {
+            "text": "Tell me a local rumor.",
+            "next": "rumors"
+          },
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "king": {
+        "text": "There is still a room upstairs bearing his crest. Nobody sleeps soundly in it.",
+        "choices": [
+          {
+            "text": "Why did you stay?",
+            "next": "stay"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "stay": {
+        "text": "If the last fire goes out, then we truly have no home.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "Ilya visits the well at dawn. Eight names, spoken softly. Never a ninth.",
+        "choices": [
+          {
+            "text": "What dangers lie nearby?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "veil": {
+        "text": "It prefers people alone. Rest here if you must; five Crowns buys warmth and a saved night's peace.",
+        "choices": [
+          {
+            "text": "What waits in the crypt?",
+            "next": "bell"
+          },
+          {
+            "text": "What do you know of the shrine?",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "bell": {
+        "text": "A guest once survived by counting the pause after each toll. Step away first. Let the silence tell you when to strike.",
+        "choices": [
+          {
+            "text": "How do I reach it?",
+            "next": "dangers"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "dangers": {
+        "text": "Travellers vanished near the southwest hollow. Follow the lamps east, and do not follow any voice calling from the trees.",
+        "choices": [
+          {
+            "text": "And the Bellkeeper?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "shrine": {
+        "text": "Vesper speaks of a room without a hearth. Take some warmth with you, if only in memory.",
+        "choices": [
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "boss": {
+        "text": "For the first night in years, the sleepers did not scream. Stay for a while.",
+        "choices": [
+          {
+            "text": "Tell me about the shrine.",
+            "next": "shrine"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "medicine": {
+        "text": "Mara sells draughts by the square. The blue crystals restore your strength for free. Do not mistake endurance for wisdom.",
+        "choices": [
+          {
+            "text": "Can you heal me?",
+            "next": "root",
+            "action": {
+              "kind": "heal"
+            }
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      },
+      "discovery": {
+        "text": "Travellers vanished near the southwest hollow. Follow the lamps east, and do not follow any voice calling from the trees. The eastern crypt gate will answer that sigil now.",
+        "choices": [
+          {
+            "text": "What waits below?",
+            "next": "bell"
+          },
+          {
+            "text": "Back.",
+            "next": "root"
+          }
+        ]
+      }
+    }
+  }
+}
