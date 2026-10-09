@@ -1,0 +1,186 @@
+{
+  "rust_sword": {
+    "name": "Wayfarer Sword",
+    "slot": "weapon",
+    "kind": "sword",
+    "attack": 12,
+    "speed": 0.38,
+    "reach": 82,
+    "cost": 9,
+    "price": 0,
+    "rarity": "Common",
+    "description": "A relic carried through the dying kingdom."
+  },
+  "dagger": {
+    "name": "Widow Dagger",
+    "slot": "weapon",
+    "kind": "dagger",
+    "attack": 8,
+    "speed": 0.2,
+    "reach": 65,
+    "cost": 5,
+    "price": 35,
+    "rarity": "Common",
+    "description": "A relic carried through the dying kingdom."
+  },
+  "axe": {
+    "name": "Executioner Axe",
+    "slot": "weapon",
+    "kind": "axe",
+    "attack": 23,
+    "speed": 0.7,
+    "reach": 92,
+    "cost": 16,
+    "price": 65,
+    "rarity": "Common",
+    "description": "A relic carried through the dying kingdom."
+  },
+  "staff": {
+    "name": "Cinder Staff",
+    "slot": "weapon",
+    "kind": "staff",
+    "attack": 18,
+    "speed": 0.6,
+    "reach": 280,
+    "cost": 8,
+    "price": 60,
+    "rarity": "Common",
+    "description": "A relic carried through the dying kingdom."
+  },
+  "bow": {
+    "name": "Yew Bow",
+    "slot": "weapon",
+    "kind": "bow",
+    "attack": 15,
+    "speed": 0.48,
+    "reach": 360,
+    "cost": 7,
+    "price": 50,
+    "rarity": "Common",
+    "description": "A relic carried through the dying kingdom."
+  },
+  "bellblade": {
+    "name": "Bellkeeper Blade",
+    "slot": "weapon",
+    "kind": "sword",
+    "attack": 28,
+    "speed": 0.4,
+    "reach": 100,
+    "cost": 11,
+    "price": 200,
+    "rarity": "Rare",
+    "description": "A relic carried through the dying kingdom."
+  },
+  "hood": {
+    "name": "Ash Hood",
+    "slot": "head",
+    "defense": 2,
+    "price": 25,
+    "rarity": "Uncommon",
+    "description": "Offers protection against the Veil."
+  },
+  "mail": {
+    "name": "Pilgrim Mail",
+    "slot": "chest",
+    "defense": 5,
+    "price": 55,
+    "rarity": "Uncommon",
+    "description": "Offers protection against the Veil."
+  },
+  "gloves": {
+    "name": "Hunter Gloves",
+    "slot": "gloves",
+    "defense": 2,
+    "price": 25,
+    "rarity": "Uncommon",
+    "description": "Offers protection against the Veil."
+  },
+  "boots": {
+    "name": "Marsh Boots",
+    "slot": "boots",
+    "defense": 2,
+    "price": 30,
+    "rarity": "Uncommon",
+    "description": "Offers protection against the Veil."
+  },
+  "charm": {
+    "name": "Silver Charm",
+    "slot": "accessory",
+    "defense": 3,
+    "price": 45,
+    "rarity": "Uncommon",
+    "description": "Offers protection against the Veil."
+  },
+  "crown": {
+    "name": "Funeral Crown",
+    "slot": "head",
+    "defense": 6,
+    "price": 120,
+    "rarity": "Uncommon",
+    "description": "Offers protection against the Veil."
+  },
+  "potion": {
+    "name": "Healing Draught",
+    "slot": "",
+    "price": 12,
+    "effect": "heal",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  },
+  "ether": {
+    "name": "Moon Ether",
+    "slot": "",
+    "price": 15,
+    "effect": "mana",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  },
+  "tonic": {
+    "name": "Iron Tonic",
+    "slot": "",
+    "price": 14,
+    "effect": "stamina",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  },
+  "antidote": {
+    "name": "Bitter Antidote",
+    "slot": "",
+    "price": 8,
+    "effect": "cleanse",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  },
+  "ore": {
+    "name": "Grave Iron",
+    "slot": "",
+    "price": 10,
+    "effect": "",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  },
+  "herb": {
+    "name": "Weeping Herb",
+    "slot": "",
+    "price": 6,
+    "effect": "",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  },
+  "key": {
+    "name": "Crypt Sigil",
+    "slot": "",
+    "price": 0,
+    "effect": "",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  },
+  "ember": {
+    "name": "Veil Ember",
+    "slot": "",
+    "price": 20,
+    "effect": "",
+    "rarity": "Common",
+    "description": "Gathered from the ruins of Hollowmere."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "bell": {
+    "name": "The Silent Bell",
+    "text": "Speak to Ilya. Defeat the forest sentinel for the sigil, enter the crypt, silence the Bellkeeper, then visit the shrine.",
+    "reward": 100
+  },
+  "herbs": {
+    "name": "A Gentle Mercy",
+    "text": "Bring three Weeping Herbs to Sister Elowen.",
+    "reward": 35
+  },
+  "charm": {
+    "name": "A Brother\u2019s Shadow",
+    "text": "Recover the Silver Charm from a forest chest. Return it or keep it.",
+    "reward": 40
+  },
+  "iron": {
+    "name": "Iron Remembers",
+    "text": "Bring three Grave Iron to Brann.",
+    "reward": 40
+  },
+  "elites": {
+    "name": "Three Unquiet Souls",
+    "text": "Defeat the forest sentinel, the lost hound and the crypt knight.",
+    "reward": 75
+  }
+}

@@ -1,0 +1,60 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS content: twelve equipment and eight consumables/materials
+PASS content: eight NPCs and six enemy types plus boss
+PASS damage has minimum floor
+PASS blocking reduces damage
+PASS negative item quantity rejected
+PASS zero removal rejected
+PASS inventory stacking
+PASS equipped weapon cannot be sold
+PASS nonexistent item cannot be sold
+PASS insufficient currency cannot buy
+PASS valid purchase deducts price
+PASS equipment changes attack
+PASS cannot equip absent item
+PASS upgrade without materials rejected
+PASS upgrade increases damage and consumes costs
+PASS consumable restores health
+PASS materials cannot be consumed
+PASS XP levels and awards points
+PASS attribute affects health
+PASS skill cost and duplicate prevention
+PASS active quest rewards
+PASS duplicate quest rewards rejected
+PASS unaccepted quest cannot reward
+PASS save writes atomically
+PASS save restores all state including equipment and memory
+PASS missing slot rejected
+PASS malformed position rejected without execution
+PASS missing attribute schema rejected
+PASS invalid item ID in save rejected
+PASS corrupt primary recovers from backup
+PASS title screen loads
+PASS input moves CharacterBody2D
+PASS world boundary collision
+PASS NPC interaction opens paused dialogue
+PASS authored natural-language fallback
+PASS natural language proposes validated purchase
+PASS nonmerchant purchase intent rejected
+PASS unknown purchase intent rejected
+PASS dialogue cannot grant currency
+PASS NPC structured memory
+PASS forest spawns enemies and two elites
+PASS crypt locked without sigil
+PASS enemy attacks player
+PASS invulnerability prevents damage
+PASS directional melee damages enemy
+PASS sentinel defeat drops crypt sigil
+PASS chest rewards exactly once
+PASS sigil unlocks crypt transition
+PASS all three elite encounters complete side quest
+PASS boss phase two transition
+PASS boss phase three transition
+PASS boss defeat persists and awards unique weapon
+PASS boss unlocks shrine
+PASS chapter conclusion completes main quest
+PASS chapter completion survives autosave restoration
+PASS player death shows respawn interface
+PASS unavailable Ollama falls back within timeout
+RESULT: 57 passed, 0 failed

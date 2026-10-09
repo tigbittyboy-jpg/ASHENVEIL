@@ -1,0 +1,42 @@
+{
+  "mara": {
+    "name": "Mara",
+    "role": "merchant",
+    "line": "Keep your hands where I can see them. Crowns speak clearer than promises."
+  },
+  "brann": {
+    "name": "Brann",
+    "role": "smith",
+    "line": "The bell broke. My anvil did not. Bring iron and I will make you dangerous."
+  },
+  "sister": {
+    "name": "Sister Elowen",
+    "role": "healer",
+    "line": "Sit. Your wounds are honest, even if your memories are not."
+  },
+  "tovin": {
+    "name": "Tovin",
+    "role": "resident",
+    "line": "Something wore my brother\u2019s face in the woods. Please find his charm."
+  },
+  "ilya": {
+    "name": "Captain Ilya",
+    "role": "quest",
+    "line": "The crypt gate needs a sigil. The forest sentinel carries it. End the bell\u2019s silence."
+  },
+  "osric": {
+    "name": "Osric",
+    "role": "fanatic",
+    "line": "The Veil is a mercy! Or perhaps... I need it to be."
+  },
+  "vesper": {
+    "name": "Vesper",
+    "role": "wanderer",
+    "line": "You have been here before. Ask the shrine what you chose to forget."
+  },
+  "nell": {
+    "name": "Nell",
+    "role": "innkeeper",
+    "line": "Beds cost coin. Rumors cost courage. The hounds fear fire."
+  }
+}

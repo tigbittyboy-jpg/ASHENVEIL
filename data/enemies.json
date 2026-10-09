@@ -1,0 +1,51 @@
+{
+  "wanderer": {
+    "hp": 38,
+    "attack": 9,
+    "speed": 45,
+    "xp": 15,
+    "behavior": "melee"
+  },
+  "hound": {
+    "hp": 28,
+    "attack": 8,
+    "speed": 100,
+    "xp": 16,
+    "behavior": "lunge"
+  },
+  "cultist": {
+    "hp": 32,
+    "attack": 10,
+    "speed": 50,
+    "xp": 20,
+    "behavior": "ranged"
+  },
+  "guardian": {
+    "hp": 80,
+    "attack": 18,
+    "speed": 32,
+    "xp": 32,
+    "behavior": "slam"
+  },
+  "wraith": {
+    "hp": 45,
+    "attack": 9,
+    "speed": 65,
+    "xp": 24,
+    "behavior": "curse"
+  },
+  "knight": {
+    "hp": 65,
+    "attack": 14,
+    "speed": 68,
+    "xp": 30,
+    "behavior": "counter"
+  },
+  "boss": {
+    "hp": 650,
+    "attack": 22,
+    "speed": 40,
+    "xp": 200,
+    "behavior": "boss"
+  }
+}
